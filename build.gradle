@@ -15,8 +15,15 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
+test {
+  testLogging {
+    exceptionFormat = 'full'
+    events = ["passed", "failed", "skipped"]
+  }
+}
+
 jar {
     manifest {
-        attributes 'Main-Class': 'JavaServer'
+        attributes 'Main-Class': 'HTTPServer'
     }
 }
