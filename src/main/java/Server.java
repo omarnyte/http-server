@@ -1,6 +1,7 @@
 import java.io.*;
 import java.net.*;
 import java.lang.Thread;
+import java.util.concurrent.*;
 
 public class Server {
   private int port; 
@@ -16,9 +17,10 @@ public class Server {
 
     try {
       ServerSocket server = new ServerSocket(port);
+      ExecutorService executor = Executors.newCachedThreadPool();
       while (true) {
         Socket clientSocket = server.accept();
-        (new Thread(new Client(clientSocket, router))).start();
+        executor.execute(new Client(clientSocket, this.router));
       } 
     }
     catch (Exception e) {
@@ -26,7 +28,5 @@ public class Server {
       System.err.println("Error on port " + port);
     }
   }
-
-  
 
 }
