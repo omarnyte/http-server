@@ -1,9 +1,10 @@
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.BindException;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 public class Server {
   private Socket client;
@@ -19,10 +20,9 @@ public class Server {
   }
 
   public void start() {
-    System.out.println("Listening on port " + this.port + ":");
-
     try {
       this.server = new ServerSocket(port);
+      System.out.println("Listening on port " + this.port + ":");
       while (true) {
         initiateClient();
 
@@ -39,8 +39,11 @@ public class Server {
 
         closeConnection();
       } 
-    }
-    catch (Exception e) {
+    } catch (BindException e) {
+      System.err.println("Port " + port + " is unavailable.");
+    } catch (IllegalArgumentException e) {
+      System.err.println("Port number must be between 0 and 65535.");
+    } catch (Exception e) {
       System.err.println(e);
       System.err.println("Error on port " + port);
     }

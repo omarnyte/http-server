@@ -10,11 +10,12 @@ public class HTTPServer {
       int port = Integer.parseInt(args[0]);
       Server server = new Server(port, router);
       server.start();
-    } 
-    catch (Exception e) {
-      System.err.println(e);
+    } catch (ArrayIndexOutOfBoundsException e) {
+      System.err.println("Plese enter a port number as a command line argument.");
       System.err.println("Usage: java HTTPServer <port>");
-    }
+    } catch (NumberFormatException e) {
+      System.err.println("Argument must be a number.");
+    } 
   }
 
   public static HashMap<String, Handler> createRoutesMap() {
