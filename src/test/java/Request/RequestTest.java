@@ -22,16 +22,5 @@ public class RequestTest {
   public void getsHTTPVersion() {
     assertEquals("1.1", request.getHTTPVersion());
   }
-
-  @Test 
-  public void getsRequestLineWithCarriageReturnAndNewLine() {
-    assertEquals("GET /uri/path HTTP/1.1\r\n", request.getRequestLine());
-  }
-
-  @Test 
-  public void getsStringifiedRequestWithCarriageReturnsAndNewLines() {
-    assertEquals("GET /uri/path HTTP/1.1\r\n" +
-                 "\r\n", request.toString());
-  }
   
 }
