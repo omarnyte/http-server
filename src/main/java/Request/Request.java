@@ -46,11 +46,4 @@ public class Request {
     return this.version;
   }
 
-  public String getRequestLine() {
-    return this.method + " " + this.uri + " HTTP/" + this.version + "\r\n";
-  }
-
-  public String toString() {
-    return this.getRequestLine() + "\r\n";
-  }
 }
