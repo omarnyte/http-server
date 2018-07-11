@@ -74,8 +74,7 @@ public class Server {
 
   private Response getResponse(Request request) {
     Handler handler = this.router.getHandler(request.getURI());
-    Response response = handler.generateResponse(request);
-    return response;
+    return handler.generateResponse(request);
   }
 
   private void closeConnection() throws IOException {

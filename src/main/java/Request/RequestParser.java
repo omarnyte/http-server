@@ -11,12 +11,11 @@ public class RequestParser {
   
   public Request generateRequest() {
     parseRequestLine();
-    Request request = new Request.Builder()
+    return new Request.Builder()
                                  .method(this.requestLine.getMethod())
                                  .uri(this.requestLine.getURI())
                                  .version(this.requestLine.getHTTPVersion())
                                  .build();
-    return request;
   }
 
   private void parseRequestLine() {
