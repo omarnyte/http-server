@@ -1,4 +1,8 @@
 import static org.junit.Assert.assertEquals;
+<<<<<<< HEAD
+=======
+import org.junit.Before;
+>>>>>>> c12ea36cc1330e3b1f8f4da75e64eb2de36c41ac
 import org.junit.Test;
 
 public class RequestParserTest {
