@@ -5,7 +5,7 @@ public class RequestParser {
   private String uri;
   private String version;
 
-  RequestParser(String requestString) {
+  public RequestParser(String requestString) {
     this.splitRequest = requestString.split("\r\n");
   }
   

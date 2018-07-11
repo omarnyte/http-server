@@ -4,7 +4,7 @@ public class Router {
 
   private HashMap<String, Handler> routes;
 
-  Router(HashMap<String, Handler> routes) {
+  public Router(HashMap<String, Handler> routes) {
     this.routes = routes;
   }
   

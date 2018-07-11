@@ -4,7 +4,7 @@ public class RootHandler implements Handler {
   private String directoryPath;
   private Response response;
   
-  RootHandler(String directoryPath) {
+  public RootHandler(String directoryPath) {
     this.directoryPath = directoryPath;
     this.response = new Response();
   }

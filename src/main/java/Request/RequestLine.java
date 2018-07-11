@@ -3,7 +3,7 @@ public class RequestLine {
   private String uri; 
   private String version;
 
-  RequestLine(String requestLineString) {
+  public RequestLine(String requestLineString) {
     String[] splitRequestLine = requestLineString.split(" ");
 
     String method = splitRequestLine[0];

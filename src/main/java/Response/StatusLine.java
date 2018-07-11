@@ -4,11 +4,11 @@ public class StatusLine {
   private String code;
   private String reasonPhrase = "";
   
-  StatusLine(int code) {
+  public StatusLine(int code) {
     this.code = Integer.toString(code); 
   }
 
-  StatusLine(int code, String reasonPhrase) {
+  public StatusLine(int code, String reasonPhrase) {
     this.code = Integer.toString(code); 
     this.reasonPhrase = reasonPhrase;
   }

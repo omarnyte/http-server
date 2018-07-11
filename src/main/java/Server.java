@@ -14,7 +14,7 @@ public class Server {
   private Router router;
   private ServerSocket server;
 
-  Server(int port, Router router) {
+  public Server(int port, Router router) {
     this.port = port;
     this.router = router;
   }
