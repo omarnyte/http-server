@@ -1,11 +1,11 @@
 import java.io.File;
 
 public class RootHandler implements Handler {
-  private String jarDirectoryPath;
+  private String directoryPath;
   private Response response;
   
-  RootHandler(String jarDirectoryPath) {
-    this.jarDirectoryPath = jarDirectoryPath;
+  RootHandler(String directoryPath) {
+    this.directoryPath = directoryPath;
     this.response = new Response();
   }
   
@@ -22,14 +22,14 @@ public class RootHandler implements Handler {
   }
 
   public void setBody() {
-    String[] contentsOfJARDirectory = getContentsOfJARDirectory();
-    String stringifiedContentsOfJARDirectory = stringifyContentsOfDirectory(contentsOfJARDirectory);
-    this.response.setMessageBody(stringifiedContentsOfJARDirectory);
+    String[] contentsOfDirectory = getContentsOfDirectory();
+    String stringifiedContentsOfDirectory = stringifyContentsOfDirectory(contentsOfDirectory);
+    this.response.setMessageBody(stringifiedContentsOfDirectory);
   }
 
-  private String[] getContentsOfJARDirectory() {
-    File jarDirectory = new File(this.jarDirectoryPath);
-    return jarDirectory.list();
+  private String[] getContentsOfDirectory() {
+    File Directory = new File(this.directoryPath);
+    return Directory.list();
   }
 
   private String stringifyContentsOfDirectory(String[] files) {
