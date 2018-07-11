@@ -1,9 +1,6 @@
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class RootHandler implements Handler {
-
   private String jarDirectoryPath;
   private Response response;
   

@@ -1,13 +1,12 @@
 import static org.junit.Assert.assertEquals;
-import org.junit.Before;
 import org.junit.Test;
 
 public class RequestTest {
   private Request request = new Request.Builder()
-                                           .method("GET")
-                                           .uri("/uri/path")
-                                           .version("1.1")
-                                           .build();
+                                       .method("GET")
+                                       .uri("/uri/path")
+                                       .version("1.1")
+                                       .build();
   
   @Test 
   public void getsMethod() {
