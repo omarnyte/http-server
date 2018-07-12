@@ -25,8 +25,8 @@ public class RootHandler implements Handler {
   }
 
   private String[] getContentsOfDirectory() {
-    File Directory = new File(this.directoryPath);
-    return Directory.list();
+    File directory = new File(this.directoryPath);
+    return directory.list();
   }
 
   private String stringifyContentsOfDirectory(String[] fileNames) {
