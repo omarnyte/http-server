@@ -25,31 +25,16 @@ public class ResponseTest {
     assertEquals("OK", response.getReasonPhrase());
   }
 
-  // @Test
-  // public void getsStatusLineWithReasonPhrase() {
-  //   assertEquals("HTTP/1.1 200 OK\r\n", response.getStatusLine());
-  // }
-
-  // @Test
-  // public void getsStatusLineWithNoReasonPhrase() {
-  //   response.setHTTPVersion("1.1");
-  //   response.setStatusCode(200);
-  //   assertEquals("HTTP/1.1 200 \r\n", response.getStatusLine());
-  // }
-
   @Test
   public void setsMessageBody() {
     assertEquals("Hello, world!", response.getMessageBody());
   }
 
-  // @Test
-  // public void getsStringifiedResponseWithCarriageReturnsAndNewLines() {
-  //   response.setHTTPVersion("1.1");
-  //   response.setStatusCode(200);
-  //   response.setMessageBody("Hello, world!");
-  //   assertEquals("HTTP/1.1 200 \r\n" +
-  //                "\r\n" + 
-  //                "Hello, world!", response.toString());
-  // }
+  @Test
+  public void getsStringifiedResponseWithCarriageReturnsAndNewLines() {
+    assertEquals("HTTP/1.1 200 OK\r\n" +
+                 "\r\n" + 
+                 "Hello, world!", response.toString());
+  }
 
 }

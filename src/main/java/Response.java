@@ -65,7 +65,7 @@ public class Response {
   }
   
   public String toString() {
-    return this.getStatusLine() + "\r\n" + this.messageBody;
+    return getStatusLine() + "\r\n" + this.messageBody;
   }
   
   private String getStatusLine() {
