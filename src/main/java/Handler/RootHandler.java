@@ -9,12 +9,23 @@ public class RootHandler implements Handler {
   }
   
   public Response generateResponse(Request request) {
-    String messageBody = createMessageBody();
+    int statusCode;
+    String reasonPhrase;
+    String messageBody = "";
+    
+    if (request.getMethod().equals("GET")) {
+      statusCode = 200;
+      reasonPhrase = "OK";
+      messageBody = createMessageBody();
+    } else {
+      statusCode = 405;
+      reasonPhrase = "Method Not Allowed";
+    }
 
     return new Response.Builder()
                        .httpVersion("1.1")
-                       .statusCode(200)
-                       .reasonPhrase("OK")
+                       .statusCode(statusCode)
+                       .reasonPhrase(reasonPhrase)
                        .messageBody(messageBody)
                        .build();
   }

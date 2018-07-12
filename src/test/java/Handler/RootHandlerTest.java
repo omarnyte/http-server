@@ -6,7 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class RootHandlerTest {
-  private Request request;
   private String testDirectoryPath;
   
   @Before
@@ -26,22 +25,38 @@ public class RootHandlerTest {
     File testHTMLFile = new File(testHTMLFilePath);
     testHTMLFile.createNewFile(); 
     testHTMLFile.deleteOnExit();
-    
-    this.request = new Request.Builder()
-                              .method("GET")
-                              .uri("/")
-                              .version("1.1")
-                              .build();                           
+
   }
+    
 
   @Test
-  public void returnContentsOfDirectory(){
+  public void returnContentsOfDirectory() {
+    Request request = new Request.Builder()
+                                  .method("GET")
+                                  .uri("/")
+                                  .version("1.1")
+                                  .build();                           
+  
     RootHandler handler = new RootHandler(this.testDirectoryPath);
-    Response response = handler.generateResponse(this.request);
+    Response response = handler.generateResponse(request);
 
-    assertEquals("test-file.txt\n" + 
-                 "test-html.html\n", response.getMessageBody());
-                 
+  assertEquals("test-file.txt\n" + 
+                "test-html.html\n", response.getMessageBody());
+  }  
+  
+  @Test
+  public void return405MethodNotAllowed() {
+    Request request = new Request.Builder()
+                                 .method("POST")
+                                 .uri("/")
+                                 .version("1.1")
+                                 .build();                           
+
+    RootHandler handler = new RootHandler(this.testDirectoryPath);
+    Response response = handler.generateResponse(request);
+
+    assertEquals(405, response.getStatusCode()); 
+    assertEquals("Method Not Allowed", response.getReasonPhrase()); 
   }
   
 }
