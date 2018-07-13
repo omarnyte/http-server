@@ -69,7 +69,7 @@ public class Server {
     return requestString;
   }
 
-  private Request parseRequest(String requestString) {
+  private Request parseRequest(String requestString) throws BadRequestException {
     RequestParser requestParser = new RequestParser(requestString);
     Request request = requestParser.generateRequest();
     return request;
