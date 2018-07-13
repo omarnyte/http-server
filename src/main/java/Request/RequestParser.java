@@ -9,18 +9,22 @@ public class RequestParser {
     this.splitRequest = requestString.split("\r\n");
   }
   
-  public Request generateRequest() {
+  public Request generateRequest() throws BadRequestException {
     parseRequestLine();
     return new Request.Builder()
-                                 .method(this.requestLine.getMethod())
-                                 .uri(this.requestLine.getURI())
-                                 .version(this.requestLine.getHTTPVersion())
-                                 .build();
+                      .method(this.requestLine.getMethod())
+                      .uri(this.requestLine.getURI())
+                      .version(this.requestLine.getHTTPVersion())
+                      .build();
   }
 
-  private void parseRequestLine() {
-    String requestLineString = this.splitRequest[0];
-    this.requestLine = new RequestLine(requestLineString);
+  private void parseRequestLine() throws BadRequestException {
+    try {
+      String requestLineString = this.splitRequest[0];
+      this.requestLine = new RequestLine(requestLineString);
+    } catch (Exception e) {
+      throw new BadRequestException("Bad request!");
+    }
   }
 
 }
