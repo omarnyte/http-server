@@ -24,6 +24,6 @@ test {
 
 jar {
     manifest {
-        attributes 'Main-Class': 'HTTPServer'
+        attributes 'Main-Class': 'Main'
     }
 }
