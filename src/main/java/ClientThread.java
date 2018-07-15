@@ -1,14 +1,17 @@
-import java.io.*;
-import java.net.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.Socket;
 
-public class Client implements Runnable {
+public class ClientThread implements Runnable {
   private BufferedReader in;
   private PrintWriter out;
-  private Socket client; 
+  private Socket clientSocket; 
   private Router router;
   
-  Client(Socket clientSocket, Router router) {
-    this.client = clientSocket; 
+  ClientThread(Socket clientSocket, Router router) {
+    this.clientSocket = clientSocket; 
     this.router = router;
   }
   
@@ -36,8 +39,8 @@ public class Client implements Runnable {
   }
 
   private void initiateClient() throws IOException {
-    this.in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-    this.out = new PrintWriter(client.getOutputStream());
+    this.in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+    this.out = new PrintWriter(clientSocket.getOutputStream());
   }
 
   private String stringifyRequest() throws IOException {
@@ -54,22 +57,20 @@ public class Client implements Runnable {
     return requestString;
   }
 
-  private Request parseRequest(String requestString) {
+  private Request parseRequest(String requestString) throws BadRequestException {
     RequestParser requestParser = new RequestParser(requestString);
-    Request request = requestParser.generateRequest();
-    return request;
+    return requestParser.generateRequest();
   }
 
   private Response getResponse(Request request) {
     Handler handler = this.router.getHandler(request.getURI());
-    Response response = handler.generateResponse(request);
-    return response;
+    return handler.generateResponse(request);
   }
 
   private void closeConnection() throws IOException {
     this.out.close(); 
     this.in.close(); 
-    this.client.close(); 
+    this.clientSocket.close(); 
   }
 
 }

@@ -5,6 +5,8 @@ import java.io.PrintWriter;
 import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
 
 public class Server {
   private int port; 
@@ -21,7 +23,7 @@ public class Server {
       ExecutorService executor = Executors.newCachedThreadPool();
       while (true) {
         Socket clientSocket = server.accept();
-        executor.execute(new Client(clientSocket, this.router));
+        executor.execute(new ClientThread(clientSocket, this.router));
       } 
     } catch (BindException e) {
       System.err.println("Port " + port + " is unavailable.");
