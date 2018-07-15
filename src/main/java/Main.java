@@ -23,6 +23,7 @@ public class Main {
     
     String rootPath = System.getProperty("user.dir");
     routes.put("/", new RootHandler(rootPath));
+    routes.put("/echo", new EchoHandler());
 
     return routes;
   }
