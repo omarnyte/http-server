@@ -3,33 +3,29 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class EchoHandler implements Handler {
-  
+  private static final String timeFormat = "hh:mm:ss";
+
   public Response generateResponse(Request request) {
-    int statusCode;
-    String reasonPhrase;
-    String messageBody = "";
-    
-    if (request.getMethod().equals("GET")) {
-      statusCode = 200;
-      reasonPhrase = "OK";
-      messageBody = createMessageBody();
-    } else {
-      statusCode = 405;
-      reasonPhrase = "Method Not Allowed";
+    String method = request.getMethod();
+    ResponseConstructor constructor;
+
+    switch (method) {
+      case "GET": 
+        constructor = new ResponseConstructor(200, createMessageBody());
+        break;
+      default: 
+        constructor = new ResponseConstructor(405);
     }
 
-    return new Response.Builder()
-                       .httpVersion("1.1")
-                       .statusCode(statusCode)
-                       .reasonPhrase(reasonPhrase)
-                       .messageBody(messageBody)
-                       .build();
+    return constructor.constructResponse();
   }
 
   private String createMessageBody() {
-    String timeFormat = "hh:mm:ss";
-    DateFormat dateFormat = new SimpleDateFormat(timeFormat);
-    String formattedTime = dateFormat.format(new Date());
-    return "Hello, world: " + formattedTime;
+    return "Hello, world: " + getFormattedTime();
+  }
+
+  private String getFormattedTime() {
+    DateFormat dateFormat = new SimpleDateFormat(this.timeFormat);
+    return dateFormat.format(new Date());
   }
 }
