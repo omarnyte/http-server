@@ -7,6 +7,11 @@ public class Router {
   public Router(HashMap<String, Handler> routes) {
     this.routes = routes;
   }
+
+  public Response getResponse(Request request) {
+    Handler handler = getHandler(request.getURI());
+    return handler.generateResponse(request);
+  }
   
   public Handler getHandler(String uri) {
     if (this.routes.get(uri) != null) {

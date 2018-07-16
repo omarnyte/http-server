@@ -33,7 +33,7 @@ public class Server {
         }
         
         Request request = parseRequest(requestString);
-        Response response = getResponse(request);
+        Response response = this.router.getResponse(request);
  
         out.print(response.toString());
 
@@ -73,11 +73,6 @@ public class Server {
     RequestParser requestParser = new RequestParser(requestString);
     Request request = requestParser.generateRequest();
     return request;
-  }
-
-  private Response getResponse(Request request) {
-    Handler handler = this.router.getHandler(request.getURI());
-    return handler.generateResponse(request);
   }
 
   private void closeConnection() throws IOException {

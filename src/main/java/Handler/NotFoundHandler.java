@@ -3,7 +3,7 @@ public class NotFoundHandler implements Handler {
     return new Response.Builder()
                        .httpVersion("1.1")
                        .statusCode(404)
-                       .reasonPhrase("OK")
+                       .reasonPhrase("Not Found")
                        .build();
   }
 

@@ -1,8 +1,8 @@
 import java.util.HashMap;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
-
 
 public class RouterTest {
   private HashMap<String, Handler> routes; 
@@ -24,10 +24,13 @@ public class RouterTest {
                                  .method("GET")
                                  .uri("/path/that/does/not/exist")
                                  .version("1.1")
-                                 .build();
-
-    Handler handler = this.router.getHandler(request.getURI());
-    assertTrue(handler instanceof NotFoundHandler);
+                                 .build();                      
+                                 
+    String expectedResponseString = "HTTP/1.1 404 Not Found\r\n" + 
+                                    "\r\n";
+    Response response = this.router.getResponse(request);
+    String responseString = response.toString();
+    assertEquals(expectedResponseString, responseString);
   }
   
   @Test 
@@ -38,8 +41,13 @@ public class RouterTest {
                                  .version("1.1")
                                  .build();
 
-   Handler handler = this.router.getHandler(request.getURI());
-   assertTrue(handler instanceof RootHandler);
+    
+    String expectedResponseString = "HTTP/1.1 200 OK\r\n" + 
+                                    "\r\n" + 
+                                    "http-server.jar\n";
+    Response response = this.router.getResponse(request);
+    String responseString = response.toString();
+    assertEquals(expectedResponseString, responseString);
   }
 
 }
