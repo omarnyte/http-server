@@ -9,15 +9,17 @@ public class EchoHandler implements Handler {
     String method = request.getMethod();
     ResponseConstructor constructor;
 
+    String statusCodeAndReasonPhrase;
+    String messageBody = "";
     switch (method) {
       case "GET": 
-        constructor = new ResponseConstructor(200, createMessageBody());
-        break;
+        return new Response.Builder(StatusPhrase.OK)
+                           .messageBody(createMessageBody())
+                           .build();
       default: 
-        constructor = new ResponseConstructor(405);
+        return new Response.Builder(StatusPhrase.METHOD_NOT_ALLOWED)
+                           .build();
     }
-
-    return constructor.constructResponse();
   }
 
   private String createMessageBody() {
