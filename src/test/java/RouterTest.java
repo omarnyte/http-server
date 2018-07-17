@@ -1,8 +1,8 @@
 import java.util.HashMap;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
-
 
 public class RouterTest {
   private HashMap<String, Handler> routes; 
@@ -19,27 +19,27 @@ public class RouterTest {
   }
   
   @Test 
-  public void returnsNotFoundHandlerWhenURIIsNotFound() {
+  public void returns404WhenURIIsNotFound() {
     Request request = new Request.Builder()
                                  .method("GET")
                                  .uri("/path/that/does/not/exist")
                                  .version("1.1")
-                                 .build();
+                                 .build(); 
 
-    Handler handler = this.router.getHandler(request.getURI());
-    assertTrue(handler instanceof NotFoundHandler);
+    Response response = this.router.getResponse(request);
+    assertEquals(404, response.getStatusCode());
   }
   
   @Test 
-  public void returnsRootHandler() {
+  public void returns200WithDirectoryContents() {
     Request request = new Request.Builder()
                                  .method("GET")
                                  .uri("/")
                                  .version("1.1")
                                  .build();
 
-   Handler handler = this.router.getHandler(request.getURI());
-   assertTrue(handler instanceof RootHandler);
+    Response response = this.router.getResponse(request);
+    assertEquals(200, response.getStatusCode());
   }
 
 }
