@@ -19,8 +19,8 @@ public class Server {
 
   public void start() {
     try {
-      this.server = new ServerSocket(port);
-      System.out.println("Listening on port " + this.port + ":");
+      ServerSocket server = new ServerSocket(port);
+      ExecutorService executor = Executors.newCachedThreadPool();
       while (true) {
         Socket clientSocket = server.accept();
         executor.execute(new ClientThread(clientSocket, this.router));

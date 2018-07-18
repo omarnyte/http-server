@@ -26,7 +26,7 @@ public class ClientThread implements Runnable {
       }
       
       Request request = parseRequest(requestString);
-      Response response = getResponse(request);
+      Response response = this.router.getResponse(request);
   
       out.print(response.toString());
 
