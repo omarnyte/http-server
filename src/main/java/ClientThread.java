@@ -26,7 +26,7 @@ public class ClientThread implements Runnable {
       }
       
       Request request = parseRequest(requestString);
-      Response response = getResponse(request);
+      Response response = this.router.getResponse(request);
   
       out.print(response.toString());
 
@@ -60,11 +60,6 @@ public class ClientThread implements Runnable {
   private Request parseRequest(String requestString) throws BadRequestException {
     RequestParser requestParser = new RequestParser(requestString);
     return requestParser.generateRequest();
-  }
-
-  private Response getResponse(Request request) {
-    Handler handler = this.router.getHandler(request.getURI());
-    return handler.generateResponse(request);
   }
 
   private void closeConnection() throws IOException {

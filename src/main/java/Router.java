@@ -13,7 +13,7 @@ public class Router {
     return handler.generateResponse(request);
   }
   
-  public Handler getHandler(String uri) {
+  private Handler getHandler(String uri) {
     if (this.routes.get(uri) != null) {
       return this.routes.get(uri);
     } 

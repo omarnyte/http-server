@@ -19,35 +19,27 @@ public class RouterTest {
   }
   
   @Test 
-  public void returnsNotFoundHandlerWhenURIIsNotFound() {
+  public void returns404WhenURIIsNotFound() {
     Request request = new Request.Builder()
                                  .method("GET")
                                  .uri("/path/that/does/not/exist")
                                  .version("1.1")
-                                 .build();                      
-                                 
-    String expectedResponseString = "HTTP/1.1 404 Not Found\r\n" + 
-                                    "\r\n";
+                                 .build(); 
+
     Response response = this.router.getResponse(request);
-    String responseString = response.toString();
-    assertEquals(expectedResponseString, responseString);
+    assertEquals(404, response.getStatusCode());
   }
   
   @Test 
-  public void returnsRootHandler() {
+  public void returns200WithDirectoryContents() {
     Request request = new Request.Builder()
                                  .method("GET")
                                  .uri("/")
                                  .version("1.1")
                                  .build();
 
-    
-    String expectedResponseString = "HTTP/1.1 200 OK\r\n" + 
-                                    "\r\n" + 
-                                    "http-server.jar\n";
     Response response = this.router.getResponse(request);
-    String responseString = response.toString();
-    assertEquals(expectedResponseString, responseString);
+    assertEquals(200, response.getStatusCode());
   }
 
 }
