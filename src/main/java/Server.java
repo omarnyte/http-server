@@ -5,14 +5,12 @@ import java.io.PrintWriter;
 import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
 
 public class Server {
-  private Socket client;
-  private BufferedReader in;
-  private PrintWriter out; 
   private int port; 
   private Router router;
-  private ServerSocket server;
 
   public Server(int port, Router router) {
     this.port = port;
@@ -21,23 +19,11 @@ public class Server {
 
   public void start() {
     try {
-      this.server = new ServerSocket(port);
-      System.out.println("Listening on port " + this.port + ":");
+      ServerSocket server = new ServerSocket(port);
+      ExecutorService executor = Executors.newCachedThreadPool();
       while (true) {
-        initiateClient();
-
-        String requestString = stringifyRequest();
-
-        if (requestString == "") {
-          continue;
-        }
-        
-        Request request = parseRequest(requestString);
-        Response response = this.router.getResponse(request);
- 
-        out.print(response.toString());
-
-        closeConnection();
+        Socket clientSocket = server.accept();
+        executor.execute(new ClientThread(clientSocket, this.router));
       } 
     } catch (BindException e) {
       System.err.println("Port " + port + " is unavailable.");
@@ -47,38 +33,6 @@ public class Server {
       System.err.println(e);
       System.err.println("Error on port " + port);
     }
-  }
-
-  private void initiateClient() throws IOException {
-    this.client = this.server.accept();
-    this.in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-    this.out = new PrintWriter(client.getOutputStream());
-  }
-
-  private String stringifyRequest() throws IOException {
-    String requestString = "";
-    String line;
-    while ((line = this.in.readLine()) != null) {
-      if (line.length() == 0) {
-        break;
-      } else {
-        requestString += line;
-      }
-    }
-
-    return requestString;
-  }
-
-  private Request parseRequest(String requestString) throws BadRequestException {
-    RequestParser requestParser = new RequestParser(requestString);
-    Request request = requestParser.generateRequest();
-    return request;
-  }
-
-  private void closeConnection() throws IOException {
-    this.out.close(); 
-    this.in.close(); 
-    this.client.close(); 
   }
 
 }

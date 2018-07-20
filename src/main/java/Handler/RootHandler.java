@@ -9,25 +9,18 @@ public class RootHandler implements Handler {
   }
   
   public Response generateResponse(Request request) {
-    int statusCode;
-    String reasonPhrase;
-    String messageBody = "";
-    
-    if (request.getMethod().equals("GET")) {
-      statusCode = 200;
-      reasonPhrase = "OK";
-      messageBody = createMessageBody();
-    } else {
-      statusCode = 405;
-      reasonPhrase = "Method Not Allowed";
-    }
+    String method = request.getMethod();
 
-    return new Response.Builder()
-                       .httpVersion("1.1")
-                       .statusCode(statusCode)
-                       .reasonPhrase(reasonPhrase)
-                       .messageBody(messageBody)
-                       .build();
+    ResponseConstructor constructor;
+    switch (method) {
+      case "GET": 
+        return new Response.Builder(StatusPhrase.OK)
+                           .messageBody(createMessageBody())
+                           .build();
+      default: 
+        return new Response.Builder(StatusPhrase.METHOD_NOT_ALLOWED)
+                           .build();
+    }
   }
 
   public String createMessageBody() {
