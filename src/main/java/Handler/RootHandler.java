@@ -11,14 +11,13 @@ public class RootHandler implements Handler {
   public Response generateResponse(Request request) {
     String method = request.getMethod();
 
-    ResponseConstructor constructor;
     switch (method) {
       case "GET": 
-        return new Response.Builder(StatusPhrase.OK)
+        return new Response.Builder(HttpStatusCode.OK)
                            .messageBody(createMessageBody())
                            .build();
       default: 
-        return new Response.Builder(StatusPhrase.METHOD_NOT_ALLOWED)
+        return new Response.Builder(HttpStatusCode.METHOD_NOT_ALLOWED)
                            .build();
     }
   }

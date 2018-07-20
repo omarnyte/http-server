@@ -10,14 +10,9 @@ public class Response {
     private int statusCode;
     private String version; 
 
-    public Builder() {
-      this.messageBody = "";
-      this.reasonPhrase = "";
-    }
-
-    public Builder(String statusCodeAndReason) {
-      this.statusCode = parseStatusCode(statusCodeAndReason);
-      this.reasonPhrase = parseReasonPhrase(statusCodeAndReason);
+    public Builder(int statusCode) {
+      this.statusCode = statusCode;
+      this.reasonPhrase = HttpStatusCode.getReasonPhrase(statusCode);
       this.messageBody = "";
       this.version = "1.1";
     }
@@ -44,18 +39,6 @@ public class Response {
 
     public Response build() {
       return new Response(this);
-    }
-
-    private int parseStatusCode(String statusCodeAndReason) {
-      int startOfStatusCode = 0;
-      int endOfStatusCode = 3;
-      String statusCodeString = statusCodeAndReason.substring(startOfStatusCode, endOfStatusCode);
-      return Integer.parseInt(statusCodeString);
-    }
-  
-    private String parseReasonPhrase(String statusCodeAndReason) {
-      int startOfReasonPhrase = 4;
-      return statusCodeAndReason.substring(startOfReasonPhrase);
     }
     
   }
