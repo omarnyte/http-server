@@ -3,9 +3,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class ResponseTest {
-  private Response response = new Response.Builder()
+  private Response response = new Response.Builder(HttpStatusCode.OK)
                                           .httpVersion("1.1")
-                                          .statusCode(200)
                                           .reasonPhrase("OK")
                                           .messageBody("Hello, world!")
                                           .build();
