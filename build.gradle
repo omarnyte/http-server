@@ -12,7 +12,9 @@ repositories {
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile 'info.cukes:cucumber-java:1.2.4'
+    testCompile 'info.cukes:cucumber-junit:1.2.4'
+    testCompile 'junit:junit:4.12'
 }
 
 test {
@@ -20,6 +22,7 @@ test {
     exceptionFormat = 'full'
     events = ["passed", "failed", "skipped", "standardOut", "standardError"] 
   }
+  systemProperties System.getProperties()
 }
 
 jar {
