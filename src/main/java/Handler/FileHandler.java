@@ -8,8 +8,14 @@ public class FileHandler implements Handler {
   String filePath; 
   Request request; 
  
-  public FileHandler(String directoryPath) { 
-    this.directoryPath = directoryPath; 
+  public FileHandler(String directoryPath) throws NonexistentDirectoryException { 
+    File directory = new File(directoryPath);
+    if (directory.exists()) {
+      this.directoryPath = directoryPath; 
+    } else {
+      String errorMessage = this.directoryPath + " does not exist. Enter a valid directory.";
+      throw new NonexistentDirectoryException(errorMessage);
+    }
   } 
    
   public Response generateResponse(Request request) { 

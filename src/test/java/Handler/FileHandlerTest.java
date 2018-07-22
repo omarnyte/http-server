@@ -2,21 +2,34 @@ import java.io.File;
 import java.io.IOException; 
 import static org.junit.Assert.assertEquals; 
 import org.junit.BeforeClass; 
+import org.junit.Rule;
+import org.junit.rules.ExpectedException;
 import org.junit.Test; 
  
 public class FileHandlerTest { 
   private static Handler handler; 
   private static Request requestToExistingFile = buildRequestToExistingFile(); 
   private static Request requestToNonexistentFile = buildRequestToNonexistentFile(); 
+
+  @Rule
+  public ExpectedException thrown = ExpectedException.none();  
    
   @BeforeClass  
-  public static void setup() throws IOException { 
+  public static void setup() throws IOException, NonexistentDirectoryException { 
     String currentDirectoryPath = System.getProperty("user.dir"); 
     String testResourcesPath = currentDirectoryPath + "/src/test/resources/testFiles"; 
  
     handler = new FileHandler(testResourcesPath); 
   } 
    
+  @Test 
+  public void throwsNonexistentDirectoryExceptionWithInvalidPath() throws NonexistentDirectoryException {
+    String nonexistentPath = "path/that/does/not/exist";
+
+    thrown.expect(NonexistentDirectoryException.class);
+    Handler fileHandler = new FileHandler(nonexistentPath);
+  }
+  
   @Test  
   public void returns404IfFileDoesNotExist() {  
     Response response = handler.generateResponse(this.requestToNonexistentFile); 
