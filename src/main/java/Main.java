@@ -44,7 +44,7 @@ public class Main {
     return store;
   }
 
-  private static Router setUpRouter(Handler defaultHandler) {
+  public static Router setUpRouter(Handler defaultHandler) {
     HashMap<String, Handler> routesMap = createRoutesMap();
     return new Router(defaultHandler, routesMap);
   }
