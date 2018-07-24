@@ -35,7 +35,7 @@ public class TextContentNegotiationSteps {
 
   @When("^that text file exists in the directory$")
   public void that_text_file_exists_in_the_directory() throws Throwable {
-
+    
   }
 
   @Then("^I should see the contents of the file$")
