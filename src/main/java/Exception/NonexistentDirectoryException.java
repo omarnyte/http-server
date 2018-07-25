@@ -1,6 +1,6 @@
 public class NonexistentDirectoryException extends Exception {
 
-  public NonexistentDirectoryException(String message) {
-      super(message);
+  public NonexistentDirectoryException(String directory) {
+    super(String.format("%s does not exist.", directory));
   }
 }

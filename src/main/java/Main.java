@@ -16,7 +16,8 @@ public class Main {
       System.err.println("Plese enter a port number and a directory path as command line arguments.");
       System.err.println("Usage: java HTTPServer <port> <directory-path>");
     } catch (NonexistentDirectoryException e) {
-      System.err.println("The directory " + args[1] + " does not exist.");
+      System.err.println(e.getMessage());
+      System.err.println("Please enter a valid directory from which to serve content.");
     } catch (NumberFormatException e) {
       System.err.println("First argument must be a number.");
     }
