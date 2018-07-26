@@ -1,26 +1,49 @@
 import java.util.HashMap;
  
 public class Main {
+  private static CLIParser parser;
+  private static DataStore store;
+  private static final int DEFAULT_PORT_NUMBER = 7777;
  
   public static void main(String[] args) {
     try {
-      String publicDirectoryPath = args[1];
-      Handler defaultHandler = new FileHandler(publicDirectoryPath);
+      parser = new CLIParser(args);
+
+      DataStore store = extractDataStore();
+      Handler defaultHandler = new FileHandler(store);
  
       Router router = setUpRouter(defaultHandler);
-
-      int port = Integer.parseInt(args[0]);
+      int port = extractPortNumber();
       Server server = new Server(port, router);
       server.start();
     } catch (ArrayIndexOutOfBoundsException e) {
-      System.err.println("Plese enter a port number and a directory path as command line arguments.");
-      System.err.println("Usage: java HTTPServer <port> <directory-path>");
+      System.err.println(e.getMessage());
+      System.err.println("You must provide an argument for each flag.");
     } catch (NonexistentDirectoryException e) {
       System.err.println(e.getMessage());
       System.err.println("Please enter a valid directory from which to serve content.");
+    } catch (NullPointerException e) {
+      System.err.println("You must provide a data store to start the server.");
+      System.err.println("Usage: java -jar http-server.jar -port <port> -<store-flag> <store argument>");
+      printAvailableStores();
     } catch (NumberFormatException e) {
-      System.err.println("First argument must be a number.");
+      System.err.println("Port must be a number.");
     }
+  }
+
+  private static DataStore extractDataStore() throws NonexistentDirectoryException {
+    String portFlag = parser.getStoreFlag();
+    switch(portFlag) {
+      case "-dir" :
+        String publicDirectoryPath = parser.getDirectory();
+        store = new Directory(publicDirectoryPath);
+    } 
+    
+    return store;
+  }
+
+  private static int extractPortNumber() {
+    return parser.containsPortFlag() ? parser.getPortNumber() : DEFAULT_PORT_NUMBER;
   }
 
   private static Router setUpRouter(Handler defaultHandler) {
@@ -36,6 +59,10 @@ public class Main {
     routes.put("/echo", new EchoHandler());
  
     return routes;
+  }
+
+  private static void printAvailableStores() {
+    System.out.println("Available stores are: -dir directory");
   }
  
 }

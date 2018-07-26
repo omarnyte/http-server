@@ -18,7 +18,7 @@ public class Directory implements DataStore {
 
   public Boolean existsInStore(String uri) {
     String filePath = this.directoryPath + uri;
-    return new File(filePath).exists() ? true : false;
+    return new File(filePath).exists();
   }
   
   public String read(String uri) {
