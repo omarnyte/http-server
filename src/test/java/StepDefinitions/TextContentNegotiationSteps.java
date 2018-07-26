@@ -17,12 +17,7 @@ public class TextContentNegotiationSteps {
   private String responseReasonPhrase;
   private Server server; 
   private int port = 8888;
-  
-  @Given("^the server is running$")
-  public void the_server_is_running() throws Throwable {
-    String[] args = { Integer.toString(this.port), publicDirectoryPath };
-    Main.main(args);
-  }
+
 
   @When("^I send a request to the path of a text file$")
   public void i_send_a_request_to_the_path_of_a_text_file() throws Throwable {

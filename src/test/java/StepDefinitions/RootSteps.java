@@ -16,6 +16,15 @@ public class RootSteps {
   private Server server;
   private int port = 8888; 
 
+  @When("^a client makes a GET request to /$")
+  public void a_client_makes_a_GET_request_to() throws Throwable {
+    String urlString = String.format("http://localhost:%d/", this.port);
+    URL url = new URL(urlString);
+    this.con = (HttpURLConnection) url.openConnection();
+    
+    this.responseReasonPhrase = con.getResponseMessage();
+  }
+
   @Then("^the server should respond with the contents of the directory of where the JAR is running$")
   public void the_server_should_respond_with_the_contents_of_the_directory_of_where_the_JAR_is_running() throws Throwable {
     String messageBody = readMessageBody();  
@@ -31,15 +40,6 @@ public class RootSteps {
       assertEquals(statusCode, this.con.getResponseCode());
   }
 
-  @When("^a client makes a GET request to /(.*)$")
-  public void a_client_makes_a_GET_request_to(String uri) throws Throwable {
-    String urlString = String.format("http://localhost:%d/%s", this.port, uri);
-    URL url = new URL(urlString);
-    this.con = (HttpURLConnection) url.openConnection();
-    
-    this.responseReasonPhrase = con.getResponseMessage();
-  }
-
   private String readMessageBody() throws IOException {
     BufferedReader in = new BufferedReader(
       new InputStreamReader(this.con.getInputStream()));
@@ -52,6 +52,14 @@ public class RootSteps {
 
     return messageBody;
   }
+
+  @When("^a client makes a GET request to any other endpoint$")
+  public void a_client_makes_a_GET_request_to_any_other_endpoint() throws Throwable {
+    String urlString = String.format("http://localhost:%d/any/other/endpoint", this.port);
+    URL url = new URL(urlString);
+    this.con = (HttpURLConnection) url.openConnection();
+    
+    this.responseReasonPhrase = con.getResponseMessage();
+  }
+
 }
-
-
