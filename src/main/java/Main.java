@@ -3,7 +3,7 @@ import java.util.HashMap;
 public class Main {
   private static CLIParser parser;
   private static DataStore store;
-  private static final int DEFAULT_PORT_NUMBER = 7777;
+  private static final int DEFAULT_PORT_NUMBER = 8888;
  
   public static void main(String[] args) {
     try {
@@ -13,7 +13,7 @@ public class Main {
       Handler defaultHandler = new FileHandler(store);
  
       Router router = setUpRouter(defaultHandler);
-      int port = extractPortNumber();
+      int port = parser.getPortNumberOrDefault(DEFAULT_PORT_NUMBER);
       Server server = new Server(port, router);
       server.start();
     } catch (ArrayIndexOutOfBoundsException e) {
@@ -40,10 +40,6 @@ public class Main {
     } 
     
     return store;
-  }
-
-  private static int extractPortNumber() {
-    return parser.containsPortFlag() ? parser.getPortNumber() : DEFAULT_PORT_NUMBER;
   }
 
   private static Router setUpRouter(Handler defaultHandler) {

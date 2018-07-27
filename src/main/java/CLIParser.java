@@ -12,17 +12,13 @@ public class CLIParser {
     this.args = args;
   }
 
-  public Boolean containsPortFlag() {
-    return Arrays.asList(args).contains(PORT_FLAG);
-  }
-
   public Boolean containsDirectoryFlag() {
     return Arrays.asList(args).contains(DIRECTORY_FLAG);
   }
 
-  public int getPortNumber() {    
+  public int getPortNumberOrDefault(int defaultPortNumber) {
     String portAsString = getArgumentByFlag(PORT_FLAG);
-    return Integer.parseInt(portAsString);
+    return (portAsString == null) ? defaultPortNumber : Integer.parseInt(portAsString);
   }
 
   public String getStoreFlag() {

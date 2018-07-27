@@ -4,6 +4,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class CLIParserTest {
+  private String[] argsWithDirectory = { "-dir", "some/path" };
   private String[] argsWithPortAndDirectory = { "-port", "7777", "-dir", "some/path" };
   private String[] argsWithNoPortAndNoDirectory = { 
                                                     "-not-port", 
@@ -11,18 +12,6 @@ public class CLIParserTest {
                                                     "not-dir",
                                                     "123/456/789"
                                                   };
-
-  @Test 
-  public void returnsTrueIfGivenPortFlag() {
-    CLIParser parser = new CLIParser(this.argsWithPortAndDirectory);
-    assertEquals(true, parser.containsPortFlag());
-  }
-
-  @Test 
-  public void returnsFalseIfGivenNoPortFlag() {
-    CLIParser parser = new CLIParser(this.argsWithNoPortAndNoDirectory);
-    assertEquals(false, parser.containsPortFlag());
-  }
 
   @Test 
   public void returnsTrueIfGivenDirectoryFlag() {
@@ -37,9 +26,17 @@ public class CLIParserTest {
   }
 
   @Test 
-  public void returnsPortNumber() {
+  public void returnsDefaultPortNumberIfNoneIsProvided() {
+    CLIParser parser = new CLIParser(this.argsWithDirectory);
+    int defaultPortNumber = 9999;
+    assertEquals(9999, parser.getPortNumberOrDefault(9999));
+  }
+
+  @Test 
+  public void returnsPortNumberIfOneIsProvided() {
     CLIParser parser = new CLIParser(this.argsWithPortAndDirectory);
-    assertEquals(7777, parser.getPortNumber());
+    int defaultPortNumber = 9999;
+    assertEquals(7777, parser.getPortNumberOrDefault(9999));
   }
   
   @Test 
