@@ -1,15 +1,23 @@
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class CLIParser {
   private static final String DIRECTORY_FLAG = "-dir";
   private static final String PORT_FLAG = "-port";
   private static final List<String> POSSIBLE_STORES = Arrays.asList( DIRECTORY_FLAG );
+  private static final List<String> VALID_FLAGS = Arrays.asList( DIRECTORY_FLAG, PORT_FLAG );
 
   private String[] args;
+  private HashMap<String, String> flagsMap;
 
   public CLIParser(String[] args) {
     this.args = args;
+    try {
+      this.flagsMap = createFlagsMap();
+    } catch (UnsupportedFlagException e) {
+      System.err.println(e.getMessage());
+    }
   }
 
   public Boolean containsDirectoryFlag() {
@@ -17,7 +25,7 @@ public class CLIParser {
   }
 
   public int getPortNumberOrDefault(int defaultPortNumber) {
-    String portAsString = getArgumentByFlag(PORT_FLAG);
+    String portAsString = this.flagsMap.get(PORT_FLAG);
     return (portAsString == null) ? defaultPortNumber : Integer.parseInt(portAsString);
   }
 
@@ -34,19 +42,23 @@ public class CLIParser {
   }
   
   public String getDirectory() {    
-    return getArgumentByFlag(DIRECTORY_FLAG);
+    return this.flagsMap.get(DIRECTORY_FLAG);
   }
 
-  private String getArgumentByFlag(String flag) {    
-    String arg = null;
+  private HashMap<String, String> createFlagsMap() throws UnsupportedFlagException {
+    HashMap<String, String> map = new HashMap<String, String>();
     
-    for (int i = 0; i < args.length; i++) {
-      if (this.args[i].equals(flag)) {
-        arg = args[i + 1];
-      } 
+    for (int i = 0; i < this.args.length - 1; i += 2) {
+      String flag = this.args[i];
+      if (!VALID_FLAGS.contains(flag)) {
+        throw new UnsupportedFlagException(flag);
+      }
+
+      String arg = this.args[i + 1];
+      map.put(flag, arg);
     }
 
-    return arg;
+    return map; 
   }
 
 }

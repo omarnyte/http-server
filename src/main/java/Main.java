@@ -28,8 +28,8 @@ public class Main {
       printAvailableStores();
     } catch (NumberFormatException e) {
       System.err.println("Port must be a number.");
-    }
-  }
+    } 
+  } 
 
   private static DataStore extractDataStore() throws NonexistentDirectoryException {
     String portFlag = parser.getStoreFlag();
