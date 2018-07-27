@@ -1,27 +1,21 @@
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public class CLIParser {
   private static final String DIRECTORY_FLAG = "-dir";
   private static final String PORT_FLAG = "-port";
-  private static final List<String> POSSIBLE_STORES = Arrays.asList( DIRECTORY_FLAG );
+  private static final List<String> VALID_STORE_FLAGS = Arrays.asList( DIRECTORY_FLAG );
   private static final List<String> VALID_FLAGS = Arrays.asList( DIRECTORY_FLAG, PORT_FLAG );
 
   private String[] args;
   private HashMap<String, String> flagsMap;
 
-  public CLIParser(String[] args) {
+  public CLIParser(String[] args) throws UnsupportedFlagException {
     this.args = args;
-    try {
-      this.flagsMap = createFlagsMap();
-    } catch (UnsupportedFlagException e) {
-      System.err.println(e.getMessage());
-    }
-  }
-
-  public Boolean containsDirectoryFlag() {
-    return Arrays.asList(args).contains(DIRECTORY_FLAG);
+    this.flagsMap = createFlagsMap();
   }
 
   public int getPortNumberOrDefault(int defaultPortNumber) {
@@ -29,18 +23,17 @@ public class CLIParser {
     return (portAsString == null) ? defaultPortNumber : Integer.parseInt(portAsString);
   }
 
-  public String getStoreFlag() {
-    String flag = null;
-    
-    for (int i = 0; i < args.length; i++) {
-      if (POSSIBLE_STORES.contains(args[i])) {
-        flag = args[i];
-      } 
+  public String getStoreFlag() throws MissingFlagException {
+    Optional<String> foundFlag = VALID_STORE_FLAGS.stream()
+                                                  .filter(flag -> this.flagsMap.containsKey(flag))
+                                                  .findFirst();
+    if (foundFlag.isPresent()) {
+      return foundFlag.get(); 
+    } else {
+      throw new MissingFlagException("store");
     }
-
-    return flag;
   }
-  
+
   public String getDirectory() {    
     return this.flagsMap.get(DIRECTORY_FLAG);
   }

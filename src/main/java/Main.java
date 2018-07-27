@@ -19,26 +19,27 @@ public class Main {
     } catch (ArrayIndexOutOfBoundsException e) {
       System.err.println(e.getMessage());
       System.err.println("You must provide an argument for each flag.");
+    } catch (MissingFlagException e) {
+      System.err.println(e.getMessage());
+      printAvailableStores();
     } catch (NonexistentDirectoryException e) {
       System.err.println(e.getMessage());
       System.err.println("Please enter a valid directory from which to serve content.");
-    } catch (NullPointerException e) {
-      System.err.println("You must provide a data store to start the server.");
-      System.err.println("Usage: java -jar http-server.jar -port <port> -<store-flag> <store argument>");
-      printAvailableStores();
     } catch (NumberFormatException e) {
       System.err.println("Port must be a number.");
-    } 
+    } catch (UnsupportedFlagException e) {
+      System.err.println(e.getMessage());
+    }
   } 
 
-  private static DataStore extractDataStore() throws NonexistentDirectoryException {
+  private static DataStore extractDataStore() throws MissingFlagException, NonexistentDirectoryException {
     String portFlag = parser.getStoreFlag();
     switch(portFlag) {
       case "-dir" :
         String publicDirectoryPath = parser.getDirectory();
         store = new Directory(publicDirectoryPath);
     } 
-    
+
     return store;
   }
 
@@ -57,8 +58,8 @@ public class Main {
     return routes;
   }
 
-  private static void printAvailableStores() {
+  public static void printAvailableStores() {
     System.out.println("Available stores are: -dir directory");
   }
- 
+
 }
