@@ -38,6 +38,14 @@ public class CLIParser {
     return this.flagsMap.get(DIRECTORY_FLAG);
   }
 
+  public String printValidFlags() {
+    return String.join(", ", this.VALID_FLAGS);
+  }
+
+  public String printValidStoreFlags() {
+    return String.join(", ", this.VALID_STORE_FLAGS);
+  }
+
   private HashMap<String, String> createFlagsMap() throws UnsupportedFlagException {
     HashMap<String, String> map = new HashMap<String, String>();
     

@@ -1,4 +1,5 @@
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 import org.junit.Test;
@@ -47,6 +48,18 @@ public class CLIParserTest {
   public void returnsDirectory() throws UnsupportedFlagException {
     CLIParser parser = new CLIParser(this.argsWithPortAndDirectory);
     assertEquals("some/path", parser.getDirectory());
+  }
+
+  @Test 
+  public void printsValidFlags() throws UnsupportedFlagException {
+    CLIParser parser = new CLIParser(this.argsWithPortAndDirectory);
+    assertTrue(parser.printValidFlags().contains("-dir"));
+  }
+
+  @Test 
+  public void printsValidStoreFlags() throws UnsupportedFlagException {
+    CLIParser parser = new CLIParser(this.argsWithPortAndDirectory);
+    assertTrue(parser.printValidFlags().contains("-dir"));
   }
   
 }

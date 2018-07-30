@@ -21,7 +21,7 @@ public class Main {
       System.err.println("You must provide an argument for each flag.");
     } catch (MissingFlagException e) {
       System.err.println(e.getMessage());
-      printAvailableStores();
+      System.err.println("Valid store flags are: " + parser.printValidFlags());
     } catch (NonexistentDirectoryException e) {
       System.err.println(e.getMessage());
       System.err.println("Please enter a valid directory from which to serve content.");
@@ -29,6 +29,7 @@ public class Main {
       System.err.println("Port must be a number.");
     } catch (UnsupportedFlagException e) {
       System.err.println(e.getMessage());
+      System.err.println("Valid flags are: " + parser.printValidFlags());
     }
   } 
 
@@ -56,10 +57,6 @@ public class Main {
     routes.put("/echo", new EchoHandler());
  
     return routes;
-  }
-
-  public static void printAvailableStores() {
-    System.out.println("Available stores are: -dir directory");
   }
 
 }
