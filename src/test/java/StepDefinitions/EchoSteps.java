@@ -32,24 +32,11 @@ public class EchoSteps {
 
   @Then("^the server should respond with \"([^\"]*)\"$")
   public void the_server_should_respond_with(String arg1) throws Throwable {
-    String messageBody = readMessageBody(); 
+    String messageBody = DefStepsUtil.readMessageBody(this.con); 
     String currentTime = getFormattedTime();    
 
-    String expectedResponseMessageBody = "Hello, world: " + getFormattedTime();
+    String expectedResponseMessageBody = "Hello, world: " + getFormattedTime() + "\n";
     assertEquals(expectedResponseMessageBody, messageBody);
-  }
-
-  private String readMessageBody() throws IOException {
-    BufferedReader in = new BufferedReader(
-      new InputStreamReader(this.con.getInputStream()));
-    String inputLine;
-    String messageBody = "";
-    while ((inputLine = in.readLine()) != null) {
-        messageBody += inputLine;
-    }
-    in.close();
-
-    return messageBody;
   }
 
   private String getFormattedTime() {

@@ -27,7 +27,7 @@ public class RootSteps {
 
   @Then("^the server should respond with the contents of the directory of where the JAR is running$")
   public void the_server_should_respond_with_the_contents_of_the_directory_of_where_the_JAR_is_running() throws Throwable {
-    String messageBody = readMessageBody();  
+    String messageBody = DefStepsUtil.readMessageBody(this.con);  
 
     String expectedResponseMessageBody = "around-the-world.txt\n" + 
                                          "fresh-prince-of-bel-air.txt\n" +
@@ -38,19 +38,6 @@ public class RootSteps {
   @Then("^the server should respond with status code (\\d+)$")
   public void the_server_should_respond_with_status_code(int statusCode) throws Throwable {
       assertEquals(statusCode, this.con.getResponseCode());
-  }
-
-  private String readMessageBody() throws IOException {
-    BufferedReader in = new BufferedReader(
-      new InputStreamReader(this.con.getInputStream()));
-    String inputLine;
-    String messageBody = "";
-    while ((inputLine = in.readLine()) != null) {
-        messageBody += inputLine + "\n";
-    }
-    in.close();
-
-    return messageBody;
   }
 
   @When("^a client makes a GET request to any other endpoint$")

@@ -9,23 +9,13 @@ public class RootHandlerTest {
   
   @BeforeClass
   public static void setup () throws IOException, NonexistentDirectoryException {
-    String currentDirectoryPath = System.getProperty("user.dir");
-    String testDirectoryPath = currentDirectoryPath + "/src/test/java/Handler/RootHandlerTestDirectory";
-    File testDirectory = new File(testDirectoryPath);
-    testDirectory.mkdir();
-    testDirectory.deleteOnExit();
-    
-    String testTxtFilePath = testDirectoryPath + "/test-file.txt";
-    File testTxtFile = new File(testTxtFilePath);
-    testTxtFile.createNewFile(); 
-    testTxtFile.deleteOnExit();
+    String tempDirectoryPath = System.getProperty("user.dir") + "/src/test/java/Handler/RootHandlerTestDirectory";
 
-    String testHTMLFilePath = testDirectoryPath + "/test-html.html";
-    File testHTMLFile = new File(testHTMLFilePath);
-    testHTMLFile.createNewFile(); 
-    testHTMLFile.deleteOnExit();
+    TempDirectory temp = new TempDirectory(tempDirectoryPath);
+    temp.createEmptyFile("test-file.txt");
+    temp.createEmptyFile("test-html.html");
 
-    Directory directory = new Directory(testDirectoryPath); 
+    Directory directory = new Directory(tempDirectoryPath); 
     handler = new RootHandler(directory); 
   }
     
