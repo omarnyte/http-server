@@ -80,4 +80,23 @@ public class Directory implements DataStore {
     return filePath.split("\\.")[1];
   }
   
+  
+  private String[] getContentsOfDirectory() {
+    File directory = new File(this.directoryPath);
+    return directory.list();
+  }
+
+  private String stringifyContentsOfDirectory(String[] fileNames) {
+    String content = "";
+    
+    if (fileNames.length == 0) {
+      return "Empty directory!";
+    }
+    
+    for (String fileName : fileNames) {
+      content += fileName + "\n";
+    }
+    
+    return content;
+  }
 }
