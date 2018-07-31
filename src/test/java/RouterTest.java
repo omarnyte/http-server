@@ -1,45 +1,65 @@
 import java.util.HashMap;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class RouterTest {
-  private HashMap<String, Handler> routes; 
-  private Router router;
+  private static String customURI = "/custom/uri";
+  private static String messageFromCustomHandler = "I come from the custom handler.";
+  private static String messageFromDefaultHandler = "I come from the default handler.";
+  private static Router router;
   
-  @Before 
-  public void setup() {
-    this.routes = new HashMap<String, Handler>();
-    String rootPath = System.getProperty("user.dir");
-    String jarDirectoryPath = rootPath + "/build/libs";
-    this.routes.put("/", new RootHandler(jarDirectoryPath));
+  @BeforeClass 
+  public static void setUpRouter() {
+    Handler mockDefaultHandler = createMockHandlerThatRespondsWithMessage(messageFromDefaultHandler);
+    Handler mockCustomHandler = createMockHandlerThatRespondsWithMessage(messageFromCustomHandler);
 
-    this.router = new Router(routes);
+    HashMap<String, Handler> routes = new HashMap<String, Handler>();
+    routes.put(customURI, mockCustomHandler);
+    router = new Router(mockDefaultHandler, routes);
   }
-  
-  @Test 
-  public void returns404WhenURIIsNotFound() {
-    Request request = new Request.Builder()
-                                 .method("GET")
-                                 .uri("/path/that/does/not/exist")
-                                 .version("1.1")
-                                 .build(); 
 
-    Response response = this.router.getResponse(request);
-    assertEquals(404, response.getStatusCode());
+  @Test 
+  public void routesRequestToCorrectHandler() {
+    Request request = buildRequestToURI(customURI);
+    Response response = router.getResponse(request);
+    assertEquals(messageFromCustomHandler, response.getMessageBody());
   }
-  
-  @Test 
-  public void returns200WithDirectoryContents() {
-    Request request = new Request.Builder()
-                                 .method("GET")
-                                 .uri("/")
-                                 .version("1.1")
-                                 .build();
 
-    Response response = this.router.getResponse(request);
-    assertEquals(200, response.getStatusCode());
+  @Test 
+  public void routesRequestToDefaultHandlerWhenUriIsNotFound() {
+    Request request = buildRequestToURI("some/other/uri");
+    Response response = router.getResponse(request);
+    assertEquals(messageFromDefaultHandler, response.getMessageBody());
+  }
+
+  private static Handler createMockHandlerThatRespondsWithMessage(String message) {
+    Response response = new Response.Builder(HttpStatusCode.OK)
+                                    .httpVersion("1.1")
+                                    .messageBody(message)
+                                    .build();
+
+    return new MockHandler(response);
+  }
+
+  private static Request buildRequestToURI(String uri) {
+    return new Request.Builder()
+                      .method("GET")
+                      .uri(uri)
+                      .version("1.1")
+                      .build();
+  }
+
+  private static class MockHandler implements Handler {
+    Response response;
+    
+    public MockHandler(Response response) {
+      this.response = response; 
+    }
+
+    public Response generateResponse(Request request) {
+      return response;
+    }
   }
 
 }

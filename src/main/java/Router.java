@@ -1,8 +1,13 @@
 import java.util.HashMap;
 
 public class Router {
-
+  private Handler defaultHandler;
   private HashMap<String, Handler> routes;
+
+  public Router(Handler defaultHandler, HashMap<String, Handler> routes) {
+    this.defaultHandler = defaultHandler;
+    this.routes = routes;
+  }
 
   public Router(HashMap<String, Handler> routes) {
     this.routes = routes;
@@ -18,7 +23,7 @@ public class Router {
       return this.routes.get(uri);
     } 
 
-    return new NotFoundHandler();
+    return defaultHandler;
   }
  
 } 
