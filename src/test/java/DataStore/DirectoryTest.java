@@ -7,8 +7,19 @@ import org.junit.rules.ExpectedException;
 import org.junit.Test; 
 
 public class DirectoryTest {
-  private String testDirectoryPath = System.getProperty("user.dir") + "/src/test/resources/testFiles";
+  private static Directory directory;
 
+  @BeforeClass
+  public static void setUp() throws IOException, NonexistentDirectoryException {
+    String tempDirectoryPath = System.getProperty("user.dir") + "/src/test/java/DataStore/TestDirectory";
+
+    TempDirectory temp = new TempDirectory(tempDirectoryPath);
+    temp.createEmptyFile("empty-file.txt");
+    temp.createFileWithContent("text-file.txt", "This is a sample text file.");
+
+    directory = new Directory(tempDirectoryPath); 
+  }
+  
   @Rule
   public ExpectedException thrown = ExpectedException.none();  
 
@@ -21,31 +32,26 @@ public class DirectoryTest {
   }
 
   @Test 
-  public void listsDirectoryContent() throws NonexistentDirectoryException {
-    Directory directory = new Directory(this.testDirectoryPath);
-    assertEquals("around-the-world.txt\n" +
-                 "fresh-prince-of-bel-air.txt\n" + 
-                 "sample-text.txt\n", directory.listContent());
+  public void listsDirectoryContent() {
+    assertEquals("empty-file.txt\n" +
+                 "text-file.txt\n", directory.listContent());
   }
   
   @Test
-  public void returnsTrueWhenFileExists() throws NonexistentDirectoryException {
-    Directory directory = new Directory(this.testDirectoryPath);
-    String uri = "/around-the-world.txt";
+  public void returnsTrueWhenFileExists() {
+    String uri = "/text-file.txt";
     assertEquals(true, directory.existsInStore(uri));
   }
 
   @Test
-  public void returnsFalseWhenFileExists() throws NonexistentDirectoryException {
-    Directory directory = new Directory(this.testDirectoryPath);
+  public void returnsFalseWhenFileExists() {
     String uri = "/does-not-exist.txt";
     assertEquals(false, directory.existsInStore(uri));
   }
 
   @Test
   public void readsFileContent() throws NonexistentDirectoryException {
-    Directory directory = new Directory(this.testDirectoryPath);
-    String uri = "/sample-text.txt";
+    String uri = "/text-file.txt";
     assertEquals("This is a sample text file.\n", directory.read(uri));
   }
 
