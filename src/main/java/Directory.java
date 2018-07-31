@@ -16,6 +16,11 @@ public class Directory implements DataStore {
     }
   }
 
+  public String listContent() {
+    String[] contentsOfDirectory = getContentsOfDirectory();
+    return stringifyContentsOfDirectory(contentsOfDirectory);
+  }
+
   public Boolean existsInStore(String uri) {
     String filePath = this.directoryPath + uri;
     return new File(filePath).exists();
@@ -36,5 +41,24 @@ public class Directory implements DataStore {
     } 
  
     return content; 
+  }
+  
+  private String[] getContentsOfDirectory() {
+    File directory = new File(this.directoryPath);
+    return directory.list();
+  }
+
+  private String stringifyContentsOfDirectory(String[] fileNames) {
+    String content = "";
+    
+    if (fileNames.length == 0) {
+      return "Empty directory!";
+    }
+    
+    for (String fileName : fileNames) {
+      content += fileName + "\n";
+    }
+    
+    return content;
   }
 }
