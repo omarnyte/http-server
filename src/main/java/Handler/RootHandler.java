@@ -1,11 +1,11 @@
 import java.io.File;
 
 public class RootHandler implements Handler {
-  private String directoryPath;
   private Response response;
+  private DataStore store;
   
-  public RootHandler(String directoryPath) {
-    this.directoryPath = directoryPath;
+  public RootHandler(DataStore store) {
+    this.store = store;
   }
   
   public Response generateResponse(Request request) {
@@ -23,27 +23,8 @@ public class RootHandler implements Handler {
   }
 
   public String createMessageBody() {
-    String[] contentsOfDirectory = getContentsOfDirectory();
-    return stringifyContentsOfDirectory(contentsOfDirectory);
+    return this.store.listContent();
   }
 
-  private String[] getContentsOfDirectory() {
-    File directory = new File(this.directoryPath);
-    return directory.list();
-  }
-
-  private String stringifyContentsOfDirectory(String[] fileNames) {
-    String content = "";
-    
-    if (fileNames.length == 0) {
-      return "Empty directory!";
-    }
-    
-    for (String fileName : fileNames) {
-      content += fileName + "\n";
-    }
-    
-    return content;
-  }
-  
 }
+  
