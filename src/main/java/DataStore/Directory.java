@@ -1,9 +1,17 @@
 import java.io.BufferedReader; 
 import java.io.File;
 import java.io.FileReader; 
-import java.io.IOException; 
+import java.io.IOException;
+
+import java.util.Map;
 
 public class Directory implements DataStore {
+  private static final String DEFAULT_FILE_TYPE = "application/octet-stream";
+  private static final Map<String, String> MIME_TYPES = Map.ofEntries(
+      Map.entry("html", "text/html"),
+      Map.entry("txt", "text/plain")
+  );
+  
   private File directory;
   private String directoryPath;
 
@@ -61,4 +69,15 @@ public class Directory implements DataStore {
     
     return content;
   }
+
+  public String getFileType(String uri) {
+    String filePath = this.directoryPath + uri;
+    String extension = getExtension(filePath);
+    return MIME_TYPES.getOrDefault(extension, DEFAULT_FILE_TYPE);
+  }
+
+  private String getExtension(String filePath) {
+    return filePath.split("\\.")[1];
+  }
+  
 }

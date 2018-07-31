@@ -20,15 +20,21 @@
 
   private Response buildGETResponse() { 
     int statusCode = determineStatusCode();
+    String contentType = determineContentType();
     String messageBody = createMessageBody(statusCode);
      
     return new Response.Builder(statusCode) 
+                       .contentType(contentType)
                        .messageBody(messageBody) 
                        .build(); 
   } 
 
   private int determineStatusCode() {
-    return store.existsInStore(this.uri) ? HttpStatusCode.OK : HttpStatusCode.NOT_FOUND;
+    return this.store.existsInStore(this.uri) ? HttpStatusCode.OK : HttpStatusCode.NOT_FOUND;
+  }
+
+  private String determineContentType() {
+    return this.store.getFileType(this.uri);
   }
 
   private String createMessageBody(int statusCode) {
