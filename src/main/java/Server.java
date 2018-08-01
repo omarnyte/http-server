@@ -34,9 +34,4 @@ public class Server {
     }
   }
 
-  public void close() throws IOException {
-    System.out.println("Closing ServerSocket on port " + port);
-    this.server.close();
-  }
-
 }
