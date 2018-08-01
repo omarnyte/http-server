@@ -35,8 +35,8 @@ public class TextContentNegotiationSteps {
 
   @Then("^I should see the contents of the file$")
   public void i_should_see_the_contents_of_the_file() throws Throwable {
-      String messageBody = readMessageBody();
-      assertEquals("This is a sample text file.", messageBody);
+      String messageBody = DefStepsUtil.readMessageBody(this.con);
+      assertEquals("This is a sample text file.\n", messageBody);
   }
 
 
@@ -54,16 +54,4 @@ public class TextContentNegotiationSteps {
       assertEquals("Not Found", this.responseReasonPhrase);
   }
 
-  private String readMessageBody() throws IOException {
-    BufferedReader in = new BufferedReader(
-      new InputStreamReader(this.con.getInputStream()));
-    String inputLine;
-    String messageBody = "";
-    while ((inputLine = in.readLine()) != null) {
-        messageBody += inputLine;
-    }
-    in.close();
-
-    return messageBody;
-  }
 }
