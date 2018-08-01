@@ -1,3 +1,4 @@
+import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -12,13 +13,21 @@ public class EchoHandler implements Handler {
     String messageBody = "";
     switch (method) {
       case "GET": 
-        return new Response.Builder(HttpStatusCode.OK)
-                           .messageBody(createMessageBody())
-                           .build();
+        return buildGETResponse();
       default: 
         return new Response.Builder(HttpStatusCode.METHOD_NOT_ALLOWED)
                            .build();
     }
+  }
+
+  private Response buildGETResponse() {
+    String messageBody = createMessageBody();
+    int contentLength = ResponseHeader.determineContentLength(messageBody);
+    return new Response.Builder(HttpStatusCode.OK)
+                       .contentType("text/plain")
+                       .contentLength(contentLength)
+                       .messageBody(messageBody)
+                       .build();
   }
 
   private String createMessageBody() {
@@ -29,4 +38,5 @@ public class EchoHandler implements Handler {
     DateFormat dateFormat = new SimpleDateFormat(this.timeFormat);
     return dateFormat.format(new Date());
   }
+  
 }

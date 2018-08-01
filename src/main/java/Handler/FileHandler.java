@@ -1,3 +1,5 @@
+import java.io.UnsupportedEncodingException;
+
  public class FileHandler implements Handler {
   private DataStore store;
   private String uri;
@@ -22,9 +24,11 @@
     int statusCode = determineStatusCode();
     String contentType = determineContentType();
     String messageBody = createMessageBody(statusCode);
+    int contentLength = ResponseHeader.determineContentLength(messageBody);
      
     return new Response.Builder(statusCode) 
                        .contentType(contentType)
+                       .contentLength(contentLength)
                        .messageBody(messageBody) 
                        .build(); 
   } 
@@ -40,6 +44,17 @@
   private String createMessageBody(int statusCode) {
     String emptyMessageBody = "";
     return (statusCode == HttpStatusCode.OK) ? store.read(this.uri) : emptyMessageBody;
+  }
+
+  public int determineContentLength(String messageBody) {
+    int length = 0;
+    try {
+      length = messageBody.getBytes("UTF-8").length;
+    } catch (UnsupportedEncodingException e) {
+      System.err.println(e.getMessage());
+    }
+
+    return length;
   }
 
 }

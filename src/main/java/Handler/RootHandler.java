@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 
 public class RootHandler implements Handler {
   private Response response;
@@ -13,18 +14,25 @@ public class RootHandler implements Handler {
 
     switch (method) {
       case "GET": 
-        return new Response.Builder(HttpStatusCode.OK)
-                           .messageBody(createMessageBody())
-                           .build();
+        return buildGETResponse();
       default: 
         return new Response.Builder(HttpStatusCode.METHOD_NOT_ALLOWED)
                            .build();
     }
   }
 
-  public String createMessageBody() {
+  private Response buildGETResponse() {
+    String messageBody = createMessageBody();
+    int contentLength = ResponseHeader.determineContentLength(messageBody);
+    return new Response.Builder(HttpStatusCode.OK)
+                       .contentType("text/plain")
+                       .contentLength(contentLength)
+                       .messageBody(messageBody)
+                       .build(); 
+  }
+
+  private String createMessageBody() {
     return this.store.listContent();
   }
 
 }
-  
