@@ -1,5 +1,6 @@
 import java.io.UnsupportedEncodingException;
 import static org.junit.Assert.assertEquals;
+import java.util.HashMap;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,6 +35,12 @@ public class ResponseTest {
   }
 
   @Test 
+  public void getsHeadersHashMap() {
+    HashMap<String, String> headers = response.getHeaders();
+    assertEquals(CONTENT_TYPE, headers.get(ResponseHeader.CONTENT_TYPE));
+  }
+
+  @Test 
   public void setsHeadersWithAStringValue() {
     assertEquals(CONTENT_TYPE, response.getHeader(ResponseHeader.CONTENT_TYPE));
   }
@@ -42,15 +49,6 @@ public class ResponseTest {
   public void setsHeadersWithAnIntValue() {
     String stringifiedContentLength = Integer.toString(CONTENT_LENGTH);
     assertEquals(stringifiedContentLength, response.getHeader(ResponseHeader.CONTENT_LENGTH));
-  }
-
-  @Test
-  public void getsStringifiedResponseWithCarriageReturnsAndNewLines() {
-    assertEquals("HTTP/1.1 200 OK\r\n" +
-                 "Content-Type: text/plain\n" + 
-                 "Content-Length: 13" +  "\r\n" +
-                 "\r\n" + 
-                 "Hello, world!", response.toString());
   }
 
 }

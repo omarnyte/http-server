@@ -54,7 +54,7 @@ public class Response {
       return this;
     }
 
-    // delete vvv
+    // delete after merging ft/image-content-negotiation with master vvv
     public Builder contentType(String contentType) {
       this.headers.put(ResponseHeader.CONTENT_TYPE, contentType);
       return this;
@@ -65,7 +65,7 @@ public class Response {
       this.headers.put(ResponseHeader.CONTENT_LENGTH, stringifedContentLength);
       return this;
     }
-    // delete ^^^
+    // delete after merging ft/image-content-negotiation with master  ^^^
 
     public Response build() {
       return new Response(this);
@@ -101,7 +101,11 @@ public class Response {
     return this.headers.get(headerField);
   }
 
-  // delete vvvvv
+  public HashMap getHeaders() {
+    return this.headers;
+  }
+
+  // delete after merging ft/image-content-negotiation with master  vvvvv
   public String getContentType() {
     return this.headers.get(ResponseHeader.CONTENT_TYPE);
   }
@@ -110,19 +114,6 @@ public class Response {
     String stringifiedContentLength = this.headers.get(ResponseHeader.CONTENT_LENGTH);
     return Integer.parseInt(stringifiedContentLength);
   }
-  // delete ^^^
-
-  public String toString() {
-    return getStatusLine() + getHeaders() + "\r\n" + this.messageBody;
-  }
-  
-  private String getStatusLine() {
-    return "HTTP/" + this.version + " " + this.statusCode + " " + this.reasonPhrase + "\r\n";
-  }
-
-  private String getHeaders() {
-    return ResponseHeader.CONTENT_TYPE + ": " + getContentType() + "\n" +
-           ResponseHeader.CONTENT_LENGTH + ": " + getContentLength() + "\r\n";
-  }
+  // delete after merging ft/image-content-negotiation with master  ^^^
 
 }
