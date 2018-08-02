@@ -31,7 +31,7 @@ public class Directory implements DataStore {
   }
 
   public String listContent() {
-    String[] contentsOfDirectory = getContentsOfDirectory();
+    String[] contentsOfDirectory = this.directory.list();
     return stringifyContentsOfDirectory(contentsOfDirectory);
   }
 
@@ -57,17 +57,7 @@ public class Directory implements DataStore {
     String extension = getExtension(filePath);
     return MIME_TYPES.getOrDefault(extension, DEFAULT_FILE_TYPE);
   }
-
-  private String getExtension(String filePath) {
-    return filePath.split("\\.")[1];
-  }
   
-  
-  private String[] getContentsOfDirectory() {
-    File directory = new File(this.directoryPath);
-    return directory.list();
-  }
-
   private String stringifyContentsOfDirectory(String[] fileNames) {
     String content = "";
     
@@ -80,6 +70,10 @@ public class Directory implements DataStore {
     }
     
     return content;
+  }
+
+  private String getExtension(String filePath) {
+    return filePath.split("\\.")[1];
   }
   
 }
