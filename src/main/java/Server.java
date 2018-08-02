@@ -1,7 +1,4 @@
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -11,6 +8,7 @@ import java.util.concurrent.ExecutorService;
 public class Server {
   private int port; 
   private Router router;
+  ServerSocket server;
 
   public Server(int port, Router router) {
     this.port = port;
@@ -19,7 +17,7 @@ public class Server {
 
   public void start() {
     try {
-      ServerSocket server = new ServerSocket(this.port);
+      this.server = new ServerSocket(this.port);
       System.out.println("Listening on port " + this.port);
       ExecutorService executor = Executors.newCachedThreadPool();
       while (true) {
@@ -34,6 +32,11 @@ public class Server {
       System.err.println(e);
       System.err.println("Error on port " + port);
     }
+  }
+
+  public void close() throws IOException {
+    System.out.println("Closing ServerSocket on port " + port);
+    this.server.close();
   }
 
 }

@@ -53,7 +53,7 @@ public class Main {
     HashMap<String, Handler> routes = new HashMap<String, Handler>();
     
     String rootPath = System.getProperty("user.dir");
-    routes.put("/", new RootHandler(rootPath));
+    routes.put("/", new RootHandler(store));
     routes.put("/echo", new EchoHandler());
  
     return routes;
