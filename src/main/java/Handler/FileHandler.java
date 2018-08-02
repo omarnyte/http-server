@@ -22,8 +22,8 @@ import java.io.UnsupportedEncodingException;
 
   private Response buildGetResponse() {
     int statusCode = determineStatusCode();
-    String messageBody = createMessageBody();
-    int contentLength = ResponseHeader.determineContentLength(messageBody);
+    byte[] messageBody = createMessageBody();
+    int contentLength = messageBody.length;
     String contentType = determineContentType();
     return new Response.Builder(statusCode)
                    .messageBody(messageBody)
@@ -36,8 +36,8 @@ import java.io.UnsupportedEncodingException;
     return this.store.existsInStore(this.uri) ? HttpStatusCode.OK : HttpStatusCode.NOT_FOUND;
   }
 
-  private String createMessageBody() {
-    return this.store.existsInStore(this.uri) ? store.read(this.uri) : buildNotFoundMessage();
+  private byte[] createMessageBody() {
+    return this.store.existsInStore(this.uri) ? store.readFile(this.uri) : buildNotFoundMessage().getBytes();
   }
 
   private String buildNotFoundMessage() {

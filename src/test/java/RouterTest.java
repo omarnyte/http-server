@@ -1,5 +1,6 @@
+import java.util.Arrays;
 import java.util.HashMap;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -23,14 +24,16 @@ public class RouterTest {
   public void routesRequestToCorrectHandler() {
     Request request = buildRequestToURI(customURI);
     Response response = router.getResponse(request);
-    assertEquals(messageFromCustomHandler, response.getMessageBody());
+    byte[] expectedMessageBody = messageFromCustomHandler.getBytes();
+    assertTrue(Arrays.equals(expectedMessageBody, response.getMessageBody()));
   }
 
   @Test 
   public void routesRequestToDefaultHandlerWhenUriIsNotFound() {
     Request request = buildRequestToURI("some/other/uri");
     Response response = router.getResponse(request);
-    assertEquals(messageFromDefaultHandler, response.getMessageBody());
+    byte[] expectedMessageBody = messageFromDefaultHandler.getBytes();
+    assertTrue(Arrays.equals(expectedMessageBody, response.getMessageBody()));
   }
 
   private static Handler createMockHandlerThatRespondsWithMessage(String message) {
