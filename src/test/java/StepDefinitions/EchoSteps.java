@@ -32,7 +32,7 @@ public class EchoSteps {
 
   @Then("^the server should respond with \"([^\"]*)\"$")
   public void the_server_should_respond_with(String arg1) throws Throwable {
-    String messageBody = DefStepsUtil.readMessageBody(this.con); 
+    String messageBody = StepDefsUtil.readMessageBody(this.con); 
     String currentTime = getFormattedTime();    
 
     String expectedResponseMessageBody = "Hello, world: " + getFormattedTime() + "\n";

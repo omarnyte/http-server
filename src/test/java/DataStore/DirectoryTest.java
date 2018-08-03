@@ -54,5 +54,5 @@ public class DirectoryTest {
     String uri = "/text-file.txt";
     assertEquals("This is a sample text file.\n", directory.read(uri));
   }
-
+  
 }

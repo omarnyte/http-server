@@ -28,9 +28,10 @@ public class RootHandlerTest {
                                  .build();                           
   
     Response response = handler.generateResponse(request);
-
-  assertEquals("test-file.txt\n" + 
-               "test-html.html\n", response.getMessageBody());
+    String expectedMessageBody = removeLeadingParentheses(HTML_FILE_URI) + "\n" + 
+                                 removeLeadingParentheses(TEXT_FILE_URI) + "\n"; 
+    byte[] expectedMessageBodyInBytes = expectedMessageBody.getBytes();
+    assertTrue(Arrays.equals(expectedMessageBodyInBytes, response.getMessageBody()));
   }  
   
   @Test
