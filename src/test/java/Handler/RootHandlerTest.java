@@ -6,6 +6,7 @@ import org.junit.Test;
 public class RootHandlerTest {
   private final static String HTML_FILE_URI = "/html-file.html";
   private final static String TEXT_FILE_URI = "/text-file.txt";
+  private final static int PORT = 8888;
   
   private static Handler handler; 
   
@@ -18,24 +19,22 @@ public class RootHandlerTest {
     temp.createEmptyFile(HTML_FILE_URI);
 
     Directory directory = new Directory(tempDirectoryPath); 
-    handler = new RootHandler(directory); 
+    handler = new RootHandler(directory, PORT); 
   }
     
-  @Test
-  public void returnContentsOfDirectory() {
+  @Test 
+  public void returneContentsOfDirectoryAsHtml() {
     Request request = new Request.Builder()
                                  .method("GET")
                                  .uri("/")
                                  .version("1.1")
-                                 .build();                           
-  
+                                 .build();   
 
-    String expectedMessageBody = removeLeadingParentheses(HTML_FILE_URI) + "\n" +  
-                                 removeLeadingParentheses(TEXT_FILE_URI) + "\n"; 
-    Response response = handler.generateResponse(request);
-    String stringifiedMessageBody = new String(response.getMessageBody());
-    assertEquals(expectedMessageBody, stringifiedMessageBody);
-  }  
+    String[] uris = { HTML_FILE_URI, TEXT_FILE_URI };
+    String expectedHtml = createExpectedHtmlFromFileUris(uris);
+    String messageBody = new String(handler.generateResponse(request).getMessageBody());
+    assertEquals(expectedHtml, messageBody);
+  }
   
   @Test
   public void return405MethodNotAllowed() {
@@ -50,9 +49,16 @@ public class RootHandlerTest {
     assertEquals("Method Not Allowed", response.getReasonPhrase()); 
   }
 
-  private String removeLeadingParentheses(String uri) {
-    int idxOfFirstCharacter = 1;
-    return uri.substring(idxOfFirstCharacter);
+  private String createExpectedHtmlFromFileUris(String[] uris) {
+    String expectedHtml = "";
+    for (String uri : uris) {
+      String fileName = TestUtil.removeLeadingParenthesesFromUri(uri);
+      expectedHtml += String.format(
+        "<a href=\"http://localhost:%d/%s\">%s</a>" + 
+        "<br>", PORT, fileName, fileName);
+    }
+
+    return expectedHtml;
   }
   
 }

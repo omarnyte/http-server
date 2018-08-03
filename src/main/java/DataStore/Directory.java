@@ -30,9 +30,8 @@ public class Directory implements DataStore {
     }
   }
 
-  public String listContent() {
-    String[] contentsOfDirectory = this.directory.list();
-    return stringifyContentsOfDirectory(contentsOfDirectory);
+  public String[] listContent() {
+    return this.directory.list();
   }
 
   public Boolean existsInStore(String uri) {
@@ -56,20 +55,6 @@ public class Directory implements DataStore {
     String filePath = this.directoryPath + uri;
     String extension = getExtension(filePath);
     return MIME_TYPES.getOrDefault(extension, DEFAULT_FILE_TYPE);
-  }
-  
-  private String stringifyContentsOfDirectory(String[] fileNames) {
-    String content = "";
-    
-    if (fileNames.length == 0) {
-      return "Empty directory!";
-    }
-    
-    for (String fileName : fileNames) {
-      content += fileName + "\n";
-    }
-    
-    return content;
   }
 
   private String getExtension(String filePath) {

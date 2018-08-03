@@ -29,16 +29,20 @@ public class RootSteps {
   public void the_server_should_respond_with_the_contents_of_the_directory_of_where_the_JAR_is_running() throws Throwable {
     String messageBody = StepDefsUtil.readMessageBody(this.con);  
 
-    String expectedResponseMessageBody = "around-the-world.txt\n" + 
-                                         "cat-and-dog.jpg\n" +
-                                         "fresh-prince-of-bel-air.txt\n" +
-                                         "git-pull.gif\n" +
-                                         "git-push-force.gif\n" +
-                                         "git-push.gif\n" +
-                                         "purr-programming.jpg\n" +
-                                         "sample-text.txt\n" + 
-                                         "smiley-cat.png\n" +
-                                         "software-developurr.gif\n";
+    String[] fileUris = {
+      "/around-the-world.txt", 
+      "/cat-and-dog.jpg",
+      "/fresh-prince-of-bel-air.txt",
+      "/git-pull.gif",
+      "/git-push-force.gif",
+      "/git-push.gif",
+      "/purr-programming.jpg",
+      "/sample-text.txt", 
+      "/smiley-cat.png",
+      "/software-developurr.gif"
+    };
+
+    String expectedResponseMessageBody = createExpectedHtmlFromFileUris(fileUris) + "\n";
     assertEquals(expectedResponseMessageBody, messageBody);
   }
 
@@ -54,6 +58,18 @@ public class RootSteps {
     this.con = (HttpURLConnection) url.openConnection();
     
     this.responseReasonPhrase = con.getResponseMessage();
+  }
+
+  private String createExpectedHtmlFromFileUris(String[] uris) {
+    String expectedHtml = "";
+    for (String uri : uris) {
+      String fileName = TestUtil.removeLeadingParenthesesFromUri(uri);
+      expectedHtml += String.format(
+        "<a href=\"http://localhost:%d/%s\">%s</a>" + 
+        "<br>", port, fileName, fileName);
+    }
+
+    return expectedHtml;
   }
 
 }

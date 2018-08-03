@@ -9,7 +9,6 @@ import org.junit.Test;
 
 public class DirectoryTest {
   private final static String EMPTY_TEXT_FILE_URI = "/empty-file.txt";
-  private final static String HTML_FILE_URI = "/html-file.html";
   private final static String NONEXISTENT_FILE_URI = "/does-not-exist.txt";
   private final static String TEXT_FILE_CONTENT = "This is a sample text file.";
   private final static String TEXT_FILE_URI = "/text-file.txt";
@@ -37,9 +36,12 @@ public class DirectoryTest {
   }
 
   @Test 
-  public void listsDirectoryContent() {
-    assertEquals("empty-file.txt\n" +
-                 "text-file.txt\n", directory.listContent());
+  public void listsDirectoryContentAsArray() {
+    String[] directoryContent = directory.listContent();
+    String emptyTextFileName = TestUtil.removeLeadingParenthesesFromUri(EMPTY_TEXT_FILE_URI);
+    String textFileName = TestUtil.removeLeadingParenthesesFromUri(TEXT_FILE_URI);
+    assertTrue(Arrays.asList(directoryContent).contains(emptyTextFileName));
+    assertTrue(Arrays.asList(directoryContent).contains(textFileName));
   }
   
   @Test
@@ -65,4 +67,3 @@ public class DirectoryTest {
   }
   
 }
-
