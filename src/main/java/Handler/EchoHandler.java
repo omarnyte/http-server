@@ -13,14 +13,14 @@ public class EchoHandler implements Handler {
     String messageBody = "";
     switch (method) {
       case "GET": 
-        return buildGETResponse();
+        return buildGetResponse();
       default: 
         return new Response.Builder(HttpStatusCode.METHOD_NOT_ALLOWED)
                            .build();
     }
   }
 
-  private Response buildGETResponse() {
+  private Response buildGetResponse() {
     String messageBody = createMessageBody();
     int contentLength = ResponseHeader.determineContentLength(messageBody);
     return new Response.Builder(HttpStatusCode.OK)
