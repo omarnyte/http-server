@@ -27,8 +27,9 @@ public class ClientThread implements Runnable {
       
       Request request = parseRequest(requestString);
       Response response = this.router.getResponse(request);
-  
-      out.print(response.toString());
+      String formattedResponse = new ResponseFormatter(response).formatResponse();
+
+      out.print(formattedResponse);
 
       closeConnection();
 
