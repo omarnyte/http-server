@@ -10,12 +10,12 @@ public class ResponseFormatterTest {
   private final static String MESSAGE_BODY = "Hello, world!";
 
   private Response response = new Response.Builder(STATUS_CODE)
-                                          .httpVersion(HTTP_VERSION)
-                                          .reasonPhrase(REASON_PHRASE)
-                                          .contentType(CONTENT_TYPE)
-                                          .contentLength(CONTENT_LENGTH)
-                                          .messageBody(MESSAGE_BODY)
-                                          .build();
+                      .httpVersion(HTTP_VERSION)
+                      .reasonPhrase(REASON_PHRASE)
+                      .setHeader(ResponseHeader.CONTENT_LENGTH, CONTENT_LENGTH)
+                      .setHeader(ResponseHeader.CONTENT_TYPE, CONTENT_TYPE)
+                      .messageBody(MESSAGE_BODY)
+                      .build();
 
   @Test 
   public void formatsResponseWithHeaders() {
@@ -26,7 +26,8 @@ public class ResponseFormatterTest {
       ResponseHeader.CONTENT_TYPE + ": " + CONTENT_TYPE + "\r\n" +
       "\r\n" + 
       MESSAGE_BODY;
-    assertEquals(expectedResponse, formatter.formatResponse());
+    String stringifiedFormattedResponse = new String(formatter.formatResponse());
+    assertEquals(expectedResponse, stringifiedFormattedResponse);
   }
 
 }

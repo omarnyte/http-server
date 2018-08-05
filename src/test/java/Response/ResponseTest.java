@@ -1,6 +1,5 @@
-import java.io.UnsupportedEncodingException;
-import static org.junit.Assert.assertEquals;
 import java.util.HashMap;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,7 +30,8 @@ public class ResponseTest {
 
   @Test
   public void getsMessageBody() {
-    assertEquals(MESSAGE_BODY, response.getMessageBody());
+    String stringifiedMessageBody = new String(response.getMessageBody());
+    assertEquals(MESSAGE_BODY, stringifiedMessageBody);
   }
 
   @Test 

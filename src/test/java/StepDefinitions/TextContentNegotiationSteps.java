@@ -35,7 +35,7 @@ public class TextContentNegotiationSteps {
 
   @Then("^I should see the contents of the file$")
   public void i_should_see_the_contents_of_the_file() throws Throwable {
-      String messageBody = DefStepsUtil.readMessageBody(this.con);
+      String messageBody = StepDefsUtil.readMessageBody(this.con);
       assertEquals("This is a sample text file.\n", messageBody);
   }
 

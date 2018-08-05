@@ -22,22 +22,22 @@ import java.io.UnsupportedEncodingException;
 
   private Response buildGetResponse() {
     int statusCode = determineStatusCode();
-    String messageBody = createMessageBody();
-    int contentLength = ResponseHeader.determineContentLength(messageBody);
+    byte[] messageBody = createMessageBody();
+    int contentLength = messageBody.length;
     String contentType = determineContentType();
     return new Response.Builder(statusCode)
-                   .messageBody(messageBody)
-                   .contentLength(contentLength)
-                   .contentType(contentType)
-                   .build();
+                       .messageBody(messageBody)
+                       .setHeader(ResponseHeader.CONTENT_LENGTH, contentLength)
+                       .setHeader(ResponseHeader.CONTENT_TYPE, contentType)
+                       .build();
   }
 
   private int determineStatusCode() {
     return this.store.existsInStore(this.uri) ? HttpStatusCode.OK : HttpStatusCode.NOT_FOUND;
   }
 
-  private String createMessageBody() {
-    return this.store.existsInStore(this.uri) ? store.read(this.uri) : buildNotFoundMessage();
+  private byte[] createMessageBody() {
+    return this.store.existsInStore(this.uri) ? store.readFile(this.uri) : buildNotFoundMessage().getBytes();
   }
 
   private String buildNotFoundMessage() {

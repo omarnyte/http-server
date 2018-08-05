@@ -27,11 +27,18 @@ public class RootSteps {
 
   @Then("^the server should respond with the contents of the directory of where the JAR is running$")
   public void the_server_should_respond_with_the_contents_of_the_directory_of_where_the_JAR_is_running() throws Throwable {
-    String messageBody = DefStepsUtil.readMessageBody(this.con);  
+    String messageBody = StepDefsUtil.readMessageBody(this.con);  
 
     String expectedResponseMessageBody = "around-the-world.txt\n" + 
+                                         "cat-and-dog.jpg\n" +
                                          "fresh-prince-of-bel-air.txt\n" +
-                                         "sample-text.txt\n" ;
+                                         "git-pull.gif\n" +
+                                         "git-push-force.gif\n" +
+                                         "git-push.gif\n" +
+                                         "purr-programming.jpg\n" +
+                                         "sample-text.txt\n" + 
+                                         "smiley-cat.png\n" +
+                                         "software-developurr.gif\n";
     assertEquals(expectedResponseMessageBody, messageBody);
   }
 

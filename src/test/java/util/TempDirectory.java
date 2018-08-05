@@ -26,7 +26,7 @@ public class TempDirectory {
 
     String tempFilePath = this.directoryPath + "/" + fileName;
     try(PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(tempFilePath)))) {
-      out.println(content);
+      out.print(content);
     } catch (IOException e) {
       System.err.println("Could not write to: " + tempFilePath);
     }

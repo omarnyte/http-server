@@ -1,12 +1,19 @@
-import java.io.File; 
 import java.io.IOException; 
+import java.util.Arrays;
 import static org.junit.Assert.assertEquals; 
+import static org.junit.Assert.assertTrue; 
 import org.junit.BeforeClass; 
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 import org.junit.Test; 
 
 public class DirectoryTest {
+  private final static String EMPTY_TEXT_FILE_URI = "/empty-file.txt";
+  private final static String HTML_FILE_URI = "/html-file.html";
+  private final static String NONEXISTENT_FILE_URI = "/does-not-exist.txt";
+  private final static String TEXT_FILE_CONTENT = "This is a sample text file.";
+  private final static String TEXT_FILE_URI = "/text-file.txt";
+
   private static Directory directory;
 
   @BeforeClass
@@ -14,8 +21,8 @@ public class DirectoryTest {
     String tempDirectoryPath = System.getProperty("user.dir") + "/src/test/java/DataStore/TestDirectory";
 
     TempDirectory temp = new TempDirectory(tempDirectoryPath);
-    temp.createEmptyFile("empty-file.txt");
-    temp.createFileWithContent("text-file.txt", "This is a sample text file.");
+    temp.createEmptyFile(EMPTY_TEXT_FILE_URI);
+    temp.createFileWithContent(TEXT_FILE_URI, TEXT_FILE_CONTENT);
 
     directory = new Directory(tempDirectoryPath); 
   }
@@ -25,10 +32,8 @@ public class DirectoryTest {
 
   @Test 
   public void throwsNonexistentDirectoryExceptionWithInvalidPath() throws NonexistentDirectoryException {
-    String nonexistentPath = "path/that/does/not/exist";
-
     thrown.expect(NonexistentDirectoryException.class);
-    Directory directory = new Directory(nonexistentPath);
+    Directory directory = new Directory(NONEXISTENT_FILE_URI);
   }
 
   @Test 
@@ -39,20 +44,25 @@ public class DirectoryTest {
   
   @Test
   public void returnsTrueWhenFileExists() {
-    String uri = "/text-file.txt";
-    assertEquals(true, directory.existsInStore(uri));
+    assertEquals(true, directory.existsInStore(TEXT_FILE_URI));
   }
 
   @Test
-  public void returnsFalseWhenFileExists() {
-    String uri = "/does-not-exist.txt";
-    assertEquals(false, directory.existsInStore(uri));
+  public void returnsFalseWhenFileDoesNotExist() {
+    assertEquals(false, directory.existsInStore(NONEXISTENT_FILE_URI));
   }
 
-  @Test
-  public void readsFileContent() throws NonexistentDirectoryException {
-    String uri = "/text-file.txt";
-    assertEquals("This is a sample text file.\n", directory.read(uri));
+  @Test 
+  public void readsFileContentAndRespondsWithBytes() {
+    byte[] expectedResponseInBytes = TEXT_FILE_CONTENT.getBytes();
+    assertTrue(Arrays.equals(expectedResponseInBytes, directory.readFile(TEXT_FILE_URI)));
   }
 
+  @Test 
+  public void returnsTheCorrectFileTypeForTxt() {
+    String expectedContentType = "text/plain";
+    assertEquals(expectedContentType, directory.getFileType(TEXT_FILE_URI));
+  }
+  
 }
+

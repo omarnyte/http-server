@@ -1,10 +1,12 @@
 import static org.junit.Assert.assertEquals;
-import java.io.File;
 import java.io.IOException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class RootHandlerTest {
+  private final static String HTML_FILE_URI = "/html-file.html";
+  private final static String TEXT_FILE_URI = "/text-file.txt";
+  
   private static Handler handler; 
   
   @BeforeClass
@@ -12,8 +14,8 @@ public class RootHandlerTest {
     String tempDirectoryPath = System.getProperty("user.dir") + "/src/test/java/Handler/RootHandlerTestDirectory";
 
     TempDirectory temp = new TempDirectory(tempDirectoryPath);
-    temp.createEmptyFile("test-file.txt");
-    temp.createEmptyFile("test-html.html");
+    temp.createEmptyFile(TEXT_FILE_URI);
+    temp.createEmptyFile(HTML_FILE_URI);
 
     Directory directory = new Directory(tempDirectoryPath); 
     handler = new RootHandler(directory); 
@@ -27,10 +29,12 @@ public class RootHandlerTest {
                                  .version("1.1")
                                  .build();                           
   
-    Response response = handler.generateResponse(request);
 
-  assertEquals("test-file.txt\n" + 
-               "test-html.html\n", response.getMessageBody());
+    String expectedMessageBody = removeLeadingParentheses(HTML_FILE_URI) + "\n" +  
+                                 removeLeadingParentheses(TEXT_FILE_URI) + "\n"; 
+    Response response = handler.generateResponse(request);
+    String stringifiedMessageBody = new String(response.getMessageBody());
+    assertEquals(expectedMessageBody, stringifiedMessageBody);
   }  
   
   @Test
@@ -42,9 +46,13 @@ public class RootHandlerTest {
                                  .build();                           
 
     Response response = handler.generateResponse(request);
-
     assertEquals(405, response.getStatusCode()); 
     assertEquals("Method Not Allowed", response.getReasonPhrase()); 
+  }
+
+  private String removeLeadingParentheses(String uri) {
+    int idxOfFirstCharacter = 1;
+    return uri.substring(idxOfFirstCharacter);
   }
   
 }

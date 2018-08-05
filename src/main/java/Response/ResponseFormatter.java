@@ -1,5 +1,7 @@
 import java.util.HashMap;
 import java.util.Map;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 public class ResponseFormatter {
   Response response;
@@ -8,11 +10,19 @@ public class ResponseFormatter {
     this.response = response;
   }
   
-  public String formatResponse() {
-    return formatStatusLine() + 
-           formatHeaders() + 
-           "\r\n" +
-           this.response.getMessageBody();
+  public byte[] formatResponse() {
+    ByteArrayOutputStream responseStream = new ByteArrayOutputStream();
+      try {
+        responseStream.write(formatStatusLine().getBytes());
+        responseStream.write(formatHeaders().getBytes());
+        responseStream.write("\r\n".getBytes());
+        responseStream.write(this.response.getMessageBody());
+      } catch (IOException e) {
+        System.err.println("Could not format response.");
+        e.printStackTrace();
+      }
+
+      return responseStream.toByteArray();
   }
 
   private String formatStatusLine() {

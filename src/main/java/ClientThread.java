@@ -1,12 +1,12 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.OutputStream;
 import java.net.Socket;
 
 public class ClientThread implements Runnable {
   private BufferedReader in;
-  private PrintWriter out;
+  private OutputStream out;
   private Socket clientSocket; 
   private Router router;
   
@@ -27,12 +27,10 @@ public class ClientThread implements Runnable {
       
       Request request = parseRequest(requestString);
       Response response = this.router.getResponse(request);
-      String formattedResponse = new ResponseFormatter(response).formatResponse();
-
-      out.print(formattedResponse);
+      byte[] formattedResponse = new ResponseFormatter(response).formatResponse();
+      this.out.write(formattedResponse);
 
       closeConnection();
-
     } catch (Exception e) {
       System.err.println(e);
     }
@@ -41,7 +39,7 @@ public class ClientThread implements Runnable {
 
   private void initiateClient() throws IOException {
     this.in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-    this.out = new PrintWriter(clientSocket.getOutputStream());
+    this.out = clientSocket.getOutputStream();
   }
 
   private String stringifyRequest() throws IOException {

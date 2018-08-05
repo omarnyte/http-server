@@ -2,7 +2,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
 public class Response {
-  private String messageBody;
+  private byte[] messageBody;
   private String reasonPhrase;
   private int statusCode;
   private String version;
@@ -10,7 +10,7 @@ public class Response {
 
   public static class Builder { 
     private HashMap<String, String> headers;
-    private String messageBody;
+    private byte[] messageBody;
     private String reasonPhrase;
     private int statusCode;
     private String version;
@@ -18,7 +18,6 @@ public class Response {
     public Builder(int statusCode) {
       this.statusCode = statusCode;
       this.reasonPhrase = HttpStatusCode.getReasonPhrase(statusCode);
-      this.messageBody = "";
       this.version = "1.1";
       this.headers = new HashMap<String, String>();
     }
@@ -38,8 +37,13 @@ public class Response {
       return this;
     }
     
-    public Builder messageBody(String messageBody) {
+    public Builder messageBody(byte[] messageBody) {
       this.messageBody = messageBody;
+      return this;
+    }
+
+    public Builder messageBody(String messageBody) {
+      this.messageBody = messageBody.getBytes();
       return this;
     }
 
@@ -53,19 +57,6 @@ public class Response {
       this.headers.put(headerField, stringifiedValue);
       return this;
     }
-
-    // delete after merging ft/image-content-negotiation with master vvv
-    public Builder contentType(String contentType) {
-      this.headers.put(ResponseHeader.CONTENT_TYPE, contentType);
-      return this;
-    }
-
-    public Builder contentLength(int contentLength) {
-      String stringifedContentLength = Integer.toString(contentLength);
-      this.headers.put(ResponseHeader.CONTENT_LENGTH, stringifedContentLength);
-      return this;
-    }
-    // delete after merging ft/image-content-negotiation with master  ^^^
 
     public Response build() {
       return new Response(this);
@@ -93,7 +84,7 @@ public class Response {
     return this.reasonPhrase;
   }
 
-  public String getMessageBody() {
+  public byte[] getMessageBody() {
     return this.messageBody;
   }
 
@@ -104,16 +95,5 @@ public class Response {
   public HashMap getHeaders() {
     return this.headers;
   }
-
-  // delete after merging ft/image-content-negotiation with master  vvvvv
-  public String getContentType() {
-    return this.headers.get(ResponseHeader.CONTENT_TYPE);
-  }
-
-  public int getContentLength() {
-    String stringifiedContentLength = this.headers.get(ResponseHeader.CONTENT_LENGTH);
-    return Integer.parseInt(stringifiedContentLength);
-  }
-  // delete after merging ft/image-content-negotiation with master  ^^^
 
 }
