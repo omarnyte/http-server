@@ -6,7 +6,6 @@ import org.junit.Test;
 public class RootHandlerTest {
   private final static String HTML_FILE_URI = "/html-file.html";
   private final static String TEXT_FILE_URI = "/text-file.txt";
-  private final static int PORT = 8888;
   
   private static Handler handler; 
   
@@ -19,7 +18,7 @@ public class RootHandlerTest {
     temp.createEmptyFile(HTML_FILE_URI);
 
     Directory directory = new Directory(tempDirectoryPath); 
-    handler = new RootHandler(directory, PORT); 
+    handler = new RootHandler(directory); 
   }
     
   @Test 
@@ -31,7 +30,7 @@ public class RootHandlerTest {
                                  .build();   
 
     String[] uris = { HTML_FILE_URI, TEXT_FILE_URI };
-    String expectedHtml = createExpectedHtmlFromFileUris(uris);
+    String expectedHtml = TestUtil.createRootHtmlFromUris(uris);
     String messageBody = new String(handler.generateResponse(request).getMessageBody());
     assertEquals(expectedHtml, messageBody);
   }
@@ -49,16 +48,4 @@ public class RootHandlerTest {
     assertEquals("Method Not Allowed", response.getReasonPhrase()); 
   }
 
-  private String createExpectedHtmlFromFileUris(String[] uris) {
-    String expectedHtml = "";
-    for (String uri : uris) {
-      String fileName = TestUtil.removeLeadingParenthesesFromUri(uri);
-      expectedHtml += String.format(
-        "<a href=\"http://localhost:%d/%s\">%s</a>" + 
-        "<br>", PORT, fileName, fileName);
-    }
-
-    return expectedHtml;
-  }
-  
 }

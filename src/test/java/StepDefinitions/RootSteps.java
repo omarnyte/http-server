@@ -11,14 +11,15 @@ import static org.junit.Assert.assertEquals;
 import org.junit.After; 
 
 public class RootSteps {
+  private final static int PORT = 8888; 
+
   private HttpURLConnection con;
   private String responseReasonPhrase;
   private Server server;
-  private int port = 8888; 
 
   @When("^a client makes a GET request to /$")
   public void a_client_makes_a_GET_request_to() throws Throwable {
-    String urlString = String.format("http://localhost:%d/", this.port);
+    String urlString = String.format("http://localhost:%d/", PORT);
     URL url = new URL(urlString);
     this.con = (HttpURLConnection) url.openConnection();
     
@@ -42,7 +43,7 @@ public class RootSteps {
       "/software-developurr.gif"
     };
 
-    String expectedResponseMessageBody = createExpectedHtmlFromFileUris(fileUris) + "\n";
+    String expectedResponseMessageBody = TestUtil.createRootHtmlFromUris(fileUris) + "\n";
     assertEquals(expectedResponseMessageBody, messageBody);
   }
 
@@ -53,23 +54,11 @@ public class RootSteps {
 
   @When("^a client makes a GET request to any other endpoint$")
   public void a_client_makes_a_GET_request_to_any_other_endpoint() throws Throwable {
-    String urlString = String.format("http://localhost:%d/any/other/endpoint", this.port);
+    String urlString = String.format("http://localhost:%d/any/other/endpoint", PORT);
     URL url = new URL(urlString);
     this.con = (HttpURLConnection) url.openConnection();
     
     this.responseReasonPhrase = con.getResponseMessage();
-  }
-
-  private String createExpectedHtmlFromFileUris(String[] uris) {
-    String expectedHtml = "";
-    for (String uri : uris) {
-      String fileName = TestUtil.removeLeadingParenthesesFromUri(uri);
-      expectedHtml += String.format(
-        "<a href=\"http://localhost:%d/%s\">%s</a>" + 
-        "<br>", port, fileName, fileName);
-    }
-
-    return expectedHtml;
   }
 
 }
