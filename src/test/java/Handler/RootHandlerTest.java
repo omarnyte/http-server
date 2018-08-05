@@ -1,8 +1,5 @@
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -32,11 +29,12 @@ public class RootHandlerTest {
                                  .version("1.1")
                                  .build();                           
   
-    Response response = handler.generateResponse(request);
-    String expectedMessageBody = removeLeadingParentheses(HTML_FILE_URI) + "\n" + 
+
+    String expectedMessageBody = removeLeadingParentheses(HTML_FILE_URI) + "\n" +  
                                  removeLeadingParentheses(TEXT_FILE_URI) + "\n"; 
-    byte[] expectedMessageBodyInBytes = expectedMessageBody.getBytes();
-    assertTrue(Arrays.equals(expectedMessageBodyInBytes, response.getMessageBody()));
+    Response response = handler.generateResponse(request);
+    String stringifiedMessageBody = new String(response.getMessageBody());
+    assertEquals(expectedMessageBody, stringifiedMessageBody);
   }  
   
   @Test
@@ -48,7 +46,6 @@ public class RootHandlerTest {
                                  .build();                           
 
     Response response = handler.generateResponse(request);
-
     assertEquals(405, response.getStatusCode()); 
     assertEquals("Method Not Allowed", response.getReasonPhrase()); 
   }

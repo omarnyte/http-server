@@ -1,39 +1,38 @@
-import java.util.Arrays;
 import java.util.HashMap;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class RouterTest {
-  private static String customURI = "/custom/uri";
-  private static String messageFromCustomHandler = "I come from the custom handler.";
-  private static String messageFromDefaultHandler = "I come from the default handler.";
+  private final static String CUSTOM_URI = "/custom/uri";
+  private final static String MESSAGE_FROM_CUSTOM_HANDLER = "I come from the custom handler.";
+  private final static String MESSAGE_FROM_DEFAULT_HANDLER = "I come from the default handler.";
   private static Router router;
   
   @BeforeClass 
   public static void setUpRouter() {
-    Handler mockDefaultHandler = createMockHandlerThatRespondsWithMessage(messageFromDefaultHandler);
-    Handler mockCustomHandler = createMockHandlerThatRespondsWithMessage(messageFromCustomHandler);
+    Handler mockDefaultHandler = createMockHandlerThatRespondsWithMessage(MESSAGE_FROM_DEFAULT_HANDLER);
+    Handler mockCustomHandler = createMockHandlerThatRespondsWithMessage(MESSAGE_FROM_CUSTOM_HANDLER);
 
     HashMap<String, Handler> routes = new HashMap<String, Handler>();
-    routes.put(customURI, mockCustomHandler);
+    routes.put(CUSTOM_URI, mockCustomHandler);
     router = new Router(mockDefaultHandler, routes);
   }
 
   @Test 
   public void routesRequestToCorrectHandler() {
-    Request request = buildRequestToURI(customURI);
+    Request request = buildRequestToURI(CUSTOM_URI);
     Response response = router.getResponse(request);
-    byte[] expectedMessageBody = messageFromCustomHandler.getBytes();
-    assertTrue(Arrays.equals(expectedMessageBody, response.getMessageBody()));
+    String stringifiedMessageBody = new String(response.getMessageBody());
+    assertEquals(MESSAGE_FROM_CUSTOM_HANDLER, stringifiedMessageBody);
   }
 
   @Test 
   public void routesRequestToDefaultHandlerWhenUriIsNotFound() {
     Request request = buildRequestToURI("some/other/uri");
     Response response = router.getResponse(request);
-    byte[] expectedMessageBody = messageFromDefaultHandler.getBytes();
-    assertTrue(Arrays.equals(expectedMessageBody, response.getMessageBody()));
+    String stringifiedMessageBody = new String(response.getMessageBody());
+    assertEquals(MESSAGE_FROM_DEFAULT_HANDLER, stringifiedMessageBody);
   }
 
   private static Handler createMockHandlerThatRespondsWithMessage(String message) {

@@ -1,5 +1,4 @@
-import java.util.Arrays;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 public class ResponseFormatterTest {
@@ -21,23 +20,14 @@ public class ResponseFormatterTest {
   @Test 
   public void formatsResponseWithHeaders() {
     ResponseFormatter formatter = new ResponseFormatter(response);        
-<<<<<<< HEAD
     String expectedResponse = 
       "HTTP/" + HTTP_VERSION + " " + STATUS_CODE + " " + REASON_PHRASE + "\r\n" +
       ResponseHeader.CONTENT_LENGTH + ": " + CONTENT_LENGTH + "\r\n" +
       ResponseHeader.CONTENT_TYPE + ": " + CONTENT_TYPE + "\r\n" +
       "\r\n" + 
       MESSAGE_BODY;
-    assertEquals(expectedResponse, formatter.formatResponse());
-=======
-    String expectedResponse = "HTTP/1.1 200 OK\r\n" +
-                              "Content-Type: text/plain\n" + 
-                              "Content-Length: 13" + "\r\n" +
-                              "\r\n" + 
-                              "Hello, world!";
-    byte[] expectedResponseInBytes = expectedResponse.getBytes();
-    assertTrue(Arrays.equals(expectedResponseInBytes, formatter.formatResponse()));
->>>>>>> Read files using byte[] rather than String, allowing responses to media other than text
+    String stringifiedFormattedResponse = new String(formatter.formatResponse());
+    assertEquals(expectedResponse, stringifiedFormattedResponse);
   }
 
 }

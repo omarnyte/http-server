@@ -1,7 +1,5 @@
 import java.io.IOException; 
-import java.util.Arrays; 
 import static org.junit.Assert.assertEquals; 
-import static org.junit.Assert.assertTrue; 
 import org.junit.BeforeClass; 
 import org.junit.Test; 
  
@@ -40,8 +38,8 @@ public class FileHandlerTest {
   @Test 
   public void returnsContentOfFileInMessageBody() { 
     Response response = handler.generateResponse(this.requestToExistingFile); 
-    byte[] expectedResponseInBytes = TEXT_FILE_CONTENT.getBytes();
-    assertTrue(Arrays.equals(expectedResponseInBytes, response.getMessageBody())); 
+    String stringifiedMessageBody = new String(response.getMessageBody());
+    assertEquals(TEXT_FILE_CONTENT, stringifiedMessageBody);
   } 
 
   private static Request buildRequestToNonexistentFile() { 
