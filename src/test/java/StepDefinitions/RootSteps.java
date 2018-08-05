@@ -32,6 +32,10 @@ public class RootSteps {
     String expectedResponseMessageBody = "around-the-world.txt\n" + 
                                          "cat-and-dog.jpg\n" +
                                          "fresh-prince-of-bel-air.txt\n" +
+                                         "git-pull.gif\n" +
+                                         "git-push-force.gif\n" +
+                                         "git-push.gif\n" +
+                                         "purr-programming.jpg\n" +
                                          "sample-text.txt\n" + 
                                          "smiley-cat.png\n" +
                                          "software-developurr.gif\n";
