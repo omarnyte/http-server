@@ -20,6 +20,7 @@ public class Response {
       this.reasonPhrase = HttpStatusCode.getReasonPhrase(statusCode);
       this.version = "1.1";
       this.headers = new HashMap<String, String>();
+      this.messageBody = "".getBytes();
     }
 
     public Builder httpVersion(String version) {
