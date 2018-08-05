@@ -1,10 +1,7 @@
-<<<<<<< HEAD
 import java.util.HashMap;
 import java.util.Map;
-=======
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
->>>>>>> Read files using byte[] rather than String, allowing responses to media other than text
 
 public class ResponseFormatter {
   Response response;

@@ -25,8 +25,7 @@ public class RootHandler implements Handler {
     String messageBody = createMessageBody();
     int contentLength = ResponseHeader.determineContentLength(messageBody);
     return new Response.Builder(HttpStatusCode.OK)
-                       .contentType("text/plain")
-                       .contentLength(contentLength)
+                       .setHeader(ResponseHeader.CONTENT_LENGTH, contentLength)
                        .messageBody(messageBody)
                        .build(); 
   }

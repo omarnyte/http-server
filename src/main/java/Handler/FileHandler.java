@@ -26,10 +26,10 @@ import java.io.UnsupportedEncodingException;
     int contentLength = messageBody.length;
     String contentType = determineContentType();
     return new Response.Builder(statusCode)
-                   .messageBody(messageBody)
-                   .contentLength(contentLength)
-                   .contentType(contentType)
-                   .build();
+                       .messageBody(messageBody)
+                       .setHeader(ResponseHeader.CONTENT_LENGTH, contentLength)
+                       .setHeader(ResponseHeader.CONTENT_TYPE, contentType)
+                       .build();
   }
 
   private int determineStatusCode() {

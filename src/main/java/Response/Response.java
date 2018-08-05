@@ -79,15 +79,6 @@ public class Response {
     return this.reasonPhrase;
   }
 
-  public String getContentType() {
-    return this.headers.get(ResponseHeader.CONTENT_TYPE);
-  }
-
-  public int getContentLength() {
-    String stringifiedContentLength = this.headers.get(ResponseHeader.CONTENT_LENGTH);
-    return Integer.parseInt(stringifiedContentLength);
-  }
-
   public byte[] getMessageBody() {
     return this.messageBody;
   }
