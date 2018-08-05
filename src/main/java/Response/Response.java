@@ -42,6 +42,11 @@ public class Response {
       return this;
     }
 
+    public Builder messageBody(String messageBody) {
+      this.messageBody = messageBody.getBytes();
+      return this;
+    }
+
     public Builder setHeader(String headerField, String value) {
       this.headers.put(headerField, value);
       return this;
