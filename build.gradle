@@ -12,6 +12,7 @@ repositories {
 }
 
 dependencies {
+    testCompile group: 'info.cukes', name: 'cucumber-picocontainer', version: '1.2.5'
     testCompile 'info.cukes:cucumber-java:1.2.4'
     testCompile 'info.cukes:cucumber-junit:1.2.4'
     testCompile 'junit:junit:4.12'
