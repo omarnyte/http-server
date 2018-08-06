@@ -29,9 +29,9 @@ public class ResponseStepDefs {
   @Then("^the server should respond with the contents of the root path$")
   public void the_server_should_respond_with_the_contents_of_the_root_path() throws Throwable {
     String messageBody = StepDefsUtil.readMessageBody(this.world.con);  
-    String[] fileUris = getFileUris();
+    String[] fileNames = getFileNames();
 
-    String expectedResponseMessageBody = TestUtil.createRootHtmlFromFileNamesAndPort(fileUris, PORT) + "\n";
+    String expectedResponseMessageBody = TestUtil.createRootHtmlFromFileNames(fileNames) + "\n";
     assertEquals(expectedResponseMessageBody, messageBody);
   }
 
@@ -63,7 +63,7 @@ public class ResponseStepDefs {
     return dateFormat.format(new Date());
   }
 
-  private String[] getFileUris() {
+  private String[] getFileNames() {
     File testDirectory = new File(TEST_DIRECTORY_PATH);
     return testDirectory.list();
   }
