@@ -38,6 +38,20 @@ public class RootHandlerTest {
     assertEquals(expectedHtml, messageBody);
   }
   
+  @Test 
+  public void returnsOnlyHeadersForHeadRequest() {
+    Request request = new Request.Builder()
+                                 .method("HEAD")
+                                 .uri("/")
+                                 .version("1.1")
+                                 .build();   
+                                 
+    Response response = handler.generateResponse(request);
+    String messageBody = new String(response.getMessageBody());
+    assertEquals(200, response.getStatusCode()); 
+    assertEquals("", messageBody); 
+  }
+  
   @Test
   public void return405MethodNotAllowed() {
     Request request = new Request.Builder()
