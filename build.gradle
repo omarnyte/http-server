@@ -18,12 +18,23 @@ dependencies {
     testCompile 'junit:junit:4.12'
 }
 
+def defaultPort = 8888
+def testDirectoryPath = System.getProperty("user.dir") + '/src/test/resources/testFiles'
+
+task startServer(type: JavaExec) {
+    classpath sourceSets.main.runtimeClasspath
+    main = "Main"
+    args "-port", defaultPort, "-dir", testDirectoryPath
+}
+
 test {
-  testLogging {
-    exceptionFormat = 'full'
-    events = ["passed", "failed", "skipped", "standardOut", "standardError"] 
-  }
-  systemProperties System.getProperties()
+    systemProperty 'PORT', defaultPort
+    systemProperty 'TEST_DIRECTORY_PATH', testDirectoryPath
+
+    testLogging {
+        exceptionFormat = 'full'
+        events = ["passed", "failed", "skipped", "standardOut", "standardError"]
+    }
 }
 
 jar {
