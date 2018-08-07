@@ -12,6 +12,8 @@ import java.io.UnsupportedEncodingException;
     this.uri = request.getURI();
      
     switch (request.getMethod()) { 
+      case "HEAD":  
+        return buildHeadResponse(); 
       case "GET":  
         return buildGetResponse(); 
       default:  
@@ -20,6 +22,16 @@ import java.io.UnsupportedEncodingException;
     } 
   }
 
+  private Response buildHeadResponse() {
+    int statusCode = determineStatusCode();
+    byte[] messageBody = createMessageBody();
+    int contentLength = messageBody.length;
+    String contentType = determineContentType();
+    return new Response.Builder(statusCode)
+                       .setHeader(ResponseHeader.CONTENT_LENGTH, contentLength)
+                       .setHeader(ResponseHeader.CONTENT_TYPE, contentType)
+                       .build();
+  }
   private Response buildGetResponse() {
     int statusCode = determineStatusCode();
     byte[] messageBody = createMessageBody();
