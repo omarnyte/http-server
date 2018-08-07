@@ -8,3 +8,9 @@ Scenario: The text file exists
 Scenario: The text file does not exist
   When a client makes a GET request to /does-not-exist.txt
   Then the server should respond with status code 404 Not Found
+
+Scenario: HEAD request to an existing text file
+  When a client makes a HEAD request to /sample-text.txt
+  Then the server should respond with status code 200 OK 
+  And the server should respond with the header Content-Type text/plain
+  And the server should not respond with a message body
