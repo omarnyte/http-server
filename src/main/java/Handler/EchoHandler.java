@@ -12,6 +12,8 @@ public class EchoHandler implements Handler {
     String statusCodeAndReasonPhrase;
     String messageBody = "";
     switch (method) {
+      case "HEAD": 
+        return buildHeadResponse();
       case "GET": 
         return buildGetResponse();
       default: 
@@ -20,10 +22,20 @@ public class EchoHandler implements Handler {
     }
   }
 
+  private Response buildHeadResponse() {
+    String messageBody = createMessageBody();
+    int contentLength = ResponseHeader.determineContentLength(messageBody);
+    return new Response.Builder(HttpStatusCode.OK)
+                       .setHeader(ResponseHeader.CONTENT_TYPE, "text/plain")
+                       .setHeader(ResponseHeader.CONTENT_LENGTH, contentLength)
+                       .build();
+  }
+
   private Response buildGetResponse() {
     String messageBody = createMessageBody();
     int contentLength = ResponseHeader.determineContentLength(messageBody);
     return new Response.Builder(HttpStatusCode.OK)
+                       .setHeader(ResponseHeader.CONTENT_TYPE, "text/plain")
                        .setHeader(ResponseHeader.CONTENT_LENGTH, contentLength)
                        .messageBody(messageBody)
                        .build();
