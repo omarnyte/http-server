@@ -12,7 +12,7 @@ public class HeaderStepDefs {
   }
 
   @Then("^the server should respond with the header (.+) (.+)$")
-  public void the_server_should_respond_with_the_header_Content_Type_text_plain(String field, String expectedValue) throws Throwable {
+  public void the_server_should_respond_with_the_header(String field, String expectedValue) throws Throwable {
     assertEquals(expectedValue, this.world.con.getHeaderField(field));
   }
 
