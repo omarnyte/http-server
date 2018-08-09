@@ -69,6 +69,7 @@ public class Directory implements DataStore {
       FileOutputStream outputStream = new FileOutputStream(file.getAbsolutePath());
       outputStream.write(content);
     } catch(IOException e) {
+      System.err.println("IOException failed inside Directory");
       System.err.println(e);
     }
   }

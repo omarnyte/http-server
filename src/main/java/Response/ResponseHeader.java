@@ -3,6 +3,7 @@ import java.io.UnsupportedEncodingException;
 public class ResponseHeader {
   public final static String CONTENT_LENGTH = "Content-Length";
   public final static String CONTENT_TYPE = "Content-Type";
+  public final static String LOCATION = "Location";
   
   public static int determineContentLength(String messageBody) {
     int length = 0;

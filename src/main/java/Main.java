@@ -56,6 +56,7 @@ public class Main {
     String rootPath = System.getProperty("user.dir");
     routes.put("/", new RootHandler(store));
     routes.put("/echo", new EchoHandler());
+    routes.put("/api/form", new FormHandler(store));
  
     return routes;
   }

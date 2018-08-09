@@ -16,7 +16,7 @@ public class FormHandler implements Handler {
      
     switch (request.getMethod()) { 
       case "POST":  
-        return buildPostResponse(); 
+        return buildPostResponse(request); 
       default:  
         return new Response.Builder(HttpStatusCode.METHOD_NOT_ALLOWED) 
                            .build(); 
@@ -28,15 +28,10 @@ public class FormHandler implements Handler {
       byte[] content = createFileContent(request);
       store.postFile(uri, content);
       return new Response.Builder(HttpStatusCode.SEE_OTHER)
-                         .setHeader("Location", redirectUri)
+                         .setHeader("Location", uri)
                          .build();
-    } catch (IOException e) {
-      System.err.println(e);
-      return new Response.Builder(HttpStatusCode.BAD_REQUEST).build();
-    }
   }
-
-  private String randomFileName() {
+   private String randomFileName() {
     int rand = new Random().nextInt(999999999) + 100000000;
     return Integer.toString(rand);
   }
@@ -50,8 +45,7 @@ public class FormHandler implements Handler {
       String value = entry.getValue();
       content += key + " : " + value + "\n";
     }
-
-    return content.getBytes();
+     return content.getBytes();
   }
 
 }

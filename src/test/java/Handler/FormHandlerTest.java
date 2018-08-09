@@ -1,5 +1,6 @@
 import java.io.File; 
 import java.io.IOException; 
+import java.util.HashMap;
 import static org.junit.Assert.assertEquals; 
 import static org.junit.Assert.assertTrue; 
 import org.junit.AfterClass; 
@@ -7,12 +8,16 @@ import org.junit.BeforeClass;
 import org.junit.Test; 
 
 public class FormHandlerTest {
-  private final static String HUMAN_NAME = "Martin";
-  private final static String PET_TYPE = "cats";
+  private final static String FIRST_KEY = "firstKey";
+  private final static String FIRST_VAL = "firstVal";
+  private final static String SECOND_KEY = "secondKey";
+  private final static String SECOND_VAL = "secondVal";
   private final static String TEMP_ROOT_DIRECTORY_PATH = System.getProperty("user.dir") + "/src/test/java/Handler/FormHandlerTestDirectory";
   
   private static String seeOtherUri;
   private static Handler handler;
+  private static Response response;
+  private static DataStore store;
   
   @BeforeClass
   public static void setUp() throws IOException, NonexistentDirectoryException {
@@ -23,20 +28,25 @@ public class FormHandlerTest {
 
     store = new Directory(TEMP_ROOT_DIRECTORY_PATH); 
     handler = new FormHandler(store); 
-  }
-  
-  @Test
-  public void createsResourceBasedOnSubmittedData() {
+    
     Request request = new Request.Builder()
                                  .method("POST")
                                  .uri("/api/form")
                                  .version("1.1")
-                                 .addMessageBodyKeyVal("humanName", "Martin")
-                                 .addMessageBodyKeyVal("type", "cat")
+                                 .addMessageBodyKeyVal(FIRST_KEY, FIRST_VAL)
+                                 .addMessageBodyKeyVal(SECOND_KEY, SECOND_VAL)
                                  .build();
-
-    Response response = handler.generateResponse(request);
-    assertEquals(HttpStatusCode.SEE_OTHER, response.getStatusCode());
+    response = handler.generateResponse(request);
+    
+    seeOtherUri = response.getHeader(ResponseHeader.LOCATION);
+  }
+  
+  @Test
+  public void returnsStatusCode303SeeOther() {
+    int statusCode = response.getStatusCode();
+    String reasonPhrase = response.getReasonPhrase();
+    assertEquals(HttpStatusCode.SEE_OTHER, statusCode);
+    assertEquals(HttpStatusCode.getReasonPhrase(HttpStatusCode.SEE_OTHER), response.getReasonPhrase());
   }
 
   @Test
@@ -55,7 +65,7 @@ public class FormHandlerTest {
   @AfterClass 
   public static void tearDown() {
     File createdFile = new File(TEMP_ROOT_DIRECTORY_PATH + seeOtherUri);
-    System.out.println("DELETED CREATED FILE? : " + createdFile.delete());
+    createdFile.delete();
   }
 
 }
