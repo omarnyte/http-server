@@ -1,5 +1,6 @@
 import java.io.BufferedReader; 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader; 
 import java.io.IOException;
 import java.util.Map;
@@ -59,6 +60,17 @@ public class Directory implements DataStore {
 
   private String getExtension(String filePath) {
     return filePath.split("\\.")[1];
+  }
+
+  public void postFile(String uri, byte[] content) {
+    try {
+      File file = new File(this.directoryPath + uri);
+      file.createNewFile();
+      FileOutputStream outputStream = new FileOutputStream(file.getAbsolutePath());
+      outputStream.write(content);
+    } catch(IOException e) {
+      System.err.println(e);
+    }
   }
   
 }
