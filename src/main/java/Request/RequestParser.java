@@ -14,16 +14,12 @@ public class RequestParser {
       buildRequestLine(requestBuilder);
       buildHeaders(requestBuilder);
       buildMessageBody(requestBuilder);
-
-      return requestBuilder.setHeader("Content-Type","application/x-www-form-urlencoded")
-                         .addMessageBodyKeyVal("hello", "world")
-                         .build();
+      return requestBuilder.build();
     } catch (ArrayIndexOutOfBoundsException e) {
       throw new BadRequestException("Bad request from ArrayIndex!");
     } catch (IOException e) {
       throw new BadRequestException("Bad request from IOException!");
     }
-
   }
 
   private Request.Builder buildRequestLine(Request.Builder requestBuilder) throws IOException {
