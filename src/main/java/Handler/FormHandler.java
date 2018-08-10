@@ -31,13 +31,13 @@ public class FormHandler implements Handler {
                          .setHeader("Location", uri)
                          .build();
   }
+
    private String randomFileName() {
     int rand = new Random().nextInt(999999999) + 100000000;
     return Integer.toString(rand);
   }
 
   private byte[] createFileContent(Request request) {
-    String LINE_SEPARATOR = System.getProperty("line.separator");
     String content =  "Thank you for submitting the following data:\n";
     HashMap<String, String> messageBody = request.getMessageBody();
     for (Map.Entry<String, String> entry : messageBody.entrySet()) {

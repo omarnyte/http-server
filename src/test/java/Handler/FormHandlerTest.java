@@ -58,7 +58,6 @@ public class FormHandlerTest {
 
   @Test
   public void createsResourceBasedOnPostedData() {
-    System.out.println(seeOtherUri);
     assertTrue(store.existsInStore(seeOtherUri));
   }
 

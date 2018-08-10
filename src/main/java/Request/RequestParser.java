@@ -51,7 +51,6 @@ public class RequestParser {
     if (stringifiedMessageBody.length() > 0) {
       String[] splitMessageBody = stringifiedMessageBody.split("&");
       for (String keyValPair : splitMessageBody) {
-        System.out.println("keyValPair: " + keyValPair);
         String[] splitKeyValPair = keyValPair.split("=");
         String key = splitKeyValPair[0];
         String val = splitKeyValPair[1];
