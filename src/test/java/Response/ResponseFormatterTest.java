@@ -14,8 +14,8 @@ public class ResponseFormatterTest {
     Response response = new Response.Builder(STATUS_CODE)
                       .httpVersion(HTTP_VERSION)
                       .reasonPhrase(REASON_PHRASE)
-                      .setHeader(ResponseHeader.CONTENT_LENGTH, CONTENT_LENGTH)
-                      .setHeader(ResponseHeader.CONTENT_TYPE, CONTENT_TYPE)
+                      .setHeader(MessageHeader.CONTENT_LENGTH, CONTENT_LENGTH)
+                      .setHeader(MessageHeader.CONTENT_TYPE, CONTENT_TYPE)
                       .messageBody(MESSAGE_BODY)
                       .build();
     ResponseFormatter formatter = new ResponseFormatter(response);   
@@ -38,8 +38,8 @@ public class ResponseFormatterTest {
 
   private String createExpectedResponseWithMessageBodyAndHeaders() {
     return "HTTP/" + HTTP_VERSION + " " + STATUS_CODE + " " + REASON_PHRASE + "\r\n" +
-      ResponseHeader.CONTENT_LENGTH + ": " + CONTENT_LENGTH + "\r\n" +
-      ResponseHeader.CONTENT_TYPE + ": " + CONTENT_TYPE + "\r\n" +
+      MessageHeader.CONTENT_LENGTH + ": " + CONTENT_LENGTH + "\r\n" +
+      MessageHeader.CONTENT_TYPE + ": " + CONTENT_TYPE + "\r\n" +
       "\r\n" + 
       MESSAGE_BODY;
   }

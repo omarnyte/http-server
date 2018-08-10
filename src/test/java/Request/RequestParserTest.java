@@ -35,7 +35,7 @@ public class RequestParserTest {
 
   @Test
   public void parsesHeaders() {
-    assertEquals(CONTENT_TYPE, request.getHeader(MessageHeader.CONTENT_TYPE));
+    assertEquals("application/x-www-form-urlencoded", request.getHeader(MessageHeader.CONTENT_TYPE));
   }
 
   @Test

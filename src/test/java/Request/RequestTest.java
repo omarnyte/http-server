@@ -12,7 +12,7 @@ public class RequestTest {
                           .method("GET")
                           .uri("/uri/path")
                           .version("1.1")
-                          .setHeader(ResponseHeader.CONTENT_TYPE, CONTENT_TYPE)
+                          .setHeader(MessageHeader.CONTENT_TYPE, CONTENT_TYPE)
                           .addMessageBodyKeyVal(MESSAGE_BODY_KEY, MESSAGE_BODY_VAL)
                           .build();
 
@@ -34,12 +34,12 @@ public class RequestTest {
   @Test 
   public void getsHeadersHashMap() {
     HashMap<String, String> headers = request.getHeaders();
-    assertEquals(CONTENT_TYPE, headers.get(ResponseHeader.CONTENT_TYPE));
+    assertEquals(CONTENT_TYPE, headers.get(MessageHeader.CONTENT_TYPE));
   }
 
   @Test 
   public void setsHeadersWithAStringValue() {
-    assertEquals(CONTENT_TYPE, request.getHeader(ResponseHeader.CONTENT_TYPE));
+    assertEquals(CONTENT_TYPE, request.getHeader(MessageHeader.CONTENT_TYPE));
   }
 
   @Test 

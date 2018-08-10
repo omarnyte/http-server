@@ -38,7 +38,7 @@ public class FormHandlerTest {
                                  .build();
     response = handler.generateResponse(request);
     
-    seeOtherUri = response.getHeader(ResponseHeader.LOCATION);
+    seeOtherUri = response.getHeader(MessageHeader.LOCATION);
   }
   
   @Test

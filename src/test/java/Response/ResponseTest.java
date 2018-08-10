@@ -13,8 +13,8 @@ public class ResponseTest {
   private Response response = new Response.Builder(HttpStatusCode.OK)
                       .httpVersion(HTTP_VERSION)
                       .reasonPhrase(REASON_PHRASE)
-                      .setHeader(ResponseHeader.CONTENT_TYPE, CONTENT_TYPE)
-                      .setHeader(ResponseHeader.CONTENT_LENGTH, CONTENT_LENGTH)
+                      .setHeader(MessageHeader.CONTENT_TYPE, CONTENT_TYPE)
+                      .setHeader(MessageHeader.CONTENT_LENGTH, CONTENT_LENGTH)
                       .messageBody(MESSAGE_BODY)
                       .build();
   
@@ -37,18 +37,18 @@ public class ResponseTest {
   @Test 
   public void getsHeadersHashMap() {
     HashMap<String, String> headers = response.getHeaders();
-    assertEquals(CONTENT_TYPE, headers.get(ResponseHeader.CONTENT_TYPE));
+    assertEquals(CONTENT_TYPE, headers.get(MessageHeader.CONTENT_TYPE));
   }
 
   @Test 
   public void setsHeadersWithAStringValue() {
-    assertEquals(CONTENT_TYPE, response.getHeader(ResponseHeader.CONTENT_TYPE));
+    assertEquals(CONTENT_TYPE, response.getHeader(MessageHeader.CONTENT_TYPE));
   }
 
   @Test 
   public void setsHeadersWithAnIntValue() {
     String stringifiedContentLength = Integer.toString(CONTENT_LENGTH);
-    assertEquals(stringifiedContentLength, response.getHeader(ResponseHeader.CONTENT_LENGTH));
+    assertEquals(stringifiedContentLength, response.getHeader(MessageHeader.CONTENT_LENGTH));
   }
 
 }
