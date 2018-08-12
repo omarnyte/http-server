@@ -21,21 +21,19 @@ public class RootHandlerTest {
     handler = new RootHandler(directory); 
   }
     
-  @Test
-  public void returnContentsOfDirectory() {
+  @Test 
+  public void returneContentsOfDirectoryAsHtml() {
     Request request = new Request.Builder()
                                  .method("GET")
                                  .uri("/")
                                  .version("1.1")
-                                 .build();                           
-  
+                                 .build();   
 
-    String expectedMessageBody = removeLeadingParentheses(HTML_FILE_URI) + "\n" +  
-                                 removeLeadingParentheses(TEXT_FILE_URI) + "\n"; 
-    Response response = handler.generateResponse(request);
-    String stringifiedMessageBody = new String(response.getMessageBody());
-    assertEquals(expectedMessageBody, stringifiedMessageBody);
-  }  
+    String[] uris = { HTML_FILE_URI, TEXT_FILE_URI };
+    String expectedHtml = TestUtil.createRootHtmlFromUris(uris);
+    String messageBody = new String(handler.generateResponse(request).getMessageBody());
+    assertEquals(expectedHtml, messageBody);
+  }
   
   @Test
   public void return405MethodNotAllowed() {
@@ -50,9 +48,4 @@ public class RootHandlerTest {
     assertEquals("Method Not Allowed", response.getReasonPhrase()); 
   }
 
-  private String removeLeadingParentheses(String uri) {
-    int idxOfFirstCharacter = 1;
-    return uri.substring(idxOfFirstCharacter);
-  }
-  
 }

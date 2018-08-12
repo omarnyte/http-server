@@ -11,14 +11,15 @@ import static org.junit.Assert.assertEquals;
 import org.junit.After; 
 
 public class RootSteps {
+  private final static int PORT = 8888; 
+
   private HttpURLConnection con;
   private String responseReasonPhrase;
   private Server server;
-  private int port = 8888; 
 
   @When("^a client makes a GET request to /$")
   public void a_client_makes_a_GET_request_to() throws Throwable {
-    String urlString = String.format("http://localhost:%d/", this.port);
+    String urlString = String.format("http://localhost:%d/", PORT);
     URL url = new URL(urlString);
     this.con = (HttpURLConnection) url.openConnection();
     
@@ -29,16 +30,20 @@ public class RootSteps {
   public void the_server_should_respond_with_the_contents_of_the_directory_of_where_the_JAR_is_running() throws Throwable {
     String messageBody = StepDefsUtil.readMessageBody(this.con);  
 
-    String expectedResponseMessageBody = "around-the-world.txt\n" + 
-                                         "cat-and-dog.jpg\n" +
-                                         "fresh-prince-of-bel-air.txt\n" +
-                                         "git-pull.gif\n" +
-                                         "git-push-force.gif\n" +
-                                         "git-push.gif\n" +
-                                         "purr-programming.jpg\n" +
-                                         "sample-text.txt\n" + 
-                                         "smiley-cat.png\n" +
-                                         "software-developurr.gif\n";
+    String[] fileUris = {
+      "/around-the-world.txt", 
+      "/cat-and-dog.jpg",
+      "/fresh-prince-of-bel-air.txt",
+      "/git-pull.gif",
+      "/git-push-force.gif",
+      "/git-push.gif",
+      "/purr-programming.jpg",
+      "/sample-text.txt", 
+      "/smiley-cat.png",
+      "/software-developurr.gif"
+    };
+
+    String expectedResponseMessageBody = TestUtil.createRootHtmlFromUris(fileUris) + "\n";
     assertEquals(expectedResponseMessageBody, messageBody);
   }
 
@@ -49,7 +54,7 @@ public class RootSteps {
 
   @When("^a client makes a GET request to any other endpoint$")
   public void a_client_makes_a_GET_request_to_any_other_endpoint() throws Throwable {
-    String urlString = String.format("http://localhost:%d/any/other/endpoint", this.port);
+    String urlString = String.format("http://localhost:%d/any/other/endpoint", PORT);
     URL url = new URL(urlString);
     this.con = (HttpURLConnection) url.openConnection();
     

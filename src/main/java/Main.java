@@ -1,9 +1,10 @@
 import java.util.HashMap;
  
 public class Main {
+  private static final int DEFAULT_PORT_NUMBER = 8888;
+  
   private static CLIParser parser;
   private static DataStore store;
-  private static final int DEFAULT_PORT_NUMBER = 8888;
  
   public static void main(String[] args) {
     try {
@@ -12,8 +13,8 @@ public class Main {
       DataStore store = extractDataStore();
       Handler defaultHandler = new FileHandler(store);
  
-      Router router = setUpRouter(defaultHandler);
       int port = parser.getPortNumberOrDefault(DEFAULT_PORT_NUMBER);
+      Router router = setUpRouter(defaultHandler);
       Server server = new Server(port, router);
       server.start();
     } catch (ArrayIndexOutOfBoundsException e) {

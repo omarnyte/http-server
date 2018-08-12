@@ -9,25 +9,45 @@ public class ResponseFormatterTest {
   private final static int CONTENT_LENGTH = 13;
   private final static String MESSAGE_BODY = "Hello, world!";
 
-  private Response response = new Response.Builder(STATUS_CODE)
+  @Test 
+  public void formatsResponseWithMessage() {
+    Response response = new Response.Builder(STATUS_CODE)
                       .httpVersion(HTTP_VERSION)
                       .reasonPhrase(REASON_PHRASE)
                       .setHeader(ResponseHeader.CONTENT_LENGTH, CONTENT_LENGTH)
                       .setHeader(ResponseHeader.CONTENT_TYPE, CONTENT_TYPE)
                       .messageBody(MESSAGE_BODY)
                       .build();
+    ResponseFormatter formatter = new ResponseFormatter(response);   
+
+    String expectedResponse = createExpectedResponseWithMessageBodyAndHeaders();
+    String stringifiedFormattedResp = new String(formatter.formatResponse());
+    assertEquals(expectedResponse, stringifiedFormattedResp);
+  }
 
   @Test 
-  public void formatsResponseWithHeaders() {
+  public void formatsResponseWithoutMessage() {
+    Response response = new Response.Builder(HttpStatusCode.METHOD_NOT_ALLOWED)
+                                    .build();
     ResponseFormatter formatter = new ResponseFormatter(response);        
-    String expectedResponse = 
-      "HTTP/" + HTTP_VERSION + " " + STATUS_CODE + " " + REASON_PHRASE + "\r\n" +
+
+    String expectedResponse = createExpectedResponseWithNoMessageBody();
+    String stringifiedFormattedResp = new String(formatter.formatResponse());
+    assertEquals(expectedResponse, stringifiedFormattedResp);
+  }
+
+  private String createExpectedResponseWithMessageBodyAndHeaders() {
+    return "HTTP/" + HTTP_VERSION + " " + STATUS_CODE + " " + REASON_PHRASE + "\r\n" +
       ResponseHeader.CONTENT_LENGTH + ": " + CONTENT_LENGTH + "\r\n" +
       ResponseHeader.CONTENT_TYPE + ": " + CONTENT_TYPE + "\r\n" +
       "\r\n" + 
       MESSAGE_BODY;
-    String stringifiedFormattedResponse = new String(formatter.formatResponse());
-    assertEquals(expectedResponse, stringifiedFormattedResponse);
+  }
+
+  private String createExpectedResponseWithNoMessageBody() {
+    int statusCode = HttpStatusCode.METHOD_NOT_ALLOWED;
+    return "HTTP/" + HTTP_VERSION + " " + statusCode + " " + HttpStatusCode.getReasonPhrase(statusCode) + "\r\n" +
+    "\r\n";
   }
 
 }
