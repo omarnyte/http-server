@@ -29,8 +29,11 @@ public class RootHandlerTest {
                                  .version("1.1")
                                  .build();   
 
-    String[] uris = { HTML_FILE_URI, TEXT_FILE_URI };
-    String expectedHtml = TestUtil.createRootHtmlFromUris(uris);
+    String[] files = { TestUtil.removeLeadingParenthesesFromUri(HTML_FILE_URI),
+                       TestUtil.removeLeadingParenthesesFromUri(TEXT_FILE_URI) 
+                    };
+    String expectedHtml = TestUtil.createRootHtmlFromFileNames(files);
+    // String expectedHtml = TestUtil.createRootHtmlFromUris(uris);
     String messageBody = new String(handler.generateResponse(request).getMessageBody());
     assertEquals(expectedHtml, messageBody);
   }

@@ -1,9 +1,8 @@
 public class TestUtil {
 
-  public static String createRootHtmlFromUris(String[] uris) {
+  public static String createRootHtmlFromFileNames(String[] fileNames) {
     String expectedHtml = "";
-    for (String uri : uris) {
-      String fileName = TestUtil.removeLeadingParenthesesFromUri(uri);
+    for (String fileName : fileNames) {
       expectedHtml += String.format(
         "<a href=\"/%s\">%s</a>" + 
         "<br>", fileName, fileName);
@@ -12,11 +11,21 @@ public class TestUtil {
     return expectedHtml;
   }
   
+  // public static String createRootHtmlFromUris(String[] uris) {
+  //   String expectedHtml = "";
+  //   for (String uri : uris) {
+  //     String fileName = TestUtil.removeLeadingParenthesesFromUri(uri);
+  //     expectedHtml += String.format(
+  //       "<a href=\"/%s\">%s</a>" + 
+  //       "<br>", fileName, fileName);
+  //   }
+
+  //   return expectedHtml;
+  // }
+
   public static String removeLeadingParenthesesFromUri(String uri) {
     int idxOfFirstCharacter = 1;
     return uri.substring(idxOfFirstCharacter);
   }
-
-  
 
 }

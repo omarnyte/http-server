@@ -12,17 +12,29 @@ repositories {
 }
 
 dependencies {
+    testCompile group: 'info.cukes', name: 'cucumber-picocontainer', version: '1.2.5'
     testCompile 'info.cukes:cucumber-java:1.2.4'
     testCompile 'info.cukes:cucumber-junit:1.2.4'
     testCompile 'junit:junit:4.12'
 }
 
+def defaultPort = 8888
+def testDirectoryPath = System.getProperty("user.dir") + '/src/test/resources/testFiles'
+
+task startServer(type: JavaExec) {
+    classpath sourceSets.main.runtimeClasspath
+    main = "Main"
+    args "-port", defaultPort, "-dir", testDirectoryPath
+}
+
 test {
-  testLogging {
-    exceptionFormat = 'full'
-    events = ["passed", "failed", "skipped", "standardOut", "standardError"] 
-  }
-  systemProperties System.getProperties()
+    systemProperty 'PORT', defaultPort
+    systemProperty 'TEST_DIRECTORY_PATH', testDirectoryPath
+
+    testLogging {
+        exceptionFormat = 'full'
+        events = ["passed", "failed", "skipped", "standardOut", "standardError"]
+    }
 }
 
 jar {
