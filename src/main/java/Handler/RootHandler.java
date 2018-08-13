@@ -13,12 +13,23 @@ public class RootHandler implements Handler {
     String method = request.getMethod();
 
     switch (method) {
+      case "HEAD": 
+        return buildHeadResponse();
       case "GET": 
         return buildGetResponse();
       default: 
         return new Response.Builder(HttpStatusCode.METHOD_NOT_ALLOWED)
                            .build();
     }
+  }
+
+  private Response buildHeadResponse() {
+    String messageBody = createMessageBody();
+    int contentLength = ResponseHeader.determineContentLength(messageBody);
+    return new Response.Builder(HttpStatusCode.OK)
+                       .setHeader(ResponseHeader.CONTENT_LENGTH, contentLength)
+                       .setHeader(ResponseHeader.CONTENT_TYPE, "text/html")
+                       .build(); 
   }
 
   private Response buildGetResponse() {

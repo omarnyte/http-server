@@ -58,6 +58,12 @@ public class ResponseStepDefs {
     assertTrue(Arrays.equals(expectedMessageBody, messageBody));
   }
 
+  @Then("^the server should not respond with a message body$")
+  public void the_server_should_not_respond_with_a_message_body() throws Throwable {
+    String messageBody = StepDefsUtil.readMessageBody(this.world.con);  
+    assertEquals("", messageBody);
+  }
+
   private String getFormattedTime(String timeFormat) {
     DateFormat dateFormat = new SimpleDateFormat(timeFormat);
     return dateFormat.format(new Date());
