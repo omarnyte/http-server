@@ -1,5 +1,13 @@
 public class TestUtil {
 
+  public static Request buildRequestToUri(String method, String uri) {
+    return new Request.Builder() 
+                      .method(method) 
+                      .uri(uri) 
+                      .version("1.1") 
+                      .build(); 
+  }
+  
   public static String createRootHtmlFromFileNames(String[] fileNames) {
     String expectedHtml = "";
     for (String fileName : fileNames) {
@@ -10,18 +18,6 @@ public class TestUtil {
 
     return expectedHtml;
   }
-  
-  // public static String createRootHtmlFromUris(String[] uris) {
-  //   String expectedHtml = "";
-  //   for (String uri : uris) {
-  //     String fileName = TestUtil.removeLeadingParenthesesFromUri(uri);
-  //     expectedHtml += String.format(
-  //       "<a href=\"/%s\">%s</a>" + 
-  //       "<br>", fileName, fileName);
-  //   }
-
-  //   return expectedHtml;
-  // }
 
   public static String removeLeadingParenthesesFromUri(String uri) {
     int idxOfFirstCharacter = 1;

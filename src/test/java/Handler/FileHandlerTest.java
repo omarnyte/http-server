@@ -9,8 +9,7 @@ public class FileHandlerTest {
   private final static String TEXT_FILE_URI = "/text-file.txt";
   
   private static Handler handler;
-  private Request requestToExistingFile = buildRequestToExistingFile();
-  private Request requestToNonexistentFile = buildRequestToNonexistentFile();
+  private Request requestToExistingFile = TestUtil.buildRequestToUri("GET", TEXT_FILE_URI);
 
   @BeforeClass
   public static void setUp() throws IOException, NonexistentDirectoryException {
@@ -25,7 +24,8 @@ public class FileHandlerTest {
   
   @Test  
   public void returns404IfFileDoesNotExist() {  
-    Response response = handler.generateResponse(this.requestToNonexistentFile); 
+    Request request = TestUtil.buildRequestToUri("GET", NONEXISTENT_FILE_URI);
+    Response response = handler.generateResponse(request); 
     assertEquals(404, response.getStatusCode()); 
   } 
 
@@ -44,32 +44,11 @@ public class FileHandlerTest {
 
   @Test 
   public void returnsOnlyHeadersForHeadRequest() {
-    Request request = new Request.Builder()
-                                 .method("HEAD")
-                                 .uri("/text-file.txt")
-                                 .version("1.1")
-                                 .build();   
-                                 
+    Request request = TestUtil.buildRequestToUri("HEAD", TEXT_FILE_URI);
     Response response = handler.generateResponse(request);
     String messageBody = new String(response.getMessageBody());
     assertEquals(200, response.getStatusCode()); 
     assertEquals("", messageBody); 
   }
-
-  private static Request buildRequestToNonexistentFile() { 
-  return new Request.Builder() 
-                    .method("GET") 
-                    .uri(NONEXISTENT_FILE_URI) 
-                    .version("1.1") 
-                    .build(); 
-  } 
-
-  private static Request buildRequestToExistingFile() { 
-  return new Request.Builder() 
-                    .method("GET") 
-                    .uri(TEXT_FILE_URI) 
-                    .version("1.1") 
-                    .build(); 
-  } 
 
 }

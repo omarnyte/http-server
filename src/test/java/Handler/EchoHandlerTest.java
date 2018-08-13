@@ -10,13 +10,7 @@ public class EchoHandlerTest {
   
   @Test 
   public void returnsCurrentTime(){ 
-    Request request = new Request.Builder()
-                                 .method("GET")
-                                 .uri("/echo")
-                                 .version("1.1")
-                                 .build();  
-                                 
-
+    Request request = TestUtil.buildRequestToUri("GET", "/echo");
     String expectedMessageBody = createExpectedMessageBody();
     Response response = handler.generateResponse(request);
     String stringifiedMessageBody = new String(response.getMessageBody());
@@ -25,15 +19,10 @@ public class EchoHandlerTest {
 
   @Test 
   public void returnsOnlyHeadersForHeadRequest() {
-    Request request = new Request.Builder()
-                                 .method("HEAD")
-                                 .uri("/echo")
-                                 .version("1.1")
-                                 .build();   
-                                 
+    Request request = TestUtil.buildRequestToUri("HEAD", "/echo");
     Response response = handler.generateResponse(request);
     String messageBody = new String(response.getMessageBody());
-    assertEquals(200, response.getStatusCode()); 
+    assertEquals(HttpStatusCode.OK, response.getStatusCode()); 
     assertEquals("", messageBody); 
   }
 
@@ -46,4 +35,5 @@ public class EchoHandlerTest {
     DateFormat dateFormat = new SimpleDateFormat(TIME_FORMAT);
     return dateFormat.format(new Date());
   }
+  
 }
