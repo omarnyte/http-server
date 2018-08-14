@@ -12,6 +12,7 @@ import org.junit.Test;
 public class DirectoryTest {
   private final static String EMPTY_TEXT_FILE_URI = "/empty-file.txt";
   private final static String NONEXISTENT_FILE_URI = "/does-not-exist.txt";
+  private final static String SUBDIRECTORY_URI = "/directory/inception";
   private final static String TEMP_DIRECTORY_PATH = System.getProperty("user.dir") + "/src/test/java/DataStore/TestDirectory";
   private final static String TEXT_FILE_CONTENT = "This is a sample text file.";
   private final static String TEXT_FILE_URI = "/text-file.txt";
@@ -39,7 +40,12 @@ public class DirectoryTest {
   }
 
   @Test 
-  public void listsDirectoryContentAsArray() {
+  public void returnsFalseWhenPassedAFileUri() {
+    assertEquals(false, directory.isDirectory(EMPTY_TEXT_FILE_URI));
+  }
+  
+  @Test 
+  public void listsRootDirectoryContentAsArray() {
     String[] directoryContent = directory.listContent();
     String emptyTextFileName = TestUtil.removeLeadingParenthesesFromUri(EMPTY_TEXT_FILE_URI);
     String textFileName = TestUtil.removeLeadingParenthesesFromUri(TEXT_FILE_URI);

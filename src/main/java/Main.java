@@ -54,7 +54,7 @@ public class Main {
     HashMap<String, Handler> routes = new HashMap<String, Handler>();
     
     String rootPath = System.getProperty("user.dir");
-    routes.put("/", new RootHandler(store));
+    routes.put("/", new DirectoryHandler(store));
     routes.put("/echo", new EchoHandler());
     routes.put("/api/form", new FormHandler(store));
  

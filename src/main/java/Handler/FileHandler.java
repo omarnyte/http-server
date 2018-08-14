@@ -12,6 +12,8 @@ import java.io.UnsupportedEncodingException;
 
     if (!this.store.existsInStore(uri)) {
       return buildNotFoundResponse(uri);
+    if (this.store.isDirectory(uri)) {
+      return buildSubdirectoryResponse(request);
     }
      
     switch (request.getMethod()) { 
@@ -31,6 +33,15 @@ import java.io.UnsupportedEncodingException;
     return new Response.Builder(HttpStatusCode.NOT_FOUND)
                        .messageBody(buildNotFoundMessage(uri))
                        .build();
+  private Response buildSubdirectoryResponse(Request request) {
+    try {
+      DataStore subdirectoryStore = this.store.createSubdirectoryStore(request.getURI());
+      DirectoryHandler subdirectoryHandler = new DirectoryHandler(subdirectoryStore, request.getURI());
+      return subdirectoryHandler.generateResponse(request);
+    } catch (NonexistentDirectoryException e) {
+      return new Response.Builder(HttpStatusCode.NOT_FOUND)
+                         .build();
+    }
   }
 
   private Response buildHeadResponse(String uri) {

@@ -3,7 +3,7 @@ import java.io.IOException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class RootHandlerTest {
+public class DirectoryHandlerTest {
   private final static String HTML_FILE_URI = "/html-file.html";
   private final static String TEXT_FILE_URI = "/text-file.txt";
   
@@ -11,14 +11,14 @@ public class RootHandlerTest {
   
   @BeforeClass
   public static void setup () throws IOException, NonexistentDirectoryException {
-    String tempDirectoryPath = System.getProperty("user.dir") + "/src/test/java/Handler/RootHandlerTestDirectory";
+    String tempDirectoryPath = System.getProperty("user.dir") + "/src/test/java/Handler/DirectoryHandlerTestDirectory";
 
     TempDirectory temp = new TempDirectory(tempDirectoryPath);
     temp.createEmptyFile(TEXT_FILE_URI);
     temp.createEmptyFile(HTML_FILE_URI);
 
     Directory directory = new Directory(tempDirectoryPath); 
-    handler = new RootHandler(directory); 
+    handler = new DirectoryHandler(directory); 
   }
     
   @Test 

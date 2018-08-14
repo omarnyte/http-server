@@ -31,6 +31,11 @@ public class Directory implements DataStore {
     }
   }
 
+  public Boolean isDirectory(String uri) {
+    File file = new File(this.directoryPath + uri);
+    return file.isDirectory();
+  }
+
   public String[] listContent() {
     return this.directory.list();
   }
@@ -72,6 +77,10 @@ public class Directory implements DataStore {
       System.err.println("IOException failed inside Directory");
       System.err.println(e);
     }
+  }
+
+  public Directory createSubdirectoryStore(String uri) throws NonexistentDirectoryException {
+    return new Directory(this.directoryPath + uri);
   }
   
   public boolean deleteFile(String uri) {
