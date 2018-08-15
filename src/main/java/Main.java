@@ -4,14 +4,14 @@ public class Main {
   private static final int DEFAULT_PORT_NUMBER = 8888;
   
   private static CLIParser parser;
-  private static DataStore store;
+  private static Directory directory;
  
   public static void main(String[] args) {
     try {
       parser = new CLIParser(args);
 
-      DataStore store = extractDataStore();
-      Handler defaultHandler = new FileHandler(store);
+      directory = extractDirectory();
+      Handler defaultHandler = new NotFoundHandler();
  
       int port = parser.getPortNumberOrDefault(DEFAULT_PORT_NUMBER);
       Router router = setUpRouter(defaultHandler);
@@ -34,29 +34,29 @@ public class Main {
     }
   } 
 
-  private static DataStore extractDataStore() throws MissingFlagException, NonexistentDirectoryException {
+  private static Directory extractDirectory() throws MissingFlagException, NonexistentDirectoryException {
     String portFlag = parser.getStoreFlag();
     switch(portFlag) {
       case "-dir" :
         String publicDirectoryPath = parser.getDirectory();
-        store = new Directory(publicDirectoryPath);
+        directory = new Directory(publicDirectoryPath);
     } 
 
-    return store;
+    return directory;
   }
 
   private static Router setUpRouter(Handler defaultHandler) {
     HashMap<String, Handler> routesMap = createRoutesMap();
-    return new Router(defaultHandler, routesMap);
+    return new Router(defaultHandler, routesMap, directory);
   }
  
   private static HashMap<String, Handler> createRoutesMap() {
     HashMap<String, Handler> routes = new HashMap<String, Handler>();
     
     String rootPath = System.getProperty("user.dir");
-    routes.put("/", new DirectoryHandler(store));
+    routes.put("/", new DirectoryHandler(directory));
     routes.put("/echo", new EchoHandler());
-    routes.put("/api/form", new FormHandler(store));
+    routes.put("/api/form", new FormHandler(directory));
  
     return routes;
   }

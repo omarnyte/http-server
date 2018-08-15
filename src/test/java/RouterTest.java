@@ -1,5 +1,6 @@
 import java.util.HashMap;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -10,13 +11,15 @@ public class RouterTest {
   private static Router router;
   
   @BeforeClass 
-  public static void setUpRouter() {
+  public static void setUp() throws NonexistentDirectoryException {
     Handler mockDefaultHandler = createMockHandlerThatRespondsWithMessage(MESSAGE_FROM_DEFAULT_HANDLER);
     Handler mockCustomHandler = createMockHandlerThatRespondsWithMessage(MESSAGE_FROM_CUSTOM_HANDLER);
 
-    HashMap<String, Handler> routes = new HashMap<String, Handler>();
-    routes.put(CUSTOM_URI, mockCustomHandler);
-    router = new Router(mockDefaultHandler, routes);
+    MockDirectory mockDirectory = setUpMockDirectory();
+
+    HashMap<String, Handler> routes = setUpRoutesWithMockCustomHandler(mockCustomHandler);
+
+    router = new Router(mockDefaultHandler, routes, mockDirectory);
   }
 
   @Test 
@@ -44,6 +47,20 @@ public class RouterTest {
     return new MockHandler(response);
   }
 
+  private static MockDirectory setUpMockDirectory() throws NonexistentDirectoryException {
+    ArrayList<String> subdirectories = new ArrayList<String>();
+    subdirectories.add("/some/subdirectory");
+    ArrayList<String> files = new ArrayList<String>();
+    files.add("some-directory.txt");
+    return new MockDirectory(System.getProperty("user.dir") , subdirectories, files);
+  }
+
+  private static HashMap<String, Handler> setUpRoutesWithMockCustomHandler(Handler mockCustomHandler) {
+    HashMap<String, Handler> routes = new HashMap<String, Handler>();
+    routes.put(CUSTOM_URI, mockCustomHandler);
+    return routes;
+  }
+
   private static Request buildRequestToURI(String uri) {
     return new Request.Builder()
                       .method("GET")
@@ -61,6 +78,33 @@ public class RouterTest {
 
     public Response generateResponse(Request request) {
       return response;
+    }
+  }
+
+
+  private static class MockDirectory extends Directory {
+    List<String> subdirectories = new ArrayList<String>();
+    List<String> files = new ArrayList<String>();    
+    
+    public MockDirectory(String directoryPath, List<String> subdirectories, List<String> files) throws NonexistentDirectoryException {
+      super(directoryPath);
+      this.subdirectories = subdirectories;
+      this.files = files;
+    }
+    
+    @Override
+    public Boolean isDirectory(String uri) {
+      return this.subdirectories.contains(uri);
+    }
+
+    @Override
+    public Boolean isFile(String uri) {
+      return this.files.contains(uri);
+    }
+
+    @Override
+    public Directory createSubdirectory(String uri) throws NonexistentDirectoryException {
+      return new Directory(System.getProperty("user.dir"));
     }
   }
 

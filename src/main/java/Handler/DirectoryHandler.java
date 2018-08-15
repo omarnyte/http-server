@@ -3,17 +3,17 @@ import java.io.UnsupportedEncodingException;
 
 public class DirectoryHandler implements Handler {
   private Response response;
-  private DataStore store;
+  private Directory directory;
 
   private String subdirectoryUri;
   
-  public DirectoryHandler(DataStore store) {
-    this.store = store;
+  public DirectoryHandler(Directory directory) {
+    this.directory = directory;
     this.subdirectoryUri = "";
   }
 
-  public DirectoryHandler(DataStore store, String subdirectoryUri) {
-    this.store = store;
+  public DirectoryHandler(Directory directory, String subdirectoryUri) {
+    this.directory = directory;
     this.subdirectoryUri = subdirectoryUri; 
   }
   
@@ -52,7 +52,7 @@ public class DirectoryHandler implements Handler {
 
   private String createMessageBody() {
     String htmlResponse = "";
-    String[] fileNames = this.store.listContent();
+    String[] fileNames = this.directory.listContent();
     for (String fileName : fileNames) {
       htmlResponse += String.format(
         "<a href=\"%s/%s\">%s</a><br>",this.subdirectoryUri, fileName, fileName);

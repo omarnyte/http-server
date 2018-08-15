@@ -2,13 +2,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class MockDirectory implements DataStore {
+public class MockDirectory extends Directory {
+  private final static String DEFAULT_DIRECTORY_PATH = System.getProperty("TEST_DIRECTORY_PATH");
+  
   private List<String> subdirectories;
   private List<String> files;   
   private Map<String, String> fileContents;
   private Map<String, String> fileTypes;
   
   public MockDirectory(List<String> subdirectories, List<String> files, Map fileContents, Map fileTypes) throws NonexistentDirectoryException {
+    super(DEFAULT_DIRECTORY_PATH);
     this.subdirectories = subdirectories;
     this.files = files;
     this.fileContents = fileContents;

@@ -1,28 +1,22 @@
 import java.io.UnsupportedEncodingException;
 
  public class FileHandler implements Handler {   
-  private DataStore store;
+  private Directory directory;
   
-  public FileHandler(DataStore store) {
-    this.store = store;
+  public FileHandler(Directory directory) {
+    this.directory = directory;
   }
   
   public Response generateResponse(Request request) { 
     String uri = request.getURI();
 
-    if (!this.store.existsInStore(uri)) {
-      return buildNotFoundResponse(uri);
-    if (this.store.isDirectory(uri)) {
-      return buildSubdirectoryResponse(request);
-    }
-     
     switch (request.getMethod()) { 
       case "HEAD":  
         return buildHeadResponse(uri); 
       case "GET":  
         return buildGetResponse(uri); 
       case "DELETE":  
-        return this.store.deleteFile(uri) ? buildDeleteResponse() : buildInternalServerErrorResponse();
+        return this.directory.deleteFile(uri) ? buildDeleteResponse() : buildInternalServerErrorResponse();
       default:  
         return new Response.Builder(HttpStatusCode.METHOD_NOT_ALLOWED) 
                            .build(); 
@@ -78,11 +72,11 @@ import java.io.UnsupportedEncodingException;
   }
 
   private int determineStatusCode(String uri) {
-    return this.store.existsInStore(uri) ? HttpStatusCode.OK : HttpStatusCode.NOT_FOUND;
+    return this.directory.existsInStore(uri) ? HttpStatusCode.OK : HttpStatusCode.NOT_FOUND;
   }
 
   private byte[] createMessageBody(String uri) {
-    return this.store.existsInStore(uri) ? store.readFile(uri) : buildNotFoundMessage(uri).getBytes();
+    return this.directory.existsInStore(uri) ? directory.readFile(uri) : buildNotFoundMessage(uri).getBytes();
   }
 
   private String buildNotFoundMessage(String uri) {
@@ -90,7 +84,7 @@ import java.io.UnsupportedEncodingException;
   }
 
   private String determineContentType(String uri) {
-    return this.store.existsInStore(uri) ? this.store.getFileType(uri) : "text/plain";
+    return this.directory.existsInStore(uri) ? this.directory.getFileType(uri) : "text/plain";
   } 
 
 }

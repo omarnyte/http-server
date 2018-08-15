@@ -17,7 +17,7 @@ public class FormHandlerTest {
   private static String seeOtherUri;
   private static Handler handler;
   private static Response response;
-  private static DataStore store;
+  private static Directory directory;
   
   @BeforeClass
   public static void setUp() throws IOException, NonexistentDirectoryException {
@@ -26,8 +26,8 @@ public class FormHandlerTest {
     TempDirectory tempRootDirectory = new TempDirectory(TEMP_ROOT_DIRECTORY_PATH);
     TempDirectory tempPosted = new TempDirectory(tempPostedDirPath);
 
-    store = new Directory(TEMP_ROOT_DIRECTORY_PATH); 
-    handler = new FormHandler(store); 
+    directory = new Directory(TEMP_ROOT_DIRECTORY_PATH); 
+    handler = new FormHandler(directory); 
     
     Request request = new Request.Builder()
                                  .method("POST")
@@ -58,7 +58,7 @@ public class FormHandlerTest {
 
   @Test
   public void createsResourceBasedOnPostedData() {
-    assertTrue(store.existsInStore(seeOtherUri));
+    assertTrue(directory.existsInStore(seeOtherUri));
   }
 
   @AfterClass 

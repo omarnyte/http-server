@@ -58,7 +58,7 @@ public class FileHandlerTest {
     assertEquals(204, response.getStatusCode()); 
   }
 
-  private static DataStore setUpMockDirectory() throws NonexistentDirectoryException {
+  private static MockDirectory setUpMockDirectory() throws NonexistentDirectoryException {
     List<String> subdirectories = setUpMockSubdirectories();
     List<String> files = setUpMockFiles();   
     Map<String, String> fileContents = setUpMockFileContents();
