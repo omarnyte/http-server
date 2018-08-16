@@ -1,4 +1,6 @@
 import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import org.junit.BeforeClass;
@@ -23,7 +25,7 @@ public class RouterTest {
   }
 
   @Test 
-  public void routesRequestToCorrectHandler() {
+  public void routesRequestToCustomHandler() {
     Request request = buildRequestToURI(CUSTOM_URI);
     Response response = router.getResponse(request);
     String stringifiedMessageBody = new String(response.getMessageBody());
@@ -104,8 +106,29 @@ public class RouterTest {
 
     @Override
     public Directory createSubdirectory(String uri) throws NonexistentDirectoryException {
-      return new Directory(System.getProperty("user.dir"));
+    public String[] listContent() {
+      String[] stringArray = { "Not implemented" };
+      return stringArray;
     }
-  }
+
+    @Override
+    public Boolean existsInStore(String uri) {
+      return true;
+    }
+
+    @Override
+    public byte[] readFile(String uri) {
+      return "Not implemented".getBytes();
+    }
+
+    @Override
+    public String getFileType(String uri) {
+      return "Not implemented";
+    }
+
+    @Override
+    public void postFile (String uri, byte[] content) {
+
+    }
 
 }

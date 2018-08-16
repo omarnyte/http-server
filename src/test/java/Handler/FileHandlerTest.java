@@ -7,55 +7,69 @@ import org.junit.BeforeClass;
 import org.junit.Test; 
  
 public class FileHandlerTest { 
-  private final static String NONEXISTENT_FILE_URI = "/does-not-exist.txt";
   private final static String TEXT_FILE_CONTENT = "This is a sample text file.";
   private final static String TEXT_FILE_URI = "/text-file.txt";
   private final static String TO_BE_DELETED_URI = "/to-be-deleted.txt";
   
-  private static Handler handler;
-  private Request requestToExistingFile = TestUtil.buildRequestToUri("GET", TEXT_FILE_URI);
+  private static Handler fileHandler;
+  private static Response responseToGet; 
+  private static Response responseToHead; 
 
   @BeforeClass
   public static void setUp() throws IOException, NonexistentDirectoryException {
-    DataStore mockDirectory = setUpMockDirectory();
-    handler = new FileHandler(mockDirectory); 
+    MockDirectory mockDirectory = setUpMockDirectory();
+    fileHandler = new FileHandler(mockDirectory); 
+
+    responseToGet = fileHandler.generateResponse(TestUtil.buildRequestToUri("GET", TEXT_FILE_URI));
+    responseToHead = fileHandler.generateResponse(TestUtil.buildRequestToUri("HEAD", TEXT_FILE_URI));
   }
-  
-  @Test  
-  public void returns404IfFileDoesNotExist() {  
-    Request request = TestUtil.buildRequestToUri("GET", NONEXISTENT_FILE_URI);
-    Response response = handler.generateResponse(request); 
-    assertEquals(404, response.getStatusCode()); 
-  } 
 
   @Test  
-  public void returns200IfFileExists() { 
-    Response response = handler.generateResponse(this.requestToExistingFile); 
-    assertEquals(200, response.getStatusCode()); 
+  public void returns200OkForGetRequest() { 
+    int expectedStatusCode = HttpStatusCode.OK;
+    int actualStatusCode = responseToGet.getStatusCode();
+    assertEquals(expectedStatusCode, actualStatusCode);
+
+    String expectedReasonPhrase = HttpStatusCode.getReasonPhrase(expectedStatusCode);
+    String actualReasonPhrase = responseToGet.getReasonPhrase();
+    assertEquals(expectedReasonPhrase, actualReasonPhrase);
   } 
 
   @Test 
   public void returnsContentOfFileInMessageBody() { 
-    Response response = handler.generateResponse(this.requestToExistingFile); 
-    String stringifiedMessageBody = new String(response.getMessageBody());
+    String stringifiedMessageBody = new String(responseToGet.getMessageBody());
     assertEquals(TEXT_FILE_CONTENT, stringifiedMessageBody);
   } 
 
+  @Test  
+  public void returns200OkForHeadRequest() { 
+    int expectedStatusCode = HttpStatusCode.OK;
+    int actualStatusCode = responseToHead.getStatusCode();
+    assertEquals(expectedStatusCode, actualStatusCode);
+
+    String expectedReasonPhrase = HttpStatusCode.getReasonPhrase(expectedStatusCode);
+    String actualReasonPhrase = responseToHead.getReasonPhrase();
+    assertEquals(expectedReasonPhrase, actualReasonPhrase);
+  } 
+  
   @Test 
-  public void returnsOnlyHeadersForHeadRequest() {
-    Request request = TestUtil.buildRequestToUri("HEAD", TEXT_FILE_URI);
-    Response response = handler.generateResponse(request);
-    String messageBody = new String(response.getMessageBody());
-    assertEquals(200, response.getStatusCode()); 
+  public void doesNotReturnMessageBodyForHeadRequest() {
+    String messageBody = new String(responseToHead.getMessageBody());
     assertEquals("", messageBody); 
   }
 
   @Test 
-  public void returns204ForDeleteRequest() {
+  public void returns204NoContentForDeleteRequest() {
     Request request = TestUtil.buildRequestToUri("DELETE", TO_BE_DELETED_URI);
-    Response response = handler.generateResponse(request);
-    String messageBody = new String(response.getMessageBody());
-    assertEquals(204, response.getStatusCode()); 
+    Response response = fileHandler.generateResponse(request);
+
+    int expectedStatusCode = HttpStatusCode.NO_CONTENT;
+    int actualStatusCode = response.getStatusCode();
+    assertEquals(expectedStatusCode, actualStatusCode);
+
+    String expectedReasonPhrase = HttpStatusCode.getReasonPhrase(expectedStatusCode);
+    String actualReasonPhrase = response.getReasonPhrase();
+    assertEquals(expectedReasonPhrase, actualReasonPhrase);
   }
 
   private static MockDirectory setUpMockDirectory() throws NonexistentDirectoryException {
