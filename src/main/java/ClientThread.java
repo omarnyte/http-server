@@ -24,10 +24,10 @@ public class ClientThread implements Runnable {
       initiateClient();
           
       Request request = parseRequest();
-      this.logger.logEntry("REQUEST", request.toString());
+      logRequest(request);
       Response response = this.router.getResponse(request);
+      logResponse(response);
       byte[] formattedResponse = new ResponseFormatter(response).formatResponse();
-      this.logger.logEntry("RESPONSE", new String(formattedResponse));
       this.out.write(formattedResponse);
 
       closeConnection();

@@ -54,34 +54,6 @@ public class LoggerTest {
     assertTrue(logFileContent.contains(entry));
   }
 
-  @Test   
-  public void logsRequest() throws IOException {
-    String entryType = "REQUEST";
-    String sampleRequestString = "GET /some/uri/to/be/logged HTTP/1/1";
-    logger.logEntry(entryType, sampleRequestString);
-    
-    byte[] logBytes = readFile(logFileName);
-    String logFileContent = new String(logBytes);
-    String expectedLogEntry = "[INFO]: REQUEST\n" + sampleRequestString;
-    assertTrue(logFileContent.contains(expectedLogEntry));
-  }
-
-  @Test 
-  public void logsResponse() throws IOException {
-    String entryType = "RESPONSE";
-    String sampleResponseString = "HTTP/1.1 200 OK\n" +
-                                  "Content-Length: 30\n" +
-                                  "Content-Type: text/html\n" +
-    
-                                  "<a href=\"/hello/my\">my</a><br>";
-    logger.logEntry(entryType,sampleResponseString);
-        
-    byte[] logBytes = readFile(logFileName);
-    String logFileContent = new String(logBytes);
-    String expectedLogEntry = "[INFO]: RESPONSE\n" + sampleResponseString;
-    assertTrue(logFileContent.contains(expectedLogEntry));
-  }
-
   public byte[] readFile(String fileName) {
     Path filePath = Paths.get(TEMP_DIRECTORY_PATH + "/" + fileName);
     byte[] fileBytes = null;

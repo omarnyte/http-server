@@ -35,7 +35,6 @@ public class Request {
       return this;
     }
 
-    // REMOVE SOON
     public Builder setHeader(String headerField, String value) {
       this.headers.put(headerField, value);
       return this;
@@ -46,7 +45,6 @@ public class Request {
       return this;
     }
 
-    // REMOVE SOON
     public Builder addMessageBodyKeyVal(String key, String value) {
       this.messageBody.put(key, value);
       return this;
@@ -93,5 +91,5 @@ public class Request {
   public HashMap<String, String> getMessageBody() {
     return this.messageBody;
   }
-
+  
 }
