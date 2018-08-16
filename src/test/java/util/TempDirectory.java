@@ -32,4 +32,15 @@ public class TempDirectory {
     }
   }
 
+  public static void deleteSubdirectories(File directory) {
+    for (File sub : directory.listFiles()) {
+      if (sub.isDirectory()) {
+        TempDirectory.deleteSubdirectories(sub);
+      } else {
+        sub.delete();
+      }
+    }
+    directory.delete();
+  }
+  
 }

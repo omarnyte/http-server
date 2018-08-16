@@ -1,12 +1,9 @@
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 public class EchoHandlerTest {
   private final static Handler handler = new EchoHandler();
-  private final static String TIME_FORMAT = "hh:mm:ss";
+  private final static String TIME_PATTERN = "hh:mm:ss";
   
   @Test 
   public void returnsCurrentTime(){ 
@@ -27,13 +24,8 @@ public class EchoHandlerTest {
   }
 
   private String createExpectedMessageBody() {
-    String formattedTime = getFormattedTime();
+    String formattedTime = TestUtil.getFormattedTime(TIME_PATTERN);
     return "Hello, world: " + formattedTime;
-  }
-  
-  private String getFormattedTime() {
-    DateFormat dateFormat = new SimpleDateFormat(TIME_FORMAT);
-    return dateFormat.format(new Date());
   }
   
 }
