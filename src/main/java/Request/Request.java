@@ -35,13 +35,25 @@ public class Request {
       return this;
     }
 
+    // REMOVE SOON
     public Builder setHeader(String headerField, String value) {
       this.headers.put(headerField, value);
       return this;
     }
 
+    public Builder headers(HashMap<String, String> headers) {
+      this.headers = headers;
+      return this;
+    }
+
+    // REMOVE SOON
     public Builder addMessageBodyKeyVal(String key, String value) {
       this.messageBody.put(key, value);
+      return this;
+    }
+
+    public Builder messageBody(HashMap<String, String> messageBody) {
+      this.messageBody = messageBody;
       return this;
     }
 
