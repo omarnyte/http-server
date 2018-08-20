@@ -34,8 +34,14 @@ public class RequestLineTest {
   }
 
   @Test 
-  public void getsURI() {
+  public void getsUri() {
     assertEquals("/uri/path", requestLine.getURI());
+  }
+
+  @Test 
+  public void getsUriWithSpaces() throws BadRequestException {
+    RequestLine requestLineWithSpacesInUri = new RequestLine("GET /file%20with%20spaces.txt HTTP/1.1");
+    assertEquals("/file with spaces.txt", requestLineWithSpacesInUri.getURI());
   }
 
   @Test 

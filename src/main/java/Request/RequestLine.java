@@ -12,7 +12,7 @@ public class RequestLine {
       String[] httpVersion = splitRequestLine[2].split("/");
   
       this.method = method;
-      this.uri = uri;
+      this.uri = sanitizeUri(uri);
       this.version = httpVersion[1];
     } catch (ArrayIndexOutOfBoundsException e) {
       throw new BadRequestException("Could not parse request line.");
@@ -30,5 +30,9 @@ public class RequestLine {
   public String getHTTPVersion() {
     return this.version;
   }
-  
+
+  private String sanitizeUri(String uri) {
+    String encodedSpace = "%20";
+    return uri.replace(encodedSpace, " ");
+  }
 }

@@ -23,45 +23,30 @@ public class RootHandlerTest {
     
   @Test 
   public void returneContentsOfDirectoryAsHtml() {
-    Request request = new Request.Builder()
-                                 .method("GET")
-                                 .uri("/")
-                                 .version("1.1")
-                                 .build();   
+    Request request = TestUtil.buildRequestToUri("GET", "/");
 
     String[] files = { TestUtil.removeLeadingParenthesesFromUri(HTML_FILE_URI),
                        TestUtil.removeLeadingParenthesesFromUri(TEXT_FILE_URI) 
-                    };
+                     };
     String expectedHtml = TestUtil.createRootHtmlFromFileNames(files);
-    // String expectedHtml = TestUtil.createRootHtmlFromUris(uris);
     String messageBody = new String(handler.generateResponse(request).getMessageBody());
     assertEquals(expectedHtml, messageBody);
   }
   
   @Test 
-  public void returnsOnlyHeadersForHeadRequest() {
-    Request request = new Request.Builder()
-                                 .method("HEAD")
-                                 .uri("/")
-                                 .version("1.1")
-                                 .build();   
-                                 
+  public void returnsOnlyHeadersForHeadRequest() {  
+    Request request = TestUtil.buildRequestToUri("HEAD", "/");
     Response response = handler.generateResponse(request);
     String messageBody = new String(response.getMessageBody());
-    assertEquals(200, response.getStatusCode()); 
+    assertEquals(HttpStatusCode.OK, response.getStatusCode()); 
     assertEquals("", messageBody); 
   }
   
   @Test
   public void return405MethodNotAllowed() {
-    Request request = new Request.Builder()
-                                 .method("POST")
-                                 .uri("/")
-                                 .version("1.1")
-                                 .build();                           
-
+    Request request = TestUtil.buildRequestToUri("POST", "/");
     Response response = handler.generateResponse(request);
-    assertEquals(405, response.getStatusCode()); 
+    assertEquals(HttpStatusCode.METHOD_NOT_ALLOWED, response.getStatusCode()); 
     assertEquals("Method Not Allowed", response.getReasonPhrase()); 
   }
 
