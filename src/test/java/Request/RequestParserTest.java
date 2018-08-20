@@ -46,7 +46,8 @@ public class RequestParserTest {
 
   @Test 
   public void throwsBadRequestException() throws BadRequestException {
-    String requestString = "GET\r\n";
+    String requestString = createRequestLine() +
+                           "Content-Length:";
 
     RequestParser requestParser = new RequestParser(new BufferedReader(new StringReader(requestString)));
     
@@ -62,11 +63,15 @@ public class RequestParserTest {
   }
 
   private static String createRequestString() {
-    return METHOD + " " + URI + " " + "HTTP/1.1\r\n" + 
+    return createRequestLine() + 
            MessageHeader.CONTENT_TYPE + ": " + CONTENT_TYPE + "\r\n" +
            MessageHeader.CONTENT_LENGTH + ": " + CONTENT_LENGTH + "\r\n" +
            "\r\n" +
            MESSAGE_BODY;
+  }
+
+  private static String createRequestLine() {
+    return METHOD + " " + URI + " " + "HTTP/1.1\r\n"; 
   }
 
   private static BufferedReader createReaderFromString(String requestString) {
