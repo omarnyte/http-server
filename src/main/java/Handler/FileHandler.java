@@ -27,8 +27,8 @@ import java.io.UnsupportedEncodingException;
     int contentLength = messageBody.length;
     String contentType = determineContentType(uri);
     return new Response.Builder(statusCode)
-                       .setHeader(ResponseHeader.CONTENT_LENGTH, contentLength)
-                       .setHeader(ResponseHeader.CONTENT_TYPE, contentType)
+                       .setHeader(MessageHeader.CONTENT_LENGTH, contentLength)
+                       .setHeader(MessageHeader.CONTENT_TYPE, contentType)
                        .build();
   }
   
@@ -39,8 +39,8 @@ import java.io.UnsupportedEncodingException;
     String contentType = determineContentType(uri);
     return new Response.Builder(statusCode)
                        .messageBody(messageBody)
-                       .setHeader(ResponseHeader.CONTENT_LENGTH, contentLength)
-                       .setHeader(ResponseHeader.CONTENT_TYPE, contentType)
+                       .setHeader(MessageHeader.CONTENT_LENGTH, contentLength)
+                       .setHeader(MessageHeader.CONTENT_TYPE, contentType)
                        .build();
   }
 

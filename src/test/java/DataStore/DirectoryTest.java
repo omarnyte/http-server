@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.IOException; 
 import java.util.Arrays;
 import static org.junit.Assert.assertEquals; 
@@ -64,6 +65,18 @@ public class DirectoryTest {
   public void returnsTheCorrectFileTypeForTxt() {
     String expectedContentType = "text/plain";
     assertEquals(expectedContentType, directory.getFileType(TEXT_FILE_URI));
+  }
+
+  @Test 
+  public void postsFile() {
+    String uri = "/sample-posted-file.txt";
+    byte[] content = "This is a sample poste file".getBytes();
+    directory.postFile(uri, content);
+
+    File file = new File(System.getProperty("user.dir") + "/src/test/java/DataStore/TestDirectory" + uri);
+
+    assertTrue(file.exists()); 
+    file.delete();
   }
   
 }

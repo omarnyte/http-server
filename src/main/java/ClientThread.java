@@ -19,13 +19,7 @@ public class ClientThread implements Runnable {
     try {
       initiateClient();
           
-      String requestString = stringifyRequest();
-  
-      if (requestString == "") {
-        return;
-      }
-      
-      Request request = parseRequest(requestString);
+      Request request = parseRequest();
       Response response = this.router.getResponse(request);
       byte[] formattedResponse = new ResponseFormatter(response).formatResponse();
       this.out.write(formattedResponse);
@@ -42,22 +36,8 @@ public class ClientThread implements Runnable {
     this.out = clientSocket.getOutputStream();
   }
 
-  private String stringifyRequest() throws IOException {
-    String requestString = "";
-    String line;
-    while ((line = this.in.readLine()) != null) {
-      if (line.length() == 0) {
-        break;
-      } else {
-        requestString += line;
-      }
-    }
-
-    return requestString;
-  }
-
-  private Request parseRequest(String requestString) throws BadRequestException {
-    RequestParser requestParser = new RequestParser(requestString);
+  private Request parseRequest() throws BadRequestException {
+    RequestParser requestParser = new RequestParser(this.in);
     return requestParser.generateRequest();
   }
 

@@ -24,19 +24,19 @@ public class EchoHandler implements Handler {
 
   private Response buildHeadResponse() {
     String messageBody = createMessageBody();
-    int contentLength = ResponseHeader.determineContentLength(messageBody);
+    int contentLength = MessageHeader.determineContentLength(messageBody);
     return new Response.Builder(HttpStatusCode.OK)
-                       .setHeader(ResponseHeader.CONTENT_TYPE, "text/plain")
-                       .setHeader(ResponseHeader.CONTENT_LENGTH, contentLength)
+                       .setHeader(MessageHeader.CONTENT_TYPE, "text/plain")
+                       .setHeader(MessageHeader.CONTENT_LENGTH, contentLength)
                        .build();
   }
 
   private Response buildGetResponse() {
     String messageBody = createMessageBody();
-    int contentLength = ResponseHeader.determineContentLength(messageBody);
+    int contentLength = MessageHeader.determineContentLength(messageBody);
     return new Response.Builder(HttpStatusCode.OK)
-                       .setHeader(ResponseHeader.CONTENT_TYPE, "text/plain")
-                       .setHeader(ResponseHeader.CONTENT_LENGTH, contentLength)
+                       .setHeader(MessageHeader.CONTENT_TYPE, "text/plain")
+                       .setHeader(MessageHeader.CONTENT_LENGTH, contentLength)
                        .messageBody(messageBody)
                        .build();
   }

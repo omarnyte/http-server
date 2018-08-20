@@ -25,19 +25,19 @@ public class RootHandler implements Handler {
 
   private Response buildHeadResponse() {
     String messageBody = createMessageBody();
-    int contentLength = ResponseHeader.determineContentLength(messageBody);
+    int contentLength = MessageHeader.determineContentLength(messageBody);
     return new Response.Builder(HttpStatusCode.OK)
-                       .setHeader(ResponseHeader.CONTENT_LENGTH, contentLength)
-                       .setHeader(ResponseHeader.CONTENT_TYPE, "text/html")
+                       .setHeader(MessageHeader.CONTENT_LENGTH, contentLength)
+                       .setHeader(MessageHeader.CONTENT_TYPE, "text/html")
                        .build(); 
   }
 
   private Response buildGetResponse() {
     String messageBody = createMessageBody();
-    int contentLength = ResponseHeader.determineContentLength(messageBody);
+    int contentLength = MessageHeader.determineContentLength(messageBody);
     return new Response.Builder(HttpStatusCode.OK)
-                       .setHeader(ResponseHeader.CONTENT_LENGTH, contentLength)
-                       .setHeader(ResponseHeader.CONTENT_TYPE, "text/html")
+                       .setHeader(MessageHeader.CONTENT_LENGTH, contentLength)
+                       .setHeader(MessageHeader.CONTENT_TYPE, "text/html")
                        .messageBody(messageBody)
                        .build(); 
   }
