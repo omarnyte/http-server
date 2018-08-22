@@ -11,12 +11,12 @@ import java.nio.file.Files;
 public class Directory implements DataStore {
   private static final String DEFAULT_FILE_TYPE = "application/octet-stream";
   private static final Map<String, String> MIME_TYPES = Map.ofEntries(
-      Map.entry("gif", "image/gif"),
-      Map.entry("html", "text/html"),
-      Map.entry("jpg", "image/jpeg"),
-      Map.entry("jpeg", "image/jpeg"),
-      Map.entry("png", "image/png"),
-      Map.entry("txt", "text/plain")
+    Map.entry("gif", "image/gif"),
+    Map.entry("html", "text/html"),
+    Map.entry("jpg", "image/jpeg"),
+    Map.entry("jpeg", "image/jpeg"),
+    Map.entry("png", "image/png"),
+    Map.entry("txt", "text/plain")
   );
   
   private File directory;
@@ -72,6 +72,11 @@ public class Directory implements DataStore {
       System.err.println("IOException failed inside Directory");
       System.err.println(e);
     }
+  }
+  
+  public boolean deleteFile(String uri) {
+    File file = new File(this.directoryPath + uri);
+    return file.delete();
   }
   
 }
