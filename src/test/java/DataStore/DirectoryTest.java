@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.IOException; 
 import java.util.Arrays;
 import static org.junit.Assert.assertEquals; 
+import static org.junit.Assert.assertFalse; 
 import static org.junit.Assert.assertTrue; 
 import org.junit.BeforeClass; 
 import org.junit.Rule;
@@ -11,20 +12,21 @@ import org.junit.Test;
 public class DirectoryTest {
   private final static String EMPTY_TEXT_FILE_URI = "/empty-file.txt";
   private final static String NONEXISTENT_FILE_URI = "/does-not-exist.txt";
+  private final static String TEMP_DIRECTORY_PATH = System.getProperty("user.dir") + "/src/test/java/DataStore/TestDirectory";
   private final static String TEXT_FILE_CONTENT = "This is a sample text file.";
   private final static String TEXT_FILE_URI = "/text-file.txt";
+  private final static String TO_BE_DELETED_URI = "/to-be-deleted.txt";
 
   private static Directory directory;
 
   @BeforeClass
   public static void setUp() throws IOException, NonexistentDirectoryException {
-    String tempDirectoryPath = System.getProperty("user.dir") + "/src/test/java/DataStore/TestDirectory";
-
-    TempDirectory temp = new TempDirectory(tempDirectoryPath);
+    TempDirectory temp = new TempDirectory(TEMP_DIRECTORY_PATH);
     temp.createEmptyFile(EMPTY_TEXT_FILE_URI);
+    temp.createEmptyFile(TO_BE_DELETED_URI);
     temp.createFileWithContent(TEXT_FILE_URI, TEXT_FILE_CONTENT);
 
-    directory = new Directory(tempDirectoryPath); 
+    directory = new Directory(TEMP_DIRECTORY_PATH); 
   }
   
   @Rule
@@ -77,6 +79,15 @@ public class DirectoryTest {
 
     assertTrue(file.exists()); 
     file.delete();
+  }
+
+  @Test 
+  public void returnsTrueIfFileWasDeleted() {
+    boolean wasDeleted = directory.deleteFile(TO_BE_DELETED_URI);
+    File shouldHaveBeenDeleted = new File(TEMP_DIRECTORY_PATH + TO_BE_DELETED_URI); 
+
+    assertTrue(wasDeleted);
+    assertFalse(shouldHaveBeenDeleted.exists());
   }
   
 }
