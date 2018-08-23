@@ -1,43 +1,27 @@
-import java.io.File; 
-import java.io.IOException; 
 import java.util.HashMap;
 import static org.junit.Assert.assertEquals; 
 import static org.junit.Assert.assertTrue; 
-import org.junit.AfterClass; 
 import org.junit.BeforeClass; 
 import org.junit.Test; 
 
 public class FormHandlerTest {
   private final static String FIRST_KEY = "firstKey";
   private final static String FIRST_VAL = "firstVal";
+  private final static String POST_METHOD = "POST";
   private final static String SECOND_KEY = "secondKey";
   private final static String SECOND_VAL = "secondVal";
-  private final static String TEMP_ROOT_DIRECTORY_PATH = System.getProperty("user.dir") + "/src/test/java/Handler/FormHandlerTestDirectory";
+  private final static String URI = "/api/form";
   
   private static String seeOtherUri;
-  private static Handler handler;
   private static Response response;
-  private static Directory directory;
   
   @BeforeClass
-  public static void setUp() throws IOException, NonexistentDirectoryException {
-    String tempPostedDirPath = TEMP_ROOT_DIRECTORY_PATH + "/POSTed";
+  public static void setUp() throws NonexistentDirectoryException {
+    Directory mockDirectory = new MockDirectory();
+    Handler formHandler = new FormHandler(mockDirectory); 
 
-    TempDirectory tempRootDirectory = new TempDirectory(TEMP_ROOT_DIRECTORY_PATH);
-    TempDirectory tempPosted = new TempDirectory(tempPostedDirPath);
-
-    directory = new Directory(TEMP_ROOT_DIRECTORY_PATH); 
-    handler = new FormHandler(directory); 
-    
-    Request request = new Request.Builder()
-                                 .method("POST")
-                                 .uri("/api/form")
-                                 .version("1.1")
-                                 .addMessageBodyKeyVal(FIRST_KEY, FIRST_VAL)
-                                 .addMessageBodyKeyVal(SECOND_KEY, SECOND_VAL)
-                                 .build();
-    response = handler.generateResponse(request);
-    
+    Request request = TestUtil.buildRequestToUriWithMessageBody(POST_METHOD, URI, createMessageBody());
+    response = formHandler.generateResponse(request);
     seeOtherUri = response.getHeader(MessageHeader.LOCATION);
   }
   
@@ -56,15 +40,11 @@ public class FormHandlerTest {
     assertTrue(headers.containsKey(MessageHeader.LOCATION));
   }
 
-  @Test
-  public void createsResourceBasedOnPostedData() {
-    assertTrue(directory.existsInStore(seeOtherUri));
-  }
-
-  @AfterClass 
-  public static void tearDown() {
-    File createdFile = new File(TEMP_ROOT_DIRECTORY_PATH + seeOtherUri);
-    createdFile.delete();
+  private static HashMap<String, String> createMessageBody() {
+    HashMap<String, String> messageBody = new HashMap<String, String>();
+    messageBody.put(FIRST_KEY, FIRST_VAL);
+    messageBody.put(SECOND_KEY, SECOND_VAL);
+    return messageBody;
   }
 
 }

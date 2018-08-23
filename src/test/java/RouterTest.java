@@ -1,8 +1,5 @@
 import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.List;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -17,7 +14,7 @@ public class RouterTest {
     Handler mockDefaultHandler = createMockHandlerThatRespondsWithMessage(MESSAGE_FROM_DEFAULT_HANDLER);
     Handler mockCustomHandler = createMockHandlerThatRespondsWithMessage(MESSAGE_FROM_CUSTOM_HANDLER);
 
-    MockDirectory mockDirectory = setUpMockDirectory();
+    MockDirectory mockDirectory = new MockDirectory();
 
     HashMap<String, Handler> routes = setUpRoutesWithMockCustomHandler(mockCustomHandler);
 
@@ -26,7 +23,8 @@ public class RouterTest {
 
   @Test 
   public void routesRequestToCustomHandler() {
-    Request request = buildRequestToURI(CUSTOM_URI);
+    String method = "GET";
+    Request request = TestUtil.buildRequestToUri(method, CUSTOM_URI);
     Response response = router.getResponse(request);
     String stringifiedMessageBody = new String(response.getMessageBody());
     assertEquals(MESSAGE_FROM_CUSTOM_HANDLER, stringifiedMessageBody);
@@ -34,7 +32,9 @@ public class RouterTest {
 
   @Test 
   public void routesRequestToDefaultHandlerWhenUriIsNotFound() {
-    Request request = buildRequestToURI("some/other/uri");
+    String method = "GET";
+    String nonexistentUri = "some/nonexistent/uri";
+    Request request = TestUtil.buildRequestToUri(method, nonexistentUri);
     Response response = router.getResponse(request);
     String stringifiedMessageBody = new String(response.getMessageBody());
     assertEquals(MESSAGE_FROM_DEFAULT_HANDLER, stringifiedMessageBody);
@@ -49,86 +49,10 @@ public class RouterTest {
     return new MockHandler(response);
   }
 
-  private static MockDirectory setUpMockDirectory() throws NonexistentDirectoryException {
-    ArrayList<String> subdirectories = new ArrayList<String>();
-    subdirectories.add("/some/subdirectory");
-    ArrayList<String> files = new ArrayList<String>();
-    files.add("some-directory.txt");
-    return new MockDirectory(System.getProperty("user.dir") , subdirectories, files);
-  }
-
   private static HashMap<String, Handler> setUpRoutesWithMockCustomHandler(Handler mockCustomHandler) {
     HashMap<String, Handler> routes = new HashMap<String, Handler>();
     routes.put(CUSTOM_URI, mockCustomHandler);
     return routes;
   }
-
-  private static Request buildRequestToURI(String uri) {
-    return new Request.Builder()
-                      .method("GET")
-                      .uri(uri)
-                      .version("1.1")
-                      .build();
-  }
-
-  private static class MockHandler implements Handler {
-    Response response;
-    
-    public MockHandler(Response response) {
-      this.response = response; 
-    }
-
-    public Response generateResponse(Request request) {
-      return response;
-    }
-  }
-
-
-  private static class MockDirectory extends Directory {
-    List<String> subdirectories = new ArrayList<String>();
-    List<String> files = new ArrayList<String>();    
-    
-    public MockDirectory(String directoryPath, List<String> subdirectories, List<String> files) throws NonexistentDirectoryException {
-      super(directoryPath);
-      this.subdirectories = subdirectories;
-      this.files = files;
-    }
-    
-    @Override
-    public Boolean isDirectory(String uri) {
-      return this.subdirectories.contains(uri);
-    }
-
-    @Override
-    public Boolean isFile(String uri) {
-      return this.files.contains(uri);
-    }
-
-    @Override
-    public Directory createSubdirectory(String uri) throws NonexistentDirectoryException {
-    public String[] listContent() {
-      String[] stringArray = { "Not implemented" };
-      return stringArray;
-    }
-
-    @Override
-    public Boolean existsInStore(String uri) {
-      return true;
-    }
-
-    @Override
-    public byte[] readFile(String uri) {
-      return "Not implemented".getBytes();
-    }
-
-    @Override
-    public String getFileType(String uri) {
-      return "Not implemented";
-    }
-
-    @Override
-    public void postFile (String uri, byte[] content) {
-
-    }
 
 }
