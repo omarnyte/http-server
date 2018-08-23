@@ -10,18 +10,21 @@ public class RouterTest {
   private static Router router;
   
   @BeforeClass 
-  public static void setUpRouter() {
+  public static void setUp() throws NonexistentDirectoryException {
     Handler mockDefaultHandler = createMockHandlerThatRespondsWithMessage(MESSAGE_FROM_DEFAULT_HANDLER);
     Handler mockCustomHandler = createMockHandlerThatRespondsWithMessage(MESSAGE_FROM_CUSTOM_HANDLER);
 
-    HashMap<String, Handler> routes = new HashMap<String, Handler>();
-    routes.put(CUSTOM_URI, mockCustomHandler);
-    router = new Router(mockDefaultHandler, routes);
+    MockDirectory mockDirectory = new MockDirectory();
+
+    HashMap<String, Handler> routes = setUpRoutesWithMockCustomHandler(mockCustomHandler);
+
+    router = new Router(mockDefaultHandler, routes, mockDirectory);
   }
 
   @Test 
-  public void routesRequestToCorrectHandler() {
-    Request request = buildRequestToURI(CUSTOM_URI);
+  public void routesRequestToCustomHandler() {
+    String method = "GET";
+    Request request = TestUtil.buildRequestToUri(method, CUSTOM_URI);
     Response response = router.getResponse(request);
     String stringifiedMessageBody = new String(response.getMessageBody());
     assertEquals(MESSAGE_FROM_CUSTOM_HANDLER, stringifiedMessageBody);
@@ -29,7 +32,9 @@ public class RouterTest {
 
   @Test 
   public void routesRequestToDefaultHandlerWhenUriIsNotFound() {
-    Request request = buildRequestToURI("some/other/uri");
+    String method = "GET";
+    String nonexistentUri = "some/nonexistent/uri";
+    Request request = TestUtil.buildRequestToUri(method, nonexistentUri);
     Response response = router.getResponse(request);
     String stringifiedMessageBody = new String(response.getMessageBody());
     assertEquals(MESSAGE_FROM_DEFAULT_HANDLER, stringifiedMessageBody);
@@ -44,24 +49,10 @@ public class RouterTest {
     return new MockHandler(response);
   }
 
-  private static Request buildRequestToURI(String uri) {
-    return new Request.Builder()
-                      .method("GET")
-                      .uri(uri)
-                      .version("1.1")
-                      .build();
-  }
-
-  private static class MockHandler implements Handler {
-    Response response;
-    
-    public MockHandler(Response response) {
-      this.response = response; 
-    }
-
-    public Response generateResponse(Request request) {
-      return response;
-    }
+  private static HashMap<String, Handler> setUpRoutesWithMockCustomHandler(Handler mockCustomHandler) {
+    HashMap<String, Handler> routes = new HashMap<String, Handler>();
+    routes.put(CUSTOM_URI, mockCustomHandler);
+    return routes;
   }
 
 }

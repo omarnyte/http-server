@@ -1,12 +1,20 @@
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 
-public class RootHandler implements Handler {
+public class DirectoryHandler implements Handler {
   private Response response;
-  private DataStore store;
+  private Directory directory;
+
+  private String subdirectoryUri;
   
-  public RootHandler(DataStore store) {
-    this.store = store;
+  public DirectoryHandler(Directory directory) {
+    this.directory = directory;
+    this.subdirectoryUri = "";
+  }
+
+  public DirectoryHandler(Directory directory, String subdirectoryUri) {
+    this.directory = directory;
+    this.subdirectoryUri = subdirectoryUri; 
   }
   
   public Response generateResponse(Request request) {
@@ -44,10 +52,10 @@ public class RootHandler implements Handler {
 
   private String createMessageBody() {
     String htmlResponse = "";
-    String[] files = this.store.listContent();
-    for (String file : files) {
+    String[] fileNames = this.directory.listContent();
+    for (String fileName : fileNames) {
       htmlResponse += String.format(
-        "<a href=\"/%s\">%s</a><br>", file, file);
+        "<a href=\"%s/%s\">%s</a><br>",this.subdirectoryUri, fileName, fileName);
     } 
 
     return htmlResponse;
