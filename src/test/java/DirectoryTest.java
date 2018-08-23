@@ -82,13 +82,14 @@ public class DirectoryTest {
   }
 
   @Test 
-  public void createsFileInDirectory() {
+  public void returnsTrueIfFileIsCreatedInDirectory() {
     String uri = "/sample-posted-file.txt";
     byte[] content = "This is a sample poste file".getBytes();
-    directory.createFileWithContent(uri, content);
+    boolean wasCreated = directory.createFileWithContent(uri, content);
 
     File file = new File(System.getProperty("user.dir") + "/src/test/java/TestDirectory" + uri);
 
+    assertTrue(wasCreated); 
     assertTrue(file.exists()); 
     file.delete();
   }

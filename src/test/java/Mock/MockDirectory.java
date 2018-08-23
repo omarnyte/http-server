@@ -59,7 +59,6 @@ public class MockDirectory extends Directory {
     return new MockDirectory();
   }
   
-
   public boolean deleteFile(String uri) {
     return this.files.remove(uri);
   }
