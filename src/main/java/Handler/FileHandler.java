@@ -15,8 +15,10 @@ import java.io.UnsupportedEncodingException;
         return buildGetResponse(uri); 
       case "HEAD":  
         return buildHeadResponse(uri); 
+      case "PUT":  
+        return handlePutRequest(request);
       case "DELETE":  
-        return this.directory.deleteFile(uri) ? buildDeleteResponse() : buildInternalServerErrorResponse();
+        return handleDeleteRequest(uri);
       default:  
         return new Response.Builder(HttpStatusCode.METHOD_NOT_ALLOWED) 
                            .build(); 
@@ -42,6 +44,21 @@ import java.io.UnsupportedEncodingException;
                        .setHeader(MessageHeader.CONTENT_LENGTH, contentLength)
                        .setHeader(MessageHeader.CONTENT_TYPE, contentType)
                        .build();
+  }
+
+  public Response handlePutRequest(Request request) {
+    byte[] content = request.getBody().getBytes();
+    String uri = request.getURI();
+    return this.directory.overwriteFileWithContent(uri, content) ? buildPutResponse(request) : buildInternalServerErrorResponse();
+  }
+
+  private Response buildPutResponse(Request request) {
+    return new Response.Builder(HttpStatusCode.OK)
+                       .build();
+  }
+
+  private Response handleDeleteRequest(String uri) {
+    return this.directory.deleteFile(uri) ? buildDeleteResponse() : buildInternalServerErrorResponse();
   }
 
   private Response buildDeleteResponse() {

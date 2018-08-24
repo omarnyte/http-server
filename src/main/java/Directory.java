@@ -72,11 +72,25 @@ public class Directory {
     try {
       File file = new File(this.directoryPath + uri);
       file.createNewFile();
-      FileOutputStream outputStream = new FileOutputStream(file.getAbsolutePath());
+      FileOutputStream outputStream = new FileOutputStream(file);
       outputStream.write(content);
       return file.exists();
     } catch(IOException e) {
-      System.err.println("IOException failed inside Directory");
+      System.err.println("Could not write content to file.");
+      System.err.println(e);
+      return false;
+    }
+  }
+
+  public boolean overwriteFileWithContent(String uri, byte[] content) {
+    try {
+      File file = new File(this.directoryPath + uri);
+      boolean shouldAppend = false;
+      FileOutputStream outputStream = new FileOutputStream(file, shouldAppend);
+      outputStream.write(content);
+      return true;
+    } catch(IOException e) {
+      System.err.println("Could not overwrite content to file.");
       System.err.println(e);
       return false;
     }
