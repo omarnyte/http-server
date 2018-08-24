@@ -38,11 +38,11 @@ public class RequestParserTest {
     assertEquals("application/x-www-form-urlencoded", request.getHeader(MessageHeader.CONTENT_TYPE));
   }
 
-  @Test
-  public void parsesMessaegeBody() {
-    HashMap<String, String> messageBody = request.getMessageBody();
-    assertEquals("mundo", messageBody.get("hola"));
-  }
+  // @Test
+  // public void parsesMessaegeBody() {
+  //   HashMap<String, String> messageBody = request.getMessageBody();
+  //   assertEquals("mundo", messageBody.get("hola"));
+  // }
 
   @Test 
   public void throwsBadRequestException() throws BadRequestException {

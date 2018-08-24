@@ -49,8 +49,10 @@ public class MockDirectory extends Directory {
     return this.fileTypes.get(uri);
   }
 
-  public void createFileWithContent (String uri, byte[] content) {
+  public boolean createFileWithContent (String uri, byte[] content) {
     this.files.add(uri);
+    this.fileContents.put(uri, content.toString());
+    return true;
   }
 
   public Directory createSubdirectory(String uri) throws NonexistentDirectoryException {
