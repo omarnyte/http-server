@@ -13,7 +13,6 @@ public class RequestParser {
     RequestLine requestLine = parseRequestLine();
     HashMap<String, String> headers = parseHeaders();
     String body = parseBody();
-    // HashMap<String, String> messageBody = parseMessageBody();
     
     return new Request.Builder()
                       .method(requestLine.getMethod())
@@ -21,7 +20,6 @@ public class RequestParser {
                       .version(requestLine.getHTTPVersion())
                       .headers(headers)
                       .body(body)
-                      // .messageBody(messageBody)
                       .build();
   }
 
@@ -69,20 +67,6 @@ public class RequestParser {
       throw new BadRequestException("Could not parse request message body.");
     }
   }
-  
-  // private HashMap<String, String> parseMessageBody() throws BadRequestException {
-  //   try {
-  //     String stringifiedMessageBody = stringifyMessageBody();
-  //     HashMap<String, String> messageBody = new HashMap<String, String>();
-  //     if (stringifiedMessageBody.length() > 0) {
-  //       putStringifiedBodyInMessageBody(stringifiedMessageBody, messageBody);
-  //     } 
-  
-  //     return messageBody;
-  //   } catch (ArrayIndexOutOfBoundsException | IOException e) {
-  //     throw new BadRequestException("Could not parse request message body.");
-  //   }
-  // }
 
   private String stringifyMessageBody() throws IOException {
     StringBuilder stringBuilder = new StringBuilder();
@@ -93,18 +77,4 @@ public class RequestParser {
     return stringBuilder.toString();
   }
   
-  // private HashMap<String, String> putStringifiedBodyInMessageBody(String stringifiedMessageBody, HashMap<String, String> messageBody) {
-  //   HashMap<String, String> updatedMessageBody = messageBody;
-    
-  //   String[] splitMessageBody = stringifiedMessageBody.split("&");
-  //   for (String keyValPair : splitMessageBody) {
-  //     String[] splitKeyValPair = keyValPair.split("=");
-  //     String key = splitKeyValPair[0];
-  //     String val = splitKeyValPair[1];
-  //     updatedMessageBody.put(key, val);
-  //   }
-
-  //   return updatedMessageBody;
-  // }
-
 }

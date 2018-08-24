@@ -7,8 +7,8 @@ public class LogFormatterTest {
   private final static String CONTENT_TYPE = "application/x-www-form-urlencoded";
   private final static String CONTENT_LENGTH = "13";
   private final static String MESSAGE_BODY = "hello, world!";
-  private final static String MESSAGE_BODY_KEY = "hello";
-  private final static String MESSAGE_BODY_VAL = "world";
+  // private final static String MESSAGE_BODY_KEY = "hello";
+  // private final static String MESSAGE_BODY_VAL = "world";
   private final static String METHOD = "GET";
   private final static String REASON_PHRASE = "OK";
   private final static String URI = "/uri/path";
@@ -46,7 +46,7 @@ public class LogFormatterTest {
                       .version(VERSION)
                       .setHeader(MessageHeader.CONTENT_TYPE, CONTENT_TYPE)
                       .setHeader(MessageHeader.CONTENT_LENGTH, CONTENT_LENGTH)
-                      .addMessageBodyKeyVal(MESSAGE_BODY_KEY, MESSAGE_BODY_VAL)
+                      .body(MESSAGE_BODY)
                       .build();
   }
 
