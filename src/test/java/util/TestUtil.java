@@ -1,4 +1,7 @@
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.Date;
 
 public class TestUtil {
 
@@ -33,6 +36,11 @@ public class TestUtil {
   public static String removeLeadingParenthesesFromUri(String uri) {
     int idxOfFirstCharacter = 1;
     return uri.substring(idxOfFirstCharacter);
+  }
+
+  public static String getFormattedTime(String dateTimepattern) {
+    DateFormat dateFormat = new SimpleDateFormat(dateTimepattern);
+    return dateFormat.format(new Date());
   }
 
 }

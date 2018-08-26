@@ -5,3 +5,4 @@
 .project
 gradlew
 gradlew.bat
+/logs

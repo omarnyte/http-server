@@ -51,7 +51,6 @@ public class RequestTest {
     assertEquals(expectedHeaders, actualHeaders);
   }
 
-  // DELETE SOON
   @Test 
   public void setsHeadersWithAStringValue() {
     assertEquals(CONTENT_TYPE, request.getHeader(MessageHeader.CONTENT_TYPE));
@@ -64,7 +63,6 @@ public class RequestTest {
     assertEquals(expectedMessageBody, actualMessageBody);
   }
 
-  // DELETE SOON
   private static HashMap<String, String> setHeaders() {
     HashMap<String, String> headers = new HashMap<String, String>();
     headers.put(MessageHeader.CONTENT_TYPE, CONTENT_TYPE);
@@ -72,7 +70,6 @@ public class RequestTest {
     return headers;
   }
 
-  // DELETE SOON
   private static HashMap<String, String> setMessageBody() {
     HashMap<String, String> messageBody = new HashMap<String, String>();
     messageBody.put(MESSAGE_BODY_KEY, MESSAGE_BODY_VAL);

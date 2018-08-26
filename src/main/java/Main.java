@@ -2,6 +2,7 @@ import java.util.HashMap;
  
 public class Main {
   private static final int DEFAULT_PORT_NUMBER = 8888;
+  private static final String LOG_DIRECTORY_PATH = System.getProperty("user.dir") + "/logs";
   
   private static CLIParser parser;
   private static Directory directory;
@@ -15,11 +16,14 @@ public class Main {
  
       int port = parser.getPortNumberOrDefault(DEFAULT_PORT_NUMBER);
       Router router = setUpRouter(defaultHandler);
-      Server server = new Server(port, router);
+      Logger logger = setUpLogger();
+      Server server = new Server(port, router, logger);
       server.start();
     } catch (ArrayIndexOutOfBoundsException e) {
       System.err.println(e.getMessage());
       System.err.println("You must provide an argument for each flag.");
+    } catch (LoggerException e) {
+      System.err.println(e.getMessage());
     } catch (MissingFlagException e) {
       System.err.println(e.getMessage());
       System.err.println("Valid store flags are: " + parser.printValidFlags());
@@ -59,6 +63,13 @@ public class Main {
     routes.put("/api/form", new FormHandler(directory));
  
     return routes;
+  }
+
+  private static Logger setUpLogger() throws LoggerException {
+    String dateTimePattern = "yyyymmddhhmmss";
+    Logger logger = new Logger(LOG_DIRECTORY_PATH, dateTimePattern);
+    logger.createLogFile();
+    return logger;
   }
 
 }

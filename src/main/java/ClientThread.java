@@ -5,14 +5,18 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 public class ClientThread implements Runnable {
-  private BufferedReader in;
-  private OutputStream out;
   private Socket clientSocket; 
+  private BufferedReader in;
+  private Logger logger;
+  private LogFormatter logFormatter;
+  private OutputStream out;
   private Router router;
   
-  ClientThread(Socket clientSocket, Router router) {
+  ClientThread(Socket clientSocket, Router router, Logger logger) {
     this.clientSocket = clientSocket; 
     this.router = router;
+    this.logger = logger;
+    this.logFormatter = new LogFormatter();
   }
   
   public void run() {
@@ -20,15 +24,16 @@ public class ClientThread implements Runnable {
       initiateClient();
           
       Request request = parseRequest();
+      logRequest(request);
       Response response = this.router.getResponse(request);
+      logResponse(response);
       byte[] formattedResponse = new ResponseFormatter(response).formatResponse();
       this.out.write(formattedResponse);
 
       closeConnection();
     } catch (Exception e) {
       System.err.println(e);
-    }
-    
+    } 
   }
 
   private void initiateClient() throws IOException {
@@ -39,6 +44,16 @@ public class ClientThread implements Runnable {
   private Request parseRequest() throws BadRequestException {
     RequestParser requestParser = new RequestParser(this.in);
     return requestParser.generateRequest();
+  }
+
+  private void logRequest(Request request) {
+    String requestFormattedForLogger = this.logFormatter.formatRequest(request);
+    this.logger.logEntry(requestFormattedForLogger);
+  }
+
+  private void logResponse(Response response) {
+    String responseFormattedForLogger = this.logFormatter.formatResponse(response);
+    this.logger.logEntry(responseFormattedForLogger);
   }
 
   private void closeConnection() throws IOException {

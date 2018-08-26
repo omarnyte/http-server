@@ -25,7 +25,15 @@ task startServer(type: JavaExec) {
     classpath sourceSets.main.runtimeClasspath
     main = "Main"
     args "-port", defaultPort, "-dir", testDirectoryPath
+
 }
+
+task createLogsDirectory() {
+    def logDir = new File(System.getProperty("user.dir") + '/logs')
+    logDir.mkdir()
+}
+
+build.dependsOn(createLogsDirectory)
 
 test {
     systemProperty 'PORT', defaultPort
