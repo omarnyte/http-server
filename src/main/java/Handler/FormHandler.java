@@ -1,10 +1,11 @@
 import java.io.File;
-import java.io.IOException; 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
   
 public class FormHandler implements Handler {   
+  private final static String DESTINATION_DIRECTORY_URI = "/POSTed";
+  private final static String POSTED_FILE_EXTENSION = ".txt";
+  
   private Directory directory;
   
   public FormHandler(Directory directory) {
@@ -25,7 +26,7 @@ public class FormHandler implements Handler {
 
   private Response buildPostResponse(Request request) {
     try {
-      String uri = "/POSTed/" + randomFileName() + ".txt";
+      String uri = DESTINATION_DIRECTORY_URI + "/" + Util.createRandomFileName(POSTED_FILE_EXTENSION);
       byte[] content = createFileContent(request);
       directory.createFileWithContent(uri, content);
       return new Response.Builder(HttpStatusCode.SEE_OTHER)
@@ -35,11 +36,6 @@ public class FormHandler implements Handler {
       return new Response.Builder(HttpStatusCode.BAD_REQUEST)
                          .build();
     }
-  }
-
-   private String randomFileName() {
-    int rand = new Random().nextInt(999999999) + 100000000;
-    return Integer.toString(rand);
   }
 
   private byte[] createFileContent(Request request) throws ArrayIndexOutOfBoundsException {

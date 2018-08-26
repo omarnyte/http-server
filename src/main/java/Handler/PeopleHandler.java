@@ -2,7 +2,6 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 
 public class PeopleHandler implements Handler {
   private final static String[] SUPPORTED_MEDIA_TYPES = { 
@@ -40,14 +39,9 @@ public class PeopleHandler implements Handler {
     String contentType = request.getHeader(MessageHeader.CONTENT_TYPE);
     String extension = MimeType.getExtension(contentType);
     byte[] content = request.getBody().getBytes();
-    String uri = "/people/" + randomFileName(extension);
+    String uri = "/people/" + Util.createRandomFileName(extension);
     this.directory.createFileWithContent(uri, content);
     return uri;
-  }
-
-  private String randomFileName(String extension) {
-    int rand = new Random().nextInt(999999999) + 100000000;
-    return Integer.toString(rand) + extension;
   }
 
   private Response buildPostResponse(String seeOtherUri) {
