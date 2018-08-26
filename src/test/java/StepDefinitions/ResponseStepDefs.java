@@ -64,6 +64,12 @@ public class ResponseStepDefs {
     assertEquals("", messageBody);
   }
 
+  @Then("^the server should respond with a message body that contains (href=\"[^\"]*)\"$")
+  public void the_server_should_respond_with_a_message_body_that_contains_href(String expectedAnchorLink) throws Throwable {
+    String messageBody = StepDefsUtil.readMessageBody(this.world.con);  
+    assertTrue(messageBody.contains(expectedAnchorLink));
+  }
+
   private String getFormattedTime(String timeFormat) {
     DateFormat dateFormat = new SimpleDateFormat(timeFormat);
     return dateFormat.format(new Date());

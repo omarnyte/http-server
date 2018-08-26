@@ -8,15 +8,15 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.Files;
 
-public class Directory implements DataStore {
+public class Directory {
   private static final String DEFAULT_FILE_TYPE = "application/octet-stream";
   private static final Map<String, String> MIME_TYPES = Map.ofEntries(
-      Map.entry("gif", "image/gif"),
-      Map.entry("html", "text/html"),
-      Map.entry("jpg", "image/jpeg"),
-      Map.entry("jpeg", "image/jpeg"),
-      Map.entry("png", "image/png"),
-      Map.entry("txt", "text/plain")
+    Map.entry("gif", "image/gif"),
+    Map.entry("html", "text/html"),
+    Map.entry("jpg", "image/jpeg"),
+    Map.entry("jpeg", "image/jpeg"),
+    Map.entry("png", "image/png"),
+    Map.entry("txt", "text/plain")
   );
   
   private File directory;
@@ -29,6 +29,16 @@ public class Directory implements DataStore {
     } else {
       throw new NonexistentDirectoryException(directoryPath);
     }
+  }
+
+  public Boolean isDirectory(String uri) {
+    File file = new File(this.directoryPath + uri);
+    return file.isDirectory();
+  }
+
+  public Boolean isFile(String uri) {
+    File file = new File(this.directoryPath + uri);
+    return file.isFile();
   }
 
   public String[] listContent() {
@@ -57,12 +67,8 @@ public class Directory implements DataStore {
     String extension = getExtension(filePath);
     return MIME_TYPES.getOrDefault(extension, DEFAULT_FILE_TYPE);
   }
-
-  private String getExtension(String filePath) {
-    return filePath.split("\\.")[1];
-  }
-
-  public void postFile(String uri, byte[] content) {
+  
+  public void createFileWithContent(String uri, byte[] content) {
     try {
       File file = new File(this.directoryPath + uri);
       file.createNewFile();
@@ -73,5 +79,18 @@ public class Directory implements DataStore {
       System.err.println(e);
     }
   }
+
+  public Directory createSubdirectory(String uri) throws NonexistentDirectoryException {
+    return new Directory(this.directoryPath + uri);
+  }
   
+  public boolean deleteFile(String uri) {
+    File file = new File(this.directoryPath + uri);
+    return file.delete();
+  }
+  
+  private String getExtension(String filePath) {
+    return filePath.split("\\.")[1];
+  }
+
 }

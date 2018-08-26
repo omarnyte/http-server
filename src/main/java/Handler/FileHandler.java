@@ -1,63 +1,57 @@
 import java.io.UnsupportedEncodingException;
 
  public class FileHandler implements Handler {   
-  private DataStore store;
+  private Directory directory;
   
-  public FileHandler(DataStore store) {
-    this.store = store;
+  public FileHandler(Directory directory) {
+    this.directory = directory;
   }
   
   public Response generateResponse(Request request) { 
     String uri = request.getURI();
-     
+
     switch (request.getMethod()) { 
-      case "HEAD":  
-        return buildHeadResponse(uri); 
       case "GET":  
         return buildGetResponse(uri); 
+      case "HEAD":  
+        return buildHeadResponse(uri); 
+      case "DELETE":  
+        return this.directory.deleteFile(uri) ? buildDeleteResponse() : buildInternalServerErrorResponse();
       default:  
         return new Response.Builder(HttpStatusCode.METHOD_NOT_ALLOWED) 
                            .build(); 
-    } 
+    }
   }
 
-  private Response buildHeadResponse(String uri) {
-    int statusCode = determineStatusCode(uri);
-    byte[] messageBody = createMessageBody(uri);
-    int contentLength = messageBody.length;
-    String contentType = determineContentType(uri);
-    return new Response.Builder(statusCode)
-                       .setHeader(MessageHeader.CONTENT_LENGTH, contentLength)
-                       .setHeader(MessageHeader.CONTENT_TYPE, contentType)
-                       .build();
-  }
-  
   private Response buildGetResponse(String uri) {
-    int statusCode = determineStatusCode(uri);
-    byte[] messageBody = createMessageBody(uri);
+    byte[] messageBody = this.directory.readFile(uri);
     int contentLength = messageBody.length;
-    String contentType = determineContentType(uri);
-    return new Response.Builder(statusCode)
+    String contentType = this.directory.getFileType(uri);
+    return new Response.Builder(HttpStatusCode.OK)
                        .messageBody(messageBody)
                        .setHeader(MessageHeader.CONTENT_LENGTH, contentLength)
                        .setHeader(MessageHeader.CONTENT_TYPE, contentType)
                        .build();
   }
-
-  private int determineStatusCode(String uri) {
-    return this.store.existsInStore(uri) ? HttpStatusCode.OK : HttpStatusCode.NOT_FOUND;
+  
+  private Response buildHeadResponse(String uri) {
+    byte[] messageBody = this.directory.readFile(uri);
+    int contentLength = messageBody.length;
+    String contentType = this.directory.getFileType(uri);
+    return new Response.Builder(HttpStatusCode.OK)
+                       .setHeader(MessageHeader.CONTENT_LENGTH, contentLength)
+                       .setHeader(MessageHeader.CONTENT_TYPE, contentType)
+                       .build();
   }
 
-  private byte[] createMessageBody(String uri) {
-    return this.store.existsInStore(uri) ? store.readFile(uri) : buildNotFoundMessage(uri).getBytes();
+  private Response buildDeleteResponse() {
+    return new Response.Builder(HttpStatusCode.NO_CONTENT)
+                       .build();
   }
 
-  private String buildNotFoundMessage(String uri) {
-    return uri + " was not found!";
+  private Response buildInternalServerErrorResponse() {
+    return new Response.Builder(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                       .build();
   }
-
-  private String determineContentType(String uri) {
-    return this.store.existsInStore(uri) ? this.store.getFileType(uri) : "text/plain";
-  } 
 
 }

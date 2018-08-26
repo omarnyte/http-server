@@ -5,10 +5,10 @@ import java.util.Map;
 import java.util.Random;
   
 public class FormHandler implements Handler {   
-  private DataStore store;
+  private Directory directory;
   
-  public FormHandler(DataStore store) {
-    this.store = store;
+  public FormHandler(Directory directory) {
+    this.directory = directory;
   }
   
   public Response generateResponse(Request request) { 
@@ -26,7 +26,7 @@ public class FormHandler implements Handler {
   private Response buildPostResponse(Request request) {
       String uri = "/POSTed/" + randomFileName() + ".txt";
       byte[] content = createFileContent(request);
-      store.postFile(uri, content);
+      directory.createFileWithContent(uri, content);
       return new Response.Builder(HttpStatusCode.SEE_OTHER)
                          .setHeader("Location", uri)
                          .build();
