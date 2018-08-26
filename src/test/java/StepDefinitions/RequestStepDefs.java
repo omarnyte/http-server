@@ -1,6 +1,7 @@
 import cucumber.api.java.en.When;
 import cucumber.api.PendingException;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URL;
 import java.net.HttpURLConnection;
 
@@ -20,6 +21,27 @@ public class RequestStepDefs {
     URL url = new URL(urlString);
     this.world.con = (HttpURLConnection) url.openConnection();
     this.world.con.setRequestMethod(method);
+    this.world.con.setDoOutput(true);
+  }
+
+  @When("^the request contains the application/json message body$")
+  public void the_request_contains_the_application_json_message_body() throws Throwable {
+    this.world.con.setRequestProperty("Content-Type", "application/json");
+
+    String json = "{ \"sampleKey\": \"sampleValue\", \"anotherSampleKey\": \"anotherSampleValue\" }";
+    writeString(this.world.con, json);
+  }
+
+  @When("^the request contains the (.+) message body \"([^\"]*)\"$")
+  public void the_request_contains_the_text_plain_message_body(String contentType, String body) throws Throwable {
+    this.world.con.setRequestProperty("Content-Type", contentType);
+    writeString(this.world.con, body);
+  }
+
+  private void writeString(HttpURLConnection con, String str) throws IOException {
+    OutputStream out = con.getOutputStream();
+    out.write(str.getBytes("UTF-8"));
+    out.close();
   }
   
 }
