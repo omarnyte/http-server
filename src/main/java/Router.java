@@ -13,6 +13,7 @@ public class Router {
 
   public Response getResponse(Request request) {
     Handler handler = getHandler(request.getURI());
+    if (request.getMethod().equals("PATCH")) handler = new PatchHandler(this.directory, new JsonPatchParser());
     return handler.generateResponse(request);
   }
   

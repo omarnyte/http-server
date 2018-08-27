@@ -10,10 +10,13 @@ import static org.junit.Assert.assertTrue;
 public class DirectoryStepDefs {
   private final static String TEST_DIRECTORY_PATH = System.getProperty("TEST_DIRECTORY_PATH"); 
 
+  private File file;
+
   @Given("^a file with the name (.+) exists in (.+)$")
   public void a_file_with_the_name_exists_in_the_root_directory(String fileName, String directoryUri) throws Throwable {
     File file = new File(getFileUri(fileName, directoryUri));
     file.createNewFile();
+    this.file = file;
     assertTrue(file.exists());
   }
 

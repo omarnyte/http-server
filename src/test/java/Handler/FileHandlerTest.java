@@ -8,6 +8,7 @@ import org.junit.BeforeClass;
 import org.junit.Test; 
  
 public class FileHandlerTest { 
+  private final static String JSON_PATCH_TYPE = "application/json/json-patch+json";
   private final static String TEXT_FILE_CONTENT = "This is a sample text file.";
   private final static String TEXT_FILE_URI = "/text-file.txt";
   private final static String TO_BE_DELETED_URI = "/to-be-deleted.txt";
@@ -92,7 +93,7 @@ public class FileHandlerTest {
     List<String> subdirectories = setUpMockSubdirectories();
     List<String> files = setUpMockFiles();   
     HashMap<String, String> fileContents = setUpMockFileContents();
-    Map<String, String> fileTypes = setUpMockFileContents();
+    Map<String, String> fileTypes = setUpMockFileTypes();
     return new MockDirectory(subdirectories, files, fileContents, fileTypes);
   }
 
@@ -116,7 +117,7 @@ public class FileHandlerTest {
 
   private static Map<String, String> setUpMockFileTypes() {
     return Map.ofEntries(
-      Map.entry(TEXT_FILE_URI, TEXT_FILE_CONTENT)
+      Map.entry(TEXT_FILE_URI, MimeType.PLAIN_TEXT)
     );
   }
 

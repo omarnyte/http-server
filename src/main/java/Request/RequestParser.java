@@ -3,6 +3,8 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class RequestParser {
+  private final static String METHOD_OVERRIDE_HEADER = "X-HTTP-Method-Override";
+  
   BufferedReader reader; 
 
   public RequestParser(BufferedReader reader) {
@@ -12,6 +14,7 @@ public class RequestParser {
   public Request generateRequest() throws BadRequestException {
     RequestLineParser requestLineParser = parseRequestLine();
     HashMap<String, String> headers = parseHeaders();
+    String method = extractMethod(requestLineParser.getMethod(), headers);
     String body = parseBody();
     
     return new Request.Builder()
@@ -48,6 +51,15 @@ public class RequestParser {
     } catch (ArrayIndexOutOfBoundsException | IOException e) {
       throw new BadRequestException("Could not parse request headers.");
     }
+  }
+
+  private String extractMethod(String givenMethod, HashMap<String, String> headers) {
+    String method = givenMethod;
+    if (headers.containsKey(METHOD_OVERRIDE_HEADER)) {
+      method = headers.get(METHOD_OVERRIDE_HEADER);
+    }
+
+    return method;
   }
 
   private HashMap<String, String> putLineInHeaders(String headersLine, HashMap<String, String> headers) {

@@ -15,6 +15,7 @@ public class Directory {
     Map.entry("html", "text/html"),
     Map.entry("jpg", "image/jpeg"),
     Map.entry("jpeg", "image/jpeg"),
+    Map.entry("json", "application/json"),
     Map.entry("png", "image/png"),
     Map.entry("txt", "text/plain")
   );

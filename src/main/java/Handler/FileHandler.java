@@ -1,6 +1,7 @@
-import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
+import java.util.List;
 
- public class FileHandler implements Handler {   
+ public class FileHandler implements Handler {         
   private Directory directory;
   
   public FileHandler(Directory directory) {
