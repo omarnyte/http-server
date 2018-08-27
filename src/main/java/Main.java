@@ -61,7 +61,7 @@ public class Main {
     routes.put("/", new DirectoryHandler(directory));
     routes.put("/echo", new EchoHandler());
     routes.put("/api/form", new FormHandler(directory));
- 
+    routes.put("/api/people", new PeopleHandler(directory));
     return routes;
   }
 

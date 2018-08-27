@@ -5,19 +5,19 @@ public class Request {
   private String uri;
   private String version;
   private HashMap<String, String> headers; 
-  private HashMap<String, String> messageBody; 
+  private String body; 
 
   public static class Builder {
     private String method;
     private String uri;
     private String version;
     private HashMap<String, String> headers;
-    private HashMap<String, String> messageBody;
+    private String body; 
     
     public Builder() {
       this.version = "1.1";
       this.headers = new HashMap<String, String>();
-      this.messageBody = new HashMap<String, String>();
+      this.body = "";
     }
     
     public Builder method(String method) {
@@ -45,13 +45,8 @@ public class Request {
       return this;
     }
 
-    public Builder addMessageBodyKeyVal(String key, String value) {
-      this.messageBody.put(key, value);
-      return this;
-    }
-
-    public Builder messageBody(HashMap<String, String> messageBody) {
-      this.messageBody = messageBody;
+    public Builder body(String body) {
+      this.body = body;
       return this;
     }
 
@@ -65,7 +60,7 @@ public class Request {
     this.uri = builder.uri;
     this.version = builder.version;
     this.headers = builder.headers;
-    this.messageBody = builder.messageBody;
+    this.body = builder.body;
   }
 
     public String getMethod() {
@@ -88,8 +83,8 @@ public class Request {
     return this.headers;
   }
 
-  public HashMap<String, String> getMessageBody() {
-    return this.messageBody;
+  public String getBody() {
+    return this.body;
   }
-  
+
 }

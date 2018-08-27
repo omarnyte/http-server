@@ -3,7 +3,6 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
-import java.util.HashMap;
 import static org.junit.Assert.assertEquals;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -39,9 +38,8 @@ public class RequestParserTest {
   }
 
   @Test
-  public void parsesMessaegeBody() {
-    HashMap<String, String> messageBody = request.getMessageBody();
-    assertEquals("mundo", messageBody.get("hola"));
+  public void parseBody() {
+    assertEquals(MESSAGE_BODY, request.getBody());
   }
 
   @Test 

@@ -1,7 +1,7 @@
 Feature: Delete a resource
 
 Scenario: DELETE request to an existing resource 
-  Given a file with the name will-be-deleted.txt exists in the root directory
+  Given a file with the name will-be-deleted.txt exists in /
   When a client makes a DELETE request to /will-be-deleted.txt
   Then the server should respond with status code 204 No Content 
   

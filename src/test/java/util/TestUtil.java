@@ -12,13 +12,13 @@ public class TestUtil {
                       .version("1.1") 
                       .build(); 
   }
-
-  public static Request buildRequestToUriWithMessageBody(String method, String uri, HashMap<String, String> messageBody) {
+  
+  public static Request buildRequestToUriWithBody(String method, String uri, String body) {
     return new Request.Builder() 
                       .method(method) 
                       .uri(uri) 
                       .version("1.1") 
-                      .messageBody(messageBody)
+                      .body(body)
                       .build(); 
   }
   

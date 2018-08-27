@@ -68,15 +68,17 @@ public class Directory {
     return MIME_TYPES.getOrDefault(extension, DEFAULT_FILE_TYPE);
   }
   
-  public void createFileWithContent(String uri, byte[] content) {
+  public boolean createFileWithContent(String uri, byte[] content) {
     try {
       File file = new File(this.directoryPath + uri);
       file.createNewFile();
       FileOutputStream outputStream = new FileOutputStream(file.getAbsolutePath());
       outputStream.write(content);
+      return file.exists();
     } catch(IOException e) {
       System.err.println("IOException failed inside Directory");
       System.err.println(e);
+      return false;
     }
   }
 
