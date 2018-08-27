@@ -8,14 +8,14 @@ public class MockDirectory extends Directory {
   
   private List<String> subdirectories = new ArrayList<String>();
   private List<String> files = new ArrayList<String>();
-  private Map<String, String> fileContents = new HashMap<String, String>();
+  private HashMap<String, String> fileContents = new HashMap<String, String>();
   private Map<String, String> fileTypes = new HashMap<String, String>();
   
   public MockDirectory() throws NonexistentDirectoryException {
     super(DEFAULT_DIRECTORY_PATH);
   }
   
-  public MockDirectory(List<String> subdirectories, List<String> files, Map fileContents, Map fileTypes) throws NonexistentDirectoryException {
+  public MockDirectory(List<String> subdirectories, List<String> files, HashMap fileContents, Map fileTypes) throws NonexistentDirectoryException {
     super(DEFAULT_DIRECTORY_PATH);
     this.subdirectories = subdirectories;
     this.files = files;
@@ -49,9 +49,14 @@ public class MockDirectory extends Directory {
     return this.fileTypes.get(uri);
   }
 
-  public boolean createFileWithContent (String uri, byte[] content) {
+  public boolean createFileWithContent(String uri, byte[] content) {
     this.files.add(uri);
     this.fileContents.put(uri, content.toString());
+    return true;
+  }
+
+  public boolean overwriteFileWithContent(String uri, byte[] content) {
+    this.fileContents.replace(uri, content.toString());
     return true;
   }
 
@@ -59,7 +64,6 @@ public class MockDirectory extends Directory {
     return new MockDirectory();
   }
   
-
   public boolean deleteFile(String uri) {
     return this.files.remove(uri);
   }

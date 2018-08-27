@@ -1,5 +1,6 @@
 import java.io.IOException; 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import static org.junit.Assert.assertEquals; 
@@ -10,6 +11,7 @@ public class FileHandlerTest {
   private final static String TEXT_FILE_CONTENT = "This is a sample text file.";
   private final static String TEXT_FILE_URI = "/text-file.txt";
   private final static String TO_BE_DELETED_URI = "/to-be-deleted.txt";
+  private final static String TO_BE_MODIFIED_URI = "/to-be-modified.txt";
   
   private static Handler fileHandler;
   private static Response responseToGet; 
@@ -72,10 +74,24 @@ public class FileHandlerTest {
     assertEquals(expectedReasonPhrase, actualReasonPhrase);
   }
 
+  @Test 
+  public void returns200OkAfterSuccessfulPut() {
+    Request request = TestUtil.buildRequestToUri("PUT", TO_BE_MODIFIED_URI);
+    Response response = fileHandler.generateResponse(request);
+
+    int expectedStatusCode = HttpStatusCode.OK;
+    int actualStatusCode = response.getStatusCode();
+    assertEquals(expectedStatusCode, actualStatusCode);
+
+    String expectedReasonPhrase = HttpStatusCode.getReasonPhrase(expectedStatusCode);
+    String actualReasonPhrase = response.getReasonPhrase();
+    assertEquals(expectedReasonPhrase, actualReasonPhrase);
+  }
+
   private static MockDirectory setUpMockDirectory() throws NonexistentDirectoryException {
     List<String> subdirectories = setUpMockSubdirectories();
     List<String> files = setUpMockFiles();   
-    Map<String, String> fileContents = setUpMockFileContents();
+    HashMap<String, String> fileContents = setUpMockFileContents();
     Map<String, String> fileTypes = setUpMockFileContents();
     return new MockDirectory(subdirectories, files, fileContents, fileTypes);
   }
@@ -92,10 +108,10 @@ public class FileHandlerTest {
     return files;
   }
 
-  private static Map<String, String> setUpMockFileContents() {
-    return Map.ofEntries(
-      Map.entry(TEXT_FILE_URI, TEXT_FILE_CONTENT)
-    );
+  private static HashMap<String, String> setUpMockFileContents() {
+    HashMap<String, String> fileContents = new HashMap<String, String>();
+    fileContents.put(TEXT_FILE_URI, TEXT_FILE_CONTENT);
+    return fileContents;
   }
 
   private static Map<String, String> setUpMockFileTypes() {

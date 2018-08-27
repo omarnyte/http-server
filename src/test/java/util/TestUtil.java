@@ -1,7 +1,12 @@
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Date;
+
 
 public class TestUtil {
 
@@ -41,6 +46,18 @@ public class TestUtil {
   public static String getFormattedTime(String dateTimepattern) {
     DateFormat dateFormat = new SimpleDateFormat(dateTimepattern);
     return dateFormat.format(new Date());
+  }
+
+  public static byte[] readFile(String uri) {
+    Path filePath = Paths.get(uri);
+    byte[] fileBytes = null;
+    try {
+      fileBytes = Files.readAllBytes(filePath);
+    } catch (IOException e) {
+      System.err.println("Could not read file: " + uri);
+      e.printStackTrace();
+    }
+    return fileBytes;
   }
 
 }

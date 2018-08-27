@@ -12,7 +12,7 @@ public class Main {
       parser = new CLIParser(args);
 
       directory = extractDirectory();
-      Handler defaultHandler = new NotFoundHandler();
+      Handler defaultHandler = new NotFoundHandler(directory);
  
       int port = parser.getPortNumberOrDefault(DEFAULT_PORT_NUMBER);
       Router router = setUpRouter(defaultHandler);

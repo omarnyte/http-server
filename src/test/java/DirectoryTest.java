@@ -17,6 +17,9 @@ public class DirectoryTest {
   private final static String TEXT_FILE_CONTENT = "This is a sample text file.";
   private final static String TEXT_FILE_URI = "/text-file.txt";
   private final static String TO_BE_DELETED_URI = "/to-be-deleted.txt";
+  private final static String TO_BE_MODIFIED_URI = "/to-be-modified.txt";
+  private final static String TO_BE_MODIFIED_ORIGINAL_CONTENT = "original line";
+  private final static String TO_BE_MODIFIED_MODIFIED_CONTENT = "modified line";
 
   private static Directory directory;
 
@@ -27,6 +30,7 @@ public class DirectoryTest {
     temp.createEmptyFile(EMPTY_TEXT_FILE_URI);
     temp.createEmptyFile(TO_BE_DELETED_URI);
     temp.createFileWithContent(TEXT_FILE_URI, TEXT_FILE_CONTENT);
+    temp.createFileWithContent(TO_BE_MODIFIED_URI, TO_BE_MODIFIED_ORIGINAL_CONTENT);
 
     directory = new Directory(TEMP_DIRECTORY_PATH); 
   }
@@ -82,13 +86,23 @@ public class DirectoryTest {
   }
 
   @Test 
-  public void createsFileInDirectory() {
+  public void overwritesExistingFileWithContent() {
+    directory.overwriteFileWithContent(TO_BE_MODIFIED_URI, TO_BE_MODIFIED_MODIFIED_CONTENT.getBytes());
+
+    byte[] returnedContentBytes = TestUtil.readFile(TEMP_DIRECTORY_PATH + TO_BE_MODIFIED_URI);
+    String returnedContent = new String(returnedContentBytes);
+    assertEquals(TO_BE_MODIFIED_MODIFIED_CONTENT, returnedContent);
+  }
+
+  @Test 
+  public void returnsTrueIfFileIsCreatedInDirectory() {
     String uri = "/sample-posted-file.txt";
     byte[] content = "This is a sample poste file".getBytes();
-    directory.createFileWithContent(uri, content);
+    boolean wasCreated = directory.createFileWithContent(uri, content);
 
     File file = new File(System.getProperty("user.dir") + "/src/test/java/TestDirectory" + uri);
 
+    assertTrue(wasCreated); 
     assertTrue(file.exists()); 
     file.delete();
   }
