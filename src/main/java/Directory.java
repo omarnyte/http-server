@@ -97,6 +97,20 @@ public class Directory {
     }
   }
 
+  public boolean overwriteFileWithStringContent(String uri, String content) {
+    try {
+      File file = new File(this.directoryPath + uri);
+      boolean shouldAppend = false;
+      FileWriter writer = new FileWriter(file, shouldAppend);
+      writer.write(content); 
+      return true;
+    } catch(IOException e) {
+      System.err.println("Could not overwrite String content to file.");
+      System.err.println(e);
+      return false;
+    }
+  }
+
   public Directory createSubdirectory(String uri) throws NonexistentDirectoryException {
     return new Directory(this.directoryPath + uri);
   }
