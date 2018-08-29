@@ -37,7 +37,6 @@ public class JsonPatchParser {
           return createJsonPatchCopy(jsonObject); 
         default: 
           throw new BadRequestException(jsonObject.getString("op") + " is not a valid JSON PATCH operation.");
-
       }
     } catch (JSONException e) {
       System.out.println(e);

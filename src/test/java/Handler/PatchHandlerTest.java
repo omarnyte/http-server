@@ -62,16 +62,6 @@ public class PatchHandlerTest {
     String actualReasonPhrase = response.getReasonPhrase();
     assertEquals(expectedReasonPhrase, actualReasonPhrase);
   }
-
-  @Test 
-  public void returnsUpdatedResourceContentAfterSuccesfulPatch() {
-    Request request = buildPatchRequestToJsonFileWithJsonPatchContent();
-    Response response = patchHandler.generateResponse(request);
-
-    String expectedResponse = "UPDATE BY OPERATION";
-    String actualResponse = new String(response.getMessageBody());
-    assertEquals(expectedResponse, actualResponse);
-  }
   
   private static MockDirectory setUpMockDirectory() throws NonexistentDirectoryException {
     List<String> files = setUpMockFiles();   

@@ -14,15 +14,3 @@ Scenario: Resource not found
   When a client makes a PATCH request to /does-not-exist.json
   And the request contains the application/json message body 
   Then the server should respond with status code 404 Not Found
-
-# Scenario: PATCH request to JSON resource 
-# When a client makes a PATCH request to /will-be-patched.json
-# And the request contains the application/json message body {
-#   "key": "newValue"
-# }
-# Then the server should respond with status code 200 OK 
-# And the server should respond with a message body of "{
-#   "key": "newValue",
-#   "anotherKey": "anotherOriginalValue"
-
-# }"
