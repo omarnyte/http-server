@@ -10,7 +10,7 @@ public class PatchHandler implements Handler {
   }  
 
   public Response generateResponse(Request request) {
-    try {
+    try {      
       String requestContentType = request.getHeader(MessageHeader.CONTENT_TYPE);   
       if (!this.directory.existsInStore(request.getURI())) {
         return new Response.Builder(HttpStatusCode.NOT_FOUND)
@@ -22,7 +22,7 @@ public class PatchHandler implements Handler {
       }
   
       String updatedResourceContent = getUpdatedResourceContent(request);
-      this.directory.overwriteFileWithContent(request.getURI(), updatedResourceContent.getBytes());
+      this.directory.overwriteFileWithStringContent(request.getURI(), updatedResourceContent);
       return buildOkResponse(request);
     } catch (BadRequestException e) {
       return new Response.Builder(HttpStatusCode.BAD_REQUEST)
