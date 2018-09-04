@@ -2,10 +2,12 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class QueryHandlerTest {
-  private final static String KEY = "aKey"; 
+  private final static String FIRST_KEY = "aKey"; 
+  private final static String FIRST_VALUE = "aValue"; 
+  private final static String SECOND_KEY = "anotherKey"; 
+  private final static String SECOND_VALUE = "anotherValue"; 
   private final static String METHOD = "GET"; 
   private final static String URI = "api/query"; 
-  private final static String VALUE = "aValue"; 
 
   private static QueryHandler handler = new QueryHandler();
   
@@ -26,10 +28,21 @@ public class QueryHandlerTest {
   
   @Test 
   public void returnsSingleQueryParametersWithNoReservedCharacters() {
-    String query = KEY + "=" + VALUE;
+
+    String query = FIRST_KEY + "=" + FIRST_VALUE;
     Request request = buildRequest(METHOD, URI, query);
     
-    String expectedString = KEY + " : " + VALUE;
+    String expectedString = FIRST_KEY + " : " + FIRST_VALUE + "\n";
+    String actualString = new String(handler.generateResponse(request).getMessageBody());
+    assertEquals(expectedString, actualString);
+  }
+
+  @Test 
+  public void returnsMultipleQueryParametersWithNoReservedCharacters() {
+    String query = String.format("%s=%s&%s=%s", FIRST_KEY, FIRST_VALUE, SECOND_KEY, SECOND_VALUE);
+    Request request = buildRequest(METHOD, URI, query);
+    
+    String expectedString = String.format("%s : %s\n%s : %s\n", FIRST_KEY, FIRST_VALUE, SECOND_KEY, SECOND_VALUE);
     String actualString = new String(handler.generateResponse(request).getMessageBody());
     assertEquals(expectedString, actualString);
   }

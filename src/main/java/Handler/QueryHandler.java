@@ -30,7 +30,7 @@ public class QueryHandler implements Handler {
         String[] splitParameters = paramPair.split("=");
         String key = splitParameters[0];
         String val = splitParameters[1];
-        body += key + " : " + val;
+        body += key + " : " + val + "\n";
       }
   
       return body;

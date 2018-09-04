@@ -44,8 +44,15 @@ public class ResponseStepDefs {
     assertEquals(expectedResponseMessageBody, messageBody);
   }
 
-  @Then("^the server should respond with a message body of \"([^\"]*)\"$")
+  @Then("^the server should respond with a message body of \"(.+)\"$")
   public void the_server_should_respond_with_a_message_body_of(String expectedMessageBody) throws Throwable {
+    expectedMessageBody += "\n";
+    String messageBody = StepDefsUtil.readMessageBody(this.world.con);
+    assertEquals(expectedMessageBody, messageBody);
+  }
+
+  @Then("^the server should respond with a message body of$")
+  public void the_server_should_respond_with_a_message_body_of_MD(String expectedMessageBody) throws Throwable {
     expectedMessageBody += "\n";
     String messageBody = StepDefsUtil.readMessageBody(this.world.con);
     assertEquals(expectedMessageBody, messageBody);
