@@ -5,6 +5,7 @@ public class MessageHeader {
   public final static String CONTENT_LENGTH = "Content-Length";
   public final static String CONTENT_TYPE = "Content-Type";
   public final static String LOCATION = "Location";
+  public final static String METHOD_OVERRIDE = "X-HTTP-Method-Override";
   
   public static int determineContentLength(String messageBody) {
     int length = 0;

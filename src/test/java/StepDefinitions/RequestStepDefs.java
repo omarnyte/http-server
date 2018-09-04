@@ -35,18 +35,10 @@ public class RequestStepDefs {
     this.world.con.setDoOutput(true);
   }
 
-  @When("^the request contains the application/json message body$")
-  public void the_request_contains_the_application_json_message_body() throws Throwable {
-    this.world.con.setRequestProperty("Content-Type", "application/json");
-
-    String json = "{ \"sampleKey\": \"sampleValue\", \"anotherSampleKey\": \"anotherSampleValue\" }";
-    writeString(this.world.con, json);
-  }
-
-  @When("^the request contains the (.+) message body \"([^\"]*)\"$")
-  public void the_request_contains_the_message_body(String contentType, String body) throws Throwable {
+  @When("^the request contains the (.+) message body$")
+  public void the_request_contains_the_message_body_block(String contentType, String content) throws Throwable {
     this.world.con.setRequestProperty("Content-Type", contentType);
-    writeString(this.world.con, body);
+    writeString(this.world.con, content);
   }
 
   private void writeString(HttpURLConnection con, String str) throws IOException {

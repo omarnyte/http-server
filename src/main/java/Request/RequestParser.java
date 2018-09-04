@@ -2,9 +2,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
 
-public class RequestParser {
-  private final static String METHOD_OVERRIDE_HEADER = "X-HTTP-Method-Override";
-  
+public class RequestParser {  
   BufferedReader reader; 
 
   public RequestParser(BufferedReader reader) {
@@ -18,7 +16,7 @@ public class RequestParser {
     String body = parseBody();
     
     return new Request.Builder()
-                      .method(requestLineParser.getMethod())
+                      .method(method)
                       .uri(requestLineParser.getURI())
                       .query(requestLineParser.getQuery())
                       .version(requestLineParser.getHTTPVersion())
@@ -55,8 +53,8 @@ public class RequestParser {
 
   private String extractMethod(String givenMethod, HashMap<String, String> headers) {
     String method = givenMethod;
-    if (headers.containsKey(METHOD_OVERRIDE_HEADER)) {
-      method = headers.get(METHOD_OVERRIDE_HEADER);
+    if (headers.containsKey(MessageHeader.METHOD_OVERRIDE)) {
+      method = headers.get(MessageHeader.METHOD_OVERRIDE);
     }
 
     return method;

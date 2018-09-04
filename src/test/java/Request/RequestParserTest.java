@@ -14,6 +14,7 @@ public class RequestParserTest {
   private final static String CONTENT_TYPE = "application/x-www-form-urlencoded";
   private final static String MESSAGE_BODY = "hello=world&hola=mundo";
   private final static String METHOD = "POST";
+  private final static String OVERRIDE_METHOD = "OVERRIDE";
   private final static String URI = "/some-form.html";
 
   private static Request request;
@@ -33,8 +34,17 @@ public class RequestParserTest {
   }
 
   @Test
+  public void parsesMethodWhenOverridenWithMethodOverride() throws BadRequestException {
+    String requestString = createRequestStringWithOverride();
+    BufferedReader reader = createReaderFromString(requestString);
+    RequestParser requestParser = new RequestParser(reader);
+    Request request = requestParser.generateRequest();
+    assertEquals(OVERRIDE_METHOD, request.getMethod());
+  }
+
+  @Test
   public void parsesHeaders() {
-    assertEquals("application/x-www-form-urlencoded", request.getHeader(MessageHeader.CONTENT_TYPE));
+    assertEquals(CONTENT_TYPE, request.getHeader(MessageHeader.CONTENT_TYPE));
   }
 
   @Test
@@ -62,6 +72,15 @@ public class RequestParserTest {
 
   private static String createRequestString() {
     return createRequestLine() + 
+           MessageHeader.CONTENT_TYPE + ": " + CONTENT_TYPE + "\r\n" +
+           MessageHeader.CONTENT_LENGTH + ": " + CONTENT_LENGTH + "\r\n" +
+           "\r\n" +
+           MESSAGE_BODY;
+  }
+
+  private static String createRequestStringWithOverride() {
+    return createRequestLine() + 
+           MessageHeader.METHOD_OVERRIDE + ": " + OVERRIDE_METHOD + "\r\n" +
            MessageHeader.CONTENT_TYPE + ": " + CONTENT_TYPE + "\r\n" +
            MessageHeader.CONTENT_LENGTH + ": " + CONTENT_LENGTH + "\r\n" +
            "\r\n" +

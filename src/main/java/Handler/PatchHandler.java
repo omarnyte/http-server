@@ -17,12 +17,12 @@ public class PatchHandler implements Handler {
                            .build();
       } else if (!requestContentType.equals(MimeType.JSON_PATCH)) {
         return new Response.Builder(HttpStatusCode.UNSUPPORTED_MEDIA_TYPE)
-                           .setHeader(MessageHeader.ACCEPT_PATCH, MimeType.JSON_PATCH)
-                           .build();
+                      .setHeader(MessageHeader.ACCEPT_PATCH, MimeType.JSON_PATCH)
+                      .build();
       }
   
       String updatedResourceContent = getUpdatedResourceContent(request);
-      this.directory.overwriteFileWithStringContent(request.getURI(), updatedResourceContent);
+      this.directory.overwriteFileWithContent(request.getURI(), updatedResourceContent.getBytes());
       return buildOkResponse(request);
     } catch (BadRequestException e) {
       return new Response.Builder(HttpStatusCode.BAD_REQUEST)

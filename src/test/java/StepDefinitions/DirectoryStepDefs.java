@@ -7,6 +7,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 
+import java.io.FileOutputStream;
+
+
 public class DirectoryStepDefs {
   private final static String TEST_DIRECTORY_PATH = System.getProperty("TEST_DIRECTORY_PATH"); 
 
@@ -25,6 +28,14 @@ public class DirectoryStepDefs {
     File file = new File(getFileUri(fileName, directoryUri));
     if (file.exists()) file.delete();
     assertFalse(file.exists());
+  }
+
+  @Given("^the file contains the content$")
+  public void the_file_contains_the_content(String content) throws Throwable {
+    System.out.println("PATH OF FILE TO BE CREATEDL " + this.file.getPath());
+    byte[] contentBytes = content.getBytes();
+    FileOutputStream outputStream = new FileOutputStream(this.file);
+    outputStream.write(contentBytes);
   }
 
   @Given("^a directory (.+) exists$")
