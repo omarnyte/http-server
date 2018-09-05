@@ -59,6 +59,11 @@ public class Response {
       return this;
     }
 
+    public Builder headers(HashMap<String, String> headers) {
+      this.headers = headers;
+      return this;
+    }
+
     public Response build() {
       return new Response(this);
     }
