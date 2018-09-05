@@ -63,6 +63,7 @@ public class Main {
     HashMap<String, Handler> routes = new HashMap<String, Handler>();
     
     String rootPath = System.getProperty("user.dir");
+    routes.put("/*", new ServerHandler(HttpMethod.SUPPORTED_METHODS));
     routes.put("/", new DirectoryHandler(directory));
     routes.put("/echo", new EchoHandler());
     routes.put(AUTH_ROUTE, new AuthHandler());

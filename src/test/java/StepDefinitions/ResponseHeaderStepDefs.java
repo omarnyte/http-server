@@ -11,8 +11,9 @@ public class ResponseHeaderStepDefs {
     this.world = world;
   }
 
-  @Then("^the server should respond with the header (.+) (.+)$")
+  @Then("^the server should respond with the header ([A-Za-z-]+) (.+)$")
   public void the_server_should_respond_with_the_header(String field, String expectedValue) throws Throwable {
+    this.world.con.getHeaderField(field);
     assertEquals(expectedValue, this.world.con.getHeaderField(field));
   }
 
