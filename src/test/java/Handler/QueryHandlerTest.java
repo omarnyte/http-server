@@ -1,5 +1,6 @@
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
+import org.junit.BeforeClass;
 
 public class QueryHandlerTest {
   private final static String FIRST_KEY = "aKey"; 
@@ -9,7 +10,13 @@ public class QueryHandlerTest {
   private final static String METHOD = "GET"; 
   private final static String URI = "api/query"; 
 
-  private static QueryHandler handler = new QueryHandler();
+  private static QueryHandler handler;
+  
+  @BeforeClass
+  public static void setUp() {
+    UrlDecoder mockUrlDecoder = new MockUrlDecoder();
+    handler = new QueryHandler(mockUrlDecoder);
+  }
   
   @Test 
   public void returns400BadRequestWithMalformedQuery() {
@@ -27,8 +34,7 @@ public class QueryHandlerTest {
   }
   
   @Test 
-  public void returnsSingleQueryParametersWithNoReservedCharacters() {
-
+  public void returnsSingleQueryParameters() {
     String query = FIRST_KEY + "=" + FIRST_VALUE;
     Request request = buildRequest(METHOD, URI, query);
     
@@ -38,7 +44,7 @@ public class QueryHandlerTest {
   }
 
   @Test 
-  public void returnsMultipleQueryParametersWithNoReservedCharacters() {
+  public void returnsMultipleQueryParameters() {
     String query = String.format("%s=%s&%s=%s", FIRST_KEY, FIRST_VALUE, SECOND_KEY, SECOND_VALUE);
     Request request = buildRequest(METHOD, URI, query);
     

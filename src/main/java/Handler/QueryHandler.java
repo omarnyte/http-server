@@ -1,5 +1,10 @@
 public class QueryHandler implements Handler {
+  private UrlDecoder urlDecoder;
 
+  public QueryHandler(UrlDecoder urlDecoder) {
+    this.urlDecoder = urlDecoder;
+  }
+  
   public Response generateResponse(Request request) {
     switch (request.getMethod()) {
       case "GET": 
@@ -30,7 +35,9 @@ public class QueryHandler implements Handler {
         String[] splitParameters = paramPair.split("=");
         String key = splitParameters[0];
         String val = splitParameters[1];
-        body += key + " : " + val + "\n";
+        String decodedKey = urlDecoder.decodeString(key);
+        String decodedVal = urlDecoder.decodeString(val);
+        body += decodedKey + " : " + decodedVal + "\n";
       }
   
       return body;
