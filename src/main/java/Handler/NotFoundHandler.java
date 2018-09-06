@@ -1,6 +1,8 @@
 import java.io.File;
 import java.io.IOException; 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
   
@@ -13,11 +15,30 @@ public class NotFoundHandler implements Handler {
   
   public Response generateResponse(Request request) {
     switch(request.getMethod()) {
-      case "PUT":
+      case HttpMethod.OPTIONS: 
+        return handleOptionsRequest(request);
+      case HttpMethod.PUT:
         return handlePutResponse(request);
       default:
         return buildNotFoundResponse(request.getURI());
     }
+  }
+
+  private Response handleOptionsRequest(Request request) {
+    List<String> supportedMethods = getSupportedMethods(request.getURI());
+    return ResponseUtil.buildOptionsResponse(supportedMethods);
+  }
+
+  private List<String> getSupportedMethods(String uri) {
+    ArrayList<String> supportedMethods = new ArrayList<String>();
+    supportedMethods.add(HttpMethod.OPTIONS);
+    if (isPutable(uri)) supportedMethods.add(HttpMethod.PUT);
+    return supportedMethods; 
+  }
+
+  private boolean isPutable(String uri) {
+    String fileType = this.directory.getFileType(uri);
+    return fileType.equals(MimeType.JSON) || fileType.equals(MimeType.PLAIN_TEXT);
   }
 
   private Response handlePutResponse(Request request) {

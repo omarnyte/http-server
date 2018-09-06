@@ -43,7 +43,7 @@ public class FileHandlerTest {
   
   @Test 
   public void returnsSupportedMethodsInAllowHeaderForOptionsRequestToPatchableResource() {
-    String expectedHeaderVal = "DELETE, GET, HEAD, OPTIONS, PATCH";
+    String expectedHeaderVal = "DELETE, GET, HEAD, OPTIONS, PATCH, PUT";
     String actualHeaderVal = responseToOptions.getHeader(MessageHeader.ALLOW);
     assertEquals(expectedHeaderVal, actualHeaderVal);
   }

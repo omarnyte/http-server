@@ -40,7 +40,8 @@ import java.util.List;
     ArrayList<String> supportedMethods = new ArrayList<String>(SUPPORTED_METHODS);
     if (isPatchable(uri)) {
       supportedMethods.add(HttpMethod.PATCH);
-    } else if (isPutable(uri)) {
+    }
+    if (isPutable(uri)) {
       supportedMethods.add(HttpMethod.PUT);
     }
 
@@ -55,7 +56,7 @@ import java.util.List;
 
   private boolean isPutable(String uri) {
     String fileType = this.directory.getFileType(uri);
-    return fileType.equals(MimeType.JSON);
+    return fileType.equals(MimeType.JSON) || fileType.equals(MimeType.PLAIN_TEXT);
   }
 
   private Response buildGetResponse(String uri) {
