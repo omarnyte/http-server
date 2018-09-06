@@ -10,17 +10,10 @@ public class ServerHandler implements Handler {
   public Response generateResponse(Request request) {
     switch (request.getMethod()) {
       case HttpMethod.OPTIONS: 
-        return new Response.Builder(HttpStatusCode.OK)
-                        .setHeader(MessageHeader.ALLOW, formatAllowHeaderVal())
-                        .build();
+        return ResponseUtil.buildOptionsResponse(this.supportedMethods);
       default:
-      return new Response.Builder(HttpStatusCode.METHOD_NOT_ALLOWED) 
-                        .setHeader(MessageHeader.ALLOW, formatAllowHeaderVal())
-                        .build(); 
+        return ResponseUtil.buildMethodNotAllowedResponse(this.supportedMethods);
     }
   }
 
-  private String formatAllowHeaderVal() {
-    return String.join(", ", this.supportedMethods);
-  }
 }
