@@ -7,7 +7,7 @@ import java.util.Map;
 public class FormHandler implements Handler {   
   private final static String DESTINATION_DIRECTORY_URI = "/POSTed";
   private final static String POSTED_FILE_EXTENSION = ".txt";
-  public static final List<String> SUPPORTED_METHODS = Arrays.asList( 
+  private static final List<String> SUPPORTED_METHODS = Arrays.asList( 
     HttpMethod.OPTIONS, 
     HttpMethod.POST
   );
