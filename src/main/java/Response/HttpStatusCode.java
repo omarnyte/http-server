@@ -13,7 +13,7 @@ public class HttpStatusCode {
   public static final int UNPROCESSABLE_ENTITY = 422;
   public static final int INTERNAL_SERVER_ERROR = 500;
 
-  private static final Map<Integer, String> messages = Map.ofEntries(
+  private static final Map<Integer, String> MESSAGES = Map.ofEntries(
     Map.entry(BAD_REQUEST, "Bad Request"),
     Map.entry(CREATED, "Created"),
     Map.entry(INTERNAL_SERVER_ERROR, "Internal Server Error"),
@@ -28,7 +28,7 @@ public class HttpStatusCode {
   );
 
   public static final String getReasonPhrase(int statusCode) {
-    return messages.get(statusCode);
+    return MESSAGES.get(statusCode);
   }
 
 }

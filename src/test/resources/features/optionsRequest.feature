@@ -8,17 +8,31 @@ Scenario: OPTIONS request to the general server
 Scenario Outline: OPTIONS request to directories
   When a client makes an OPTIONS request to <Path>
   Then the server should respond with status code 200 OK 
-  And the server should respond with the header Allow <Supported Methods>
-  |  Path        | Supported Methods       |
-  | /            | OPTIONS, HEAD, GET      | 
-  | /hello       | OPTIONS, HEAD, GET      | 
+  And the server should respond with the header Allow GET, HEAD, OPTIONS
+
+  Examples:
+  |  Path   |
+  | /       | 
+  | /hello  | 
 
 Scenario Outline: OPTIONS request to an API endpoint
   When a client makes an OPTIONS request to <Path>
   Then the server should respond with status code 200 OK 
   And the server should respond with the header Allow <Supported Methods>
+
+  Examples: 
   |  Path        | Supported Methods  |
   | /api/form    | OPTIONS, POST      | 
   | /api/people  | OPTIONS, POST      | 
   | /api/query   | GET, HEAD, OPTIONS | 
 
+Scenario Outline: OPTIONS request to files
+  Given a file with the name <File Name> exists in <Directory>
+  When a client makes an OPTIONS request to <Path>
+  Then the server should respond with status code 200 OK 
+  And the server should respond with the header Allow <Supported Methods>
+
+  Examples: Existing files
+  | File Name   | Directory |  Path             | Supported Methods    |
+  | sample.json | /         | /sample.json | DELETE, GET, HEAD, OPTIONS, PATCH, PUT | 
+  | sample.txt  | /         | /sample.txt  | DELETE, GET, HEAD, OPTIONS, PATCH, PUT | 
