@@ -1,5 +1,4 @@
 import java.util.Arrays;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -8,6 +7,10 @@ public class PeopleHandler implements Handler {
     MimeType.JSON, 
     MimeType.PLAIN_TEXT
   };
+  private static final List<String> SUPPORTED_METHODS = Arrays.asList( 
+    HttpMethod.OPTIONS,
+    HttpMethod.POST
+  );
 
   private Directory directory;
 
@@ -17,7 +20,9 @@ public class PeopleHandler implements Handler {
 
   public Response generateResponse(Request request) {
     switch (request.getMethod()) { 
-      case "POST":  
+      case HttpMethod.OPTIONS: 
+        return ResponseUtil.buildOptionsResponse(SUPPORTED_METHODS);
+      case HttpMethod.POST:  
         return handlePostRequest(request); 
       default:  
         return new Response.Builder(HttpStatusCode.METHOD_NOT_ALLOWED) 
