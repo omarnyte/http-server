@@ -60,6 +60,7 @@ public class Main {
     String rootPath = System.getProperty("user.dir");
     routes.put("/", new DirectoryHandler(directory));
     routes.put("/echo", new EchoHandler());
+    routes.put("/api/authenticate", new AuthHandler());
     routes.put("/api/form", new FormHandler(directory));
     routes.put("/api/people", new PeopleHandler(directory));
     routes.put("/api/query", new QueryHandler(new UrlDecoder()));

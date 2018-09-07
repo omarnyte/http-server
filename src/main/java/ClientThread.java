@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class ClientThread implements Runnable {
   private Socket clientSocket; 
   private BufferedReader in;
@@ -23,8 +26,13 @@ public class ClientThread implements Runnable {
     try {
       initiateClient();
           
+      
       Request request = parseRequest();
       logRequest(request);
+
+      List<String> protectedUris = Arrays.asList( "/protected" );
+      // AuthMiddleware auth = new AuthMiddleware(protectedUris, router);
+      // Response response = auth.getResponse(request);
       Response response = this.router.getResponse(request);
       logResponse(response);
       byte[] formattedResponse = new ResponseFormatter(response).formatResponse();

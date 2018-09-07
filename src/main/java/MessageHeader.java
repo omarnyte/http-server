@@ -2,6 +2,9 @@ import java.io.UnsupportedEncodingException;
 
 public class MessageHeader {
   public final static String ACCEPT_PATCH = "Accept-Patch";
+  public final static String ALLOW = "Allow";
+  public final static String AUTHENTICATE = "WWW-Authenticate";
+  public final static String AUTHORIZATION = "Authorization";
   public final static String CONTENT_LENGTH = "Content-Length";
   public final static String CONTENT_TYPE = "Content-Type";
   public final static String LOCATION = "Location";
