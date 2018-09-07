@@ -18,7 +18,8 @@ public class AuthenticatorTest {
   
   @BeforeClass
   public static void setUp() {
-    authenticator = new Authenticator(PROTECTED_URIS, AUTH_ROUTE);
+    Credentials credentials = new Credentials("username", "password");
+    authenticator = new Authenticator(credentials, PROTECTED_URIS, AUTH_ROUTE);
   }
   
   @Test 

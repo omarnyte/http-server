@@ -3,14 +3,13 @@ import java.util.Base64.Decoder;
 import java.util.HashMap;
 import java.util.List;
 
-public class Authenticator {
-  private final static String USERNAME = "username";
-  private final static String PASSWORD = "password";
-  
+public class Authenticator {  
   private String authRoute;
+  private Credentials credentials;
   private List<String> protectedUris;
   
-  public Authenticator(List<String> protectedUris, String authRoute) {
+  public Authenticator(Credentials credentials, List<String> protectedUris, String authRoute) {
+    this.credentials = credentials;
     this.protectedUris = protectedUris;
     this.authRoute = authRoute;
   }
@@ -44,7 +43,7 @@ public class Authenticator {
   private boolean identicalCredentials(String[] splitDecodedCredentials) {
     String username = splitDecodedCredentials[0];
     String password = splitDecodedCredentials[1];
-    return username.equals(USERNAME) && password.equals(PASSWORD);
+    return this.credentials.areValidCredentials(username, password);
   }
 
   private Request buildRequestToAuthRoute() {
