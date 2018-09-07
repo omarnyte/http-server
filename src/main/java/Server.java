@@ -6,15 +6,17 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
 
 public class Server {
+  private Authenticator authenticator;
   private int port; 
   private Logger logger;
   private Router router;
   ServerSocket server;
 
-  public Server(int port, Router router, Logger logger) {
+  public Server(int port, Router router, Logger logger, Authenticator authenticator) {
     this.port = port;
     this.router = router;
     this.logger = logger;
+    this.authenticator = authenticator;
   }
 
   public void start() {
@@ -25,7 +27,7 @@ public class Server {
       ExecutorService executor = Executors.newCachedThreadPool();
       while (true) {
         Socket clientSocket = server.accept();
-        executor.execute(new ClientThread(clientSocket, this.router, logger));
+        executor.execute(new ClientThread(clientSocket, this.router, logger, this.authenticator));
       } 
     } catch (BindException e) {
       System.err.println("Port " + port + " is unavailable.");

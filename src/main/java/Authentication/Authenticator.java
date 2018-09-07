@@ -15,7 +15,11 @@ public class Authenticator {
   }
 
   public Request authenticateRequest(Request request) {
-    return isProtected(request.getURI()) ? validateCredentials(request) : request;
+    try {
+      return isProtected(request.getURI()) ? validateCredentials(request) : request;
+    } catch (NullPointerException e) {
+      return buildRequestToAuthRoute(request.getMethod());
+    } 
   }
 
   private boolean isProtected(String uri) {
@@ -25,14 +29,14 @@ public class Authenticator {
   private Request validateCredentials(Request request) {
     String authHeader = request.getHeader(MessageHeader.AUTHORIZATION);
     if (authHeader == null) {
-      return buildRequestToAuthRoute();
+      return buildRequestToAuthRoute(request.getMethod());
+    } else {
+      String[] splitDecodedCredentials = getSplitDecodedCredentials(authHeader);
+      return identicalCredentials(splitDecodedCredentials) ? request : buildRequestToAuthRoute(request.getMethod());  
     }
-
-    String[] splitDecodedCredentials = getSplitDecodedCredentials(authHeader);
-    return identicalCredentials(splitDecodedCredentials) ? request : buildRequestToAuthRoute();  
   }
 
-  private String[] getSplitDecodedCredentials(String authHeader) {
+  private String[] getSplitDecodedCredentials(String authHeader) throws NullPointerException {
     String[] splitAuthHeader = authHeader.split(" ");
     String encodedCredentials = splitAuthHeader[1];
     Base64.Decoder decoder = Base64.getDecoder();
@@ -46,9 +50,10 @@ public class Authenticator {
     return this.credentials.areValidCredentials(username, password);
   }
 
-  private Request buildRequestToAuthRoute() {
+  private Request buildRequestToAuthRoute(String method) {
     return new Request.Builder()
-                      .uri(authRoute)
+                      .method(method)
+                      .uri(this.authRoute)
                       .build();
   }
   

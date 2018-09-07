@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ClientThread implements Runnable {
+  private Authenticator authenticator; 
   private Socket clientSocket; 
   private BufferedReader in;
   private Logger logger;
@@ -15,27 +16,22 @@ public class ClientThread implements Runnable {
   private OutputStream out;
   private Router router;
   
-  ClientThread(Socket clientSocket, Router router, Logger logger) {
+  ClientThread(Socket clientSocket, Router router, Logger logger, Authenticator authenticator) {
     this.clientSocket = clientSocket; 
     this.router = router;
     this.logger = logger;
     this.logFormatter = new LogFormatter();
+    this.authenticator = authenticator;
   }
   
   public void run() {
     try {
       initiateClient();
-          
-      
-      Request request = parseRequest();
-      logRequest(request);
 
-      List<String> protectedUris = Arrays.asList( "/protected" );
-      // AuthMiddleware auth = new AuthMiddleware(protectedUris, router);
-      // Response response = auth.getResponse(request);
+      Request request = applyRequestMiddleware();
       Response response = this.router.getResponse(request);
-      logResponse(response);
-      byte[] formattedResponse = new ResponseFormatter(response).formatResponse();
+      byte[] formattedResponse = applyResponseMiddleware(response);
+      
       this.out.write(formattedResponse);
 
       closeConnection();
@@ -49,6 +45,12 @@ public class ClientThread implements Runnable {
     this.out = clientSocket.getOutputStream();
   }
 
+  private Request applyRequestMiddleware() throws BadRequestException {
+    Request request = parseRequest();
+    logRequest(request);
+    return this.authenticator.authenticateRequest(request);
+  }
+
   private Request parseRequest() throws BadRequestException {
     RequestParser requestParser = new RequestParser(this.in);
     return requestParser.generateRequest();
@@ -57,6 +59,11 @@ public class ClientThread implements Runnable {
   private void logRequest(Request request) {
     String requestFormattedForLogger = this.logFormatter.formatRequest(request);
     this.logger.logEntry(requestFormattedForLogger);
+  }
+
+  private byte[] applyResponseMiddleware(Response response) {
+    logResponse(response);
+    return new ResponseFormatter(response).formatResponse();
   }
 
   private void logResponse(Response response) {

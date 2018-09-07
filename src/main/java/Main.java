@@ -1,6 +1,9 @@
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
  
 public class Main {
+  private final static String AUTH_ROUTE = "/api/authenticate";
   private static final int DEFAULT_PORT_NUMBER = 8888;
   private static final String LOG_DIRECTORY_PATH = System.getProperty("user.dir") + "/logs";
   
@@ -17,7 +20,9 @@ public class Main {
       int port = parser.getPortNumberOrDefault(DEFAULT_PORT_NUMBER);
       Router router = setUpRouter(defaultHandler);
       Logger logger = setUpLogger();
-      Server server = new Server(port, router, logger);
+      Authenticator authenticator = setUpAuthenticator();
+      Middleware middleware = configureMiddleware(logger, authenticator);
+      Server server = new Server(port, router, middleware);
       server.start();
     } catch (ArrayIndexOutOfBoundsException e) {
       System.err.println(e.getMessage());
@@ -60,7 +65,7 @@ public class Main {
     String rootPath = System.getProperty("user.dir");
     routes.put("/", new DirectoryHandler(directory));
     routes.put("/echo", new EchoHandler());
-    routes.put("/api/authenticate", new AuthHandler());
+    routes.put(AUTH_ROUTE, new AuthHandler());
     routes.put("/api/form", new FormHandler(directory));
     routes.put("/api/people", new PeopleHandler(directory));
     routes.put("/api/query", new QueryHandler(new UrlDecoder()));
@@ -72,6 +77,14 @@ public class Main {
     Logger logger = new Logger(LOG_DIRECTORY_PATH, dateTimePattern);
     logger.createLogFile();
     return logger;
+  }
+
+  private static Authenticator setUpAuthenticator() {
+    Credentials credentials = new Credentials("username", "password");
+    List<String> protectedUris = Arrays.asList(
+      "/protected"
+    ); 
+    return new Authenticator(credentials, protectedUris, AUTH_ROUTE);
   }
 
 }
