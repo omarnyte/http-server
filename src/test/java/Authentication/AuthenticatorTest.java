@@ -6,8 +6,10 @@ import org.junit.Test;
 
 public class AuthenticatorTest {
   private static final String AUTH_ROUTE = "/auth/route";
+  private final static String AUTH_SCHEME = "Basic";
   private static final String INVALID_ENCODED_CREDENTIALS= "aW52YWxpZHVzZXJuYW1lOmludmFsaWRwYXNzd29yZA0K";
   private static final String PROTECTED_URI = "/protected/uri";
+  private static final String PROTECTED_CHILD_URI = PROTECTED_URI + "/protected.txt";
   private static final List<String> PROTECTED_URIS = Arrays.asList(
     PROTECTED_URI
     );  
@@ -25,45 +27,50 @@ public class AuthenticatorTest {
   @Test 
   public void doesNotAlterRequestIfUriIsUnprotected() {
     Request request = new Request.Builder()
-                                 .method(HttpMethod.GET)
                                  .uri(UNPROTECTED_URI)
                                  .build();
-    request = authenticator.authenticateRequest(request);
+    request = authenticator.applyMiddleware(request);
     assertEquals(UNPROTECTED_URI, request.getURI());
   }
 
   @Test 
   public void altersUnauthenticatedRequestIfUriIsProtected() {
     Request request = new Request.Builder()
-                                 .method(HttpMethod.GET)
                                  .uri(PROTECTED_URI)
                                  .build();
-    request = authenticator.authenticateRequest(request);
+    request = authenticator.applyMiddleware(request);
     assertEquals(AUTH_ROUTE, request.getURI());
   }
 
   @Test 
   public void altersRequestWithInvalidCredentialstIfUriIsProtected() {
-    String authHeaderValue = "Basic " + INVALID_ENCODED_CREDENTIALS;
+    String authHeaderValue = AUTH_SCHEME + " " + INVALID_ENCODED_CREDENTIALS;
     Request request = new Request.Builder()
-                        .method(HttpMethod.GET)
                         .setHeader(MessageHeader.AUTHORIZATION, authHeaderValue)
                         .uri(PROTECTED_URI)
                         .build();
-    request = authenticator.authenticateRequest(request);
+    request = authenticator.applyMiddleware(request);
     assertEquals(AUTH_ROUTE, request.getURI());
   }
-  @Test 
 
+  @Test 
   public void doesNotAlterRequestWithValidCredentialstIfUriIsProtected() {
-    String authHeaderValue = "Basic " + VALID_ENCODED_CREDENTIALS;
+    String authHeaderValue =AUTH_SCHEME + " " + VALID_ENCODED_CREDENTIALS;
     Request request = new Request.Builder()
-                        .method(HttpMethod.GET)
                         .setHeader(MessageHeader.AUTHORIZATION, authHeaderValue)
                         .uri(PROTECTED_URI)
                         .build();
-    request = authenticator.authenticateRequest(request);
+    request = authenticator.applyMiddleware(request);
     assertEquals(PROTECTED_URI, request.getURI());
+  }
+
+  @Test 
+  public void protectsChildUris() {
+    Request request = new Request.Builder()
+                                 .uri(PROTECTED_CHILD_URI)
+                                 .build();
+    request = authenticator.applyMiddleware(request);
+    assertEquals(AUTH_ROUTE, request.getURI());
   }
 
 }

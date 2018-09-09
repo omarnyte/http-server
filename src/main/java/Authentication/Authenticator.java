@@ -3,7 +3,7 @@ import java.util.Base64.Decoder;
 import java.util.HashMap;
 import java.util.List;
 
-public class Authenticator {  
+public class Authenticator extends Middleware {  
   private String authRoute;
   private Credentials credentials;
   private List<String> protectedUris;
@@ -14,7 +14,7 @@ public class Authenticator {
     this.authRoute = authRoute;
   }
 
-  public Request authenticateRequest(Request request) {
+  public Request applyMiddleware(Request request) {
     try {
       return isProtected(request.getURI()) ? validateCredentials(request) : request;
     } catch (NullPointerException e) {
@@ -23,7 +23,15 @@ public class Authenticator {
   }
 
   private boolean isProtected(String uri) {
-    return this.protectedUris.contains(uri);
+    return this.protectedUris.contains(uri) || isProtectedChild(uri);
+  }
+
+  private boolean isProtectedChild(String uri) {
+    for (String protectedUri : protectedUris) {
+      if (uri.matches(protectedUri + "/.+")) return true;
+    }
+
+    return false;
   }
 
   private Request validateCredentials(Request request) {

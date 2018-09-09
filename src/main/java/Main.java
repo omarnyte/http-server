@@ -87,4 +87,10 @@ public class Main {
     return new Authenticator(credentials, protectedUris, AUTH_ROUTE);
   }
 
+  private static Middleware configureMiddleware(Logger logger, Authenticator authenticator) {
+    Middleware middleware = logger;
+    middleware.linkWith(authenticator);
+    return middleware;
+  }
+
 }
