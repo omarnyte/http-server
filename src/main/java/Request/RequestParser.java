@@ -10,23 +10,24 @@ public class RequestParser {
   }
 
   public Request generateRequest() throws BadRequestException {
-    RequestLine requestLine = parseRequestLine();
+    RequestLineParser requestLineParser = parseRequestLine();
     HashMap<String, String> headers = parseHeaders();
     String body = parseBody();
     
     return new Request.Builder()
-                      .method(requestLine.getMethod())
-                      .uri(requestLine.getURI())
-                      .version(requestLine.getHTTPVersion())
+                      .method(requestLineParser.getMethod())
+                      .uri(requestLineParser.getURI())
+                      .query(requestLineParser.getQuery())
+                      .version(requestLineParser.getHTTPVersion())
                       .headers(headers)
                       .body(body)
                       .build();
   }
 
-  private RequestLine parseRequestLine() throws BadRequestException {
+  private RequestLineParser parseRequestLine() throws BadRequestException {
     try {
       String requestLineString = this.reader.readLine();
-      return new RequestLine(requestLineString);
+      return new RequestLineParser(requestLineString);
     } catch (IOException e) {
       throw new BadRequestException("Could not parse request line.");
     } 
