@@ -8,17 +8,22 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class PatchHandlerTest {
-  private final static String JSON_PATCH_TYPE = "application/json-patch+json";
   private final static String JSON_FILE_URI = "/to-be-patched.json";
   private final static String JSON_FILE_ORIGINAL_CONTENT = "ORIGINAL JSON FILE CONTENT";
+  private final static String JSON_PATCH_TYPE = "application/json-patch+json";
+  private final static String JSON_PATCH_OPERATION_RESULT = "UPDATE BY OPERATION";
   
   private static Handler patchHandler;
+  private static Response successfulResponseToPatch;
 
   @BeforeClass
   public static void setUpOnce() throws IOException, NonexistentDirectoryException {
     MockDirectory mockDirectory = setUpMockDirectory();
     JsonPatchParser mockJsonPatchParser = setUpMockJsonPatchParser();
     patchHandler = new PatchHandler(mockDirectory, mockJsonPatchParser); 
+
+    Request request = buildPatchRequestToJsonFileWithJsonPatchContent();
+    successfulResponseToPatch = patchHandler.generateResponse(request);
   }
 
   @Test 
@@ -51,16 +56,18 @@ public class PatchHandlerTest {
 
   @Test 
   public void returns200OkAfterSuccessfulPatch() {
-    Request request = buildPatchRequestToJsonFileWithJsonPatchContent();
-    Response response = patchHandler.generateResponse(request);
-
     int expectedStatusCode = HttpStatusCode.OK;
-    int actualStatusCode = response.getStatusCode();
+    int actualStatusCode = successfulResponseToPatch.getStatusCode();
     assertEquals(expectedStatusCode, actualStatusCode);
 
     String expectedReasonPhrase = HttpStatusCode.getReasonPhrase(expectedStatusCode);
-    String actualReasonPhrase = response.getReasonPhrase();
+    String actualReasonPhrase = successfulResponseToPatch.getReasonPhrase();
     assertEquals(expectedReasonPhrase, actualReasonPhrase);
+  }
+
+  @Test 
+  public void returnsUpdatedContentAfterSuccessfulPatch() {
+    assertEquals(JSON_PATCH_OPERATION_RESULT, new String(successfulResponseToPatch.getMessageBody()));
   }
   
   private static MockDirectory setUpMockDirectory() throws NonexistentDirectoryException {
@@ -90,7 +97,7 @@ public class PatchHandlerTest {
 
   private static JsonPatchParser setUpMockJsonPatchParser() {
     ArrayList<JsonPatchOperation> mockOperations = new ArrayList<JsonPatchOperation>();
-    mockOperations.add(new MockJsonPatchOperation("UPDATE BY OPERATION"));
+    mockOperations.add(new MockJsonPatchOperation(JSON_PATCH_OPERATION_RESULT));
     return new MockJsonPatchParser(mockOperations);
   }
 
@@ -118,7 +125,7 @@ public class PatchHandlerTest {
                       .build(); 
   }
 
-  private Request buildPatchRequestToJsonFileWithJsonPatchContent() {
+  private static Request buildPatchRequestToJsonFileWithJsonPatchContent() {
     HashMap<String, String> headers = new HashMap<String, String>();
     headers.put(MessageHeader.CONTENT_TYPE, JSON_PATCH_TYPE);
     String jsonPatchBody = "JSON PATCH BODY";

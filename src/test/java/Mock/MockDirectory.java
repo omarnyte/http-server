@@ -63,7 +63,7 @@ public class MockDirectory extends Directory {
   }
 
   public boolean overwriteFileWithContent(String uri, byte[] content) {
-    this.fileContents.replace(uri, content.toString());
+    this.fileContents.replace(uri, new String(content));
     return true;
   }
 
