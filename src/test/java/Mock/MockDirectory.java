@@ -15,6 +15,13 @@ public class MockDirectory extends Directory {
     super(DEFAULT_DIRECTORY_PATH);
   }
   
+  public MockDirectory(List<String> files, HashMap fileContents, Map fileTypes) throws NonexistentDirectoryException {
+    super(DEFAULT_DIRECTORY_PATH);
+    this.files = files;
+    this.fileContents = fileContents;
+    this.fileTypes = fileTypes;
+  }
+
   public MockDirectory(List<String> subdirectories, List<String> files, HashMap fileContents, Map fileTypes) throws NonexistentDirectoryException {
     super(DEFAULT_DIRECTORY_PATH);
     this.subdirectories = subdirectories;
@@ -56,7 +63,12 @@ public class MockDirectory extends Directory {
   }
 
   public boolean overwriteFileWithContent(String uri, byte[] content) {
-    this.fileContents.replace(uri, content.toString());
+    this.fileContents.replace(uri, new String(content));
+    return true;
+  }
+
+  public boolean overwriteFileWithStringContent(String uri, String content) {
+    this.fileContents.replace(uri, content);
     return true;
   }
 

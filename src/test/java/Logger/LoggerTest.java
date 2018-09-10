@@ -40,13 +40,11 @@ public class LoggerTest {
   
   @Test
   public void createsNewLogFileWithTimeStampAsName() {    
-    System.out.println("first test");
     assertTrue(logFile.exists());
   }  
 
   @Test 
   public void logsEntryToLogFile() throws IOException, LoggerException {
-    System.out.println("second test");
     String entry = "This line will be written in the log.";
     logger.logEntry(entry);
     byte[] logBytes = readFile(logFileName);

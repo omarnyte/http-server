@@ -2,7 +2,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
 
-public class RequestParser {
+public class RequestParser {  
   BufferedReader reader; 
 
   public RequestParser(BufferedReader reader) {
@@ -12,10 +12,11 @@ public class RequestParser {
   public Request generateRequest() throws BadRequestException {
     RequestLineParser requestLineParser = parseRequestLine();
     HashMap<String, String> headers = parseHeaders();
+    String method = extractMethod(requestLineParser.getMethod(), headers);
     String body = parseBody();
     
     return new Request.Builder()
-                      .method(requestLineParser.getMethod())
+                      .method(method)
                       .uri(requestLineParser.getURI())
                       .query(requestLineParser.getQuery())
                       .version(requestLineParser.getHTTPVersion())
@@ -48,6 +49,15 @@ public class RequestParser {
     } catch (ArrayIndexOutOfBoundsException | IOException e) {
       throw new BadRequestException("Could not parse request headers.");
     }
+  }
+
+  private String extractMethod(String givenMethod, HashMap<String, String> headers) {
+    String method = givenMethod;
+    if (headers.containsKey(MessageHeader.METHOD_OVERRIDE)) {
+      method = headers.get(MessageHeader.METHOD_OVERRIDE);
+    }
+
+    return method;
   }
 
   private HashMap<String, String> putLineInHeaders(String headersLine, HashMap<String, String> headers) {

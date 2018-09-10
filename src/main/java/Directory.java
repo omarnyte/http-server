@@ -1,5 +1,6 @@
 import java.io.BufferedReader; 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.FileOutputStream;
 import java.io.FileReader; 
 import java.io.IOException;
@@ -15,6 +16,7 @@ public class Directory {
     Map.entry("html", "text/html"),
     Map.entry("jpg", "image/jpeg"),
     Map.entry("jpeg", "image/jpeg"),
+    Map.entry("json", "application/json"),
     Map.entry("png", "image/png"),
     Map.entry("txt", "text/plain")
   );
@@ -91,6 +93,20 @@ public class Directory {
       return true;
     } catch(IOException e) {
       System.err.println("Could not overwrite content to file.");
+      System.err.println(e);
+      return false;
+    }
+  }
+
+  public boolean overwriteFileWithStringContent(String uri, String content) {
+    try {
+      File file = new File(this.directoryPath + uri);
+      boolean shouldAppend = false;
+      FileWriter writer = new FileWriter(file, shouldAppend);
+      writer.write(content); 
+      return true;
+    } catch(IOException e) {
+      System.err.println("Could not overwrite String content to file.");
       System.err.println(e);
       return false;
     }

@@ -33,6 +33,20 @@ public class NotFoundHandlerTest {
   }
 
   @Test 
+  public void returns404NotFoundForPatchRequests() {
+    Request request = TestUtil.buildRequestToUri("PATCH", NONEXISTENT_URI);
+    Response response = notFoundHandler.generateResponse(request);
+
+    int expectedStatusCode = HttpStatusCode.NOT_FOUND;
+    int actualStatusCode = response.getStatusCode();
+    assertEquals(expectedStatusCode, actualStatusCode);
+
+    String expectedReasonPhrase = HttpStatusCode.getReasonPhrase(expectedStatusCode);
+    String actualReasonPhrase = response.getReasonPhrase();
+    assertEquals(expectedReasonPhrase, actualReasonPhrase);
+  }
+
+  @Test 
   public void returns201CreatedForPutRequestToResourceThatDoesNotExist() {
     String body = "body";
     Request request = TestUtil.buildRequestToUriWithBody("PUT", NONEXISTENT_URI, body);
