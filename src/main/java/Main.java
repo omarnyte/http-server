@@ -19,9 +19,10 @@ public class Main {
  
       int port = parser.getPortNumberOrDefault(DEFAULT_PORT_NUMBER);
       Router router = setUpRouter(defaultHandler);
+      CorsMiddleware corsMiddleware = new CorsMiddleware();
       Logger logger = setUpLogger();
       Authenticator authenticator = setUpAuthenticator();
-      Middleware middleware = configureMiddleware(logger, authenticator);
+      Middleware middleware = configureMiddleware(corsMiddleware, logger, authenticator);
       Server server = new Server(port, router, middleware);
       server.start();
     } catch (ArrayIndexOutOfBoundsException e) {
@@ -88,9 +89,10 @@ public class Main {
     return new Authenticator(credentials, protectedUris, AUTH_ROUTE);
   }
 
-  private static Middleware configureMiddleware(Logger logger, Authenticator authenticator) {
-    Middleware middleware = logger;
-    middleware.linkWith(authenticator);
+  private static Middleware configureMiddleware(CorsMiddleware corsMiddleware, Logger logger, Authenticator authenticator) {
+    Middleware middleware = corsMiddleware;
+    middleware.linkWith(logger)
+              .linkWith(authenticator);
     return middleware;
   }
 

@@ -51,7 +51,7 @@ import java.util.List;
 
   private boolean isPatchable(String uri) {
     String fileType = this.directory.getFileType(uri);
-    return fileType.equals(MimeType.JSON) || fileType.equals(MimeType.PLAIN_TEXT);
+    return fileType.equals(MimeType.JSON);
   }
 
   private boolean isPutable(String uri) {
