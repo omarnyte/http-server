@@ -53,7 +53,7 @@ public class DirectoryStepDefs {
   }
 
   private String getFileUri(String fileName, String directoryURI) {
-    return TEST_DIRECTORY_PATH + directoryURI + fileName;
+    return TEST_DIRECTORY_PATH + directoryURI + "/" + fileName;
   } 
 
 }

@@ -6,15 +6,36 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Logger {
+public class Logger extends Middleware {
   private String dateTimePattern;
   private String logDirectoryPath;
   private File logFile;
+
+
+
+  LogFormatter logFormatter = new LogFormatter();
+
+
+
 
   public Logger(String logDirectoryPath, String dateTimePattern) throws LoggerException {
     this.logDirectoryPath = logDirectoryPath;
     this.dateTimePattern = dateTimePattern;
   }
+
+  public Request applyMiddleware(Request request) {
+    String requestFormattedForLogger = this.logFormatter.formatRequest(request);
+    logEntry(requestFormattedForLogger);
+    return checkNext(request);
+  }
+
+  public Response applyMiddleware(Response response) {
+    String responseFormattedForLogger = this.logFormatter.formatResponse(response);
+    logEntry(responseFormattedForLogger);
+    return checkNext(response);
+  }
+
+
 
   public File createLogFile() throws LoggerException {
     try {

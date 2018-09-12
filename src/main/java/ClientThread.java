@@ -7,27 +7,27 @@ import java.net.Socket;
 public class ClientThread implements Runnable {
   private Socket clientSocket; 
   private BufferedReader in;
-  private Logger logger;
-  private LogFormatter logFormatter;
+  private Middleware middleware;
   private OutputStream out;
   private Router router;
   
-  ClientThread(Socket clientSocket, Router router, Logger logger) {
+  ClientThread(Socket clientSocket, Router router, Middleware middleware) {
     this.clientSocket = clientSocket; 
     this.router = router;
-    this.logger = logger;
-    this.logFormatter = new LogFormatter();
+    this.middleware = middleware;
   }
   
   public void run() {
     try {
       initiateClient();
-          
+
       Request request = parseRequest();
-      logRequest(request);
+      request = this.middleware.applyMiddleware(request);
+
       Response response = this.router.getResponse(request);
-      logResponse(response);
+      response = this.middleware.applyMiddleware(response);
       byte[] formattedResponse = new ResponseFormatter(response).formatResponse();
+      
       this.out.write(formattedResponse);
 
       closeConnection();
@@ -44,16 +44,6 @@ public class ClientThread implements Runnable {
   private Request parseRequest() throws BadRequestException {
     RequestParser requestParser = new RequestParser(this.in);
     return requestParser.generateRequest();
-  }
-
-  private void logRequest(Request request) {
-    String requestFormattedForLogger = this.logFormatter.formatRequest(request);
-    this.logger.logEntry(requestFormattedForLogger);
-  }
-
-  private void logResponse(Response response) {
-    String responseFormattedForLogger = this.logFormatter.formatResponse(response);
-    this.logger.logEntry(responseFormattedForLogger);
   }
 
   private void closeConnection() throws IOException {

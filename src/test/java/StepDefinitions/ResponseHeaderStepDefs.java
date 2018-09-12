@@ -4,10 +4,10 @@ import java.util.Arrays;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
-public class HeaderStepDefs {
+public class ResponseHeaderStepDefs {
   private World world;
 
-  public HeaderStepDefs(World world) {
+  public ResponseHeaderStepDefs(World world) {
     this.world = world;
   }
 
