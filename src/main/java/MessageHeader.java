@@ -1,6 +1,7 @@
 import java.io.UnsupportedEncodingException;
 
 public class MessageHeader {
+  public final static String AC_ALLOW_ORIGIN = "Access-Control-Allow-Origin";
   public final static String ACCEPT_PATCH = "Accept-Patch";
   public final static String ALLOW = "Allow";
   public final static String AUTHENTICATE = "WWW-Authenticate";
