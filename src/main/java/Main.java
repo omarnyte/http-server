@@ -1,12 +1,8 @@
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
  
 public class Main {
+  private final static int DEFAULT_PORT_NUMBER = 8888;
   private final static String AUTH_ROUTE = "/api/authenticate";
-  private static final int DEFAULT_PORT_NUMBER = 8888;
-  private static final String LOG_DIRECTORY_PATH = System.getProperty("user.dir") + "/logs";
-  
   private static CLIParser parser;
   private static Directory directory;
  
@@ -19,10 +15,8 @@ public class Main {
  
       int port = parser.getPortNumberOrDefault(DEFAULT_PORT_NUMBER);
       Router router = setUpRouter(defaultHandler);
-      CorsMiddleware corsMiddleware = new CorsMiddleware();
-      Logger logger = setUpLogger();
-      Authenticator authenticator = setUpAuthenticator();
-      Middleware middleware = configureMiddleware(corsMiddleware, logger, authenticator);
+      Middleware middleware = new MiddlewareConfig().getMiddlewareChain();
+      
       Server server = new Server(port, router, middleware);
       server.start();
     } catch (ArrayIndexOutOfBoundsException e) {
@@ -72,28 +66,6 @@ public class Main {
     routes.put("/api/people", new PeopleHandler(directory));
     routes.put("/api/query", new QueryHandler(new UrlDecoder()));
     return routes;
-  }
-
-  private static Logger setUpLogger() throws LoggerException {
-    String dateTimePattern = "yyyymmddhhmmss";
-    Logger logger = new Logger(LOG_DIRECTORY_PATH, dateTimePattern);
-    logger.createLogFile();
-    return logger;
-  }
-
-  private static Authenticator setUpAuthenticator() {
-    Credentials credentials = new Credentials("username", "password");
-    List<String> protectedUris = Arrays.asList(
-      "/protected"
-    ); 
-    return new Authenticator(credentials, protectedUris, AUTH_ROUTE);
-  }
-
-  private static Middleware configureMiddleware(CorsMiddleware corsMiddleware, Logger logger, Authenticator authenticator) {
-    Middleware middleware = corsMiddleware;
-    middleware.linkWith(logger)
-              .linkWith(authenticator);
-    return middleware;
   }
 
 }
