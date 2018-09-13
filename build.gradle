@@ -21,9 +21,16 @@ dependencies {
 }
 
 def defaultPort = 8888
+def demoDirectoryPath = System.getProperty("user.dir") + '/src/test/resources/demoFiles'
 def testDirectoryPath = System.getProperty("user.dir") + '/src/test/resources/testFiles'
 
-task startServer(type: JavaExec) {
+task startDemoServer(type: JavaExec) {
+    classpath sourceSets.main.runtimeClasspath
+    main = "Main"
+    args "-port", defaultPort, "-dir", demoDirectoryPath
+}
+
+task startTestServer(type: JavaExec) {
     classpath sourceSets.main.runtimeClasspath
     main = "Main"
     args "-port", defaultPort, "-dir", testDirectoryPath
@@ -35,7 +42,11 @@ task createLogsDirectory() {
     logDir.mkdir()
 }
 
-build.dependsOn(createLogsDirectory)
+task createTestDirectory() {
+    def testDir = testDirectoryPath
+}
+
+build.dependsOn(createTestDirectory, createLogsDirectory)
 
 test {
     systemProperty 'PORT', defaultPort
