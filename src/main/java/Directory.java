@@ -121,8 +121,14 @@ public class Directory {
     return file.delete();
   }
   
+  public void createDirectory(String uri) {
+    File directory = new File(this.directoryPath + uri);
+    directory.mkdirs();
+  }
+  
   private String getExtension(String filePath) {
     return filePath.split("\\.")[1];
   }
+
 
 }

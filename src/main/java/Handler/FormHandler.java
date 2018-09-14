@@ -16,6 +16,7 @@ public class FormHandler implements Handler {
   
   public FormHandler(Directory directory) {
     this.directory = directory;
+    this.directory.createDirectory(DESTINATION_DIRECTORY_URI);
   }
   
   public Response generateResponse(Request request) {      
