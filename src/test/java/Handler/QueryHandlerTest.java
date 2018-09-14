@@ -11,11 +11,33 @@ public class QueryHandlerTest {
   private final static String URI = "api/query"; 
 
   private static QueryHandler handler;
+  private static Response responseToOptionsRequest;
   
   @BeforeClass
   public static void setUp() {
     UrlDecoder mockUrlDecoder = new MockUrlDecoder();
     handler = new QueryHandler(mockUrlDecoder);
+
+    Request optionsRequest = new Request.Builder().method(HttpMethod.OPTIONS).build();
+    responseToOptionsRequest = handler.generateResponse(optionsRequest);
+  }
+  
+  @Test 
+  public void returns200OkForOptionsRequest() {
+    int expectedStatusCode = HttpStatusCode.OK;
+    int actualStatusCode = responseToOptionsRequest.getStatusCode();
+    assertEquals(expectedStatusCode, actualStatusCode);
+
+    String expectedReasonPhrase = HttpStatusCode.getReasonPhrase(expectedStatusCode);
+    String actualReasonPhrase = responseToOptionsRequest.getReasonPhrase();
+    assertEquals(expectedReasonPhrase, actualReasonPhrase);
+  }
+  
+  @Test 
+  public void returnsSupportedMethodsInAllowHeaderForOptionsRequest() {
+    String expectedHeaderVal = "GET, HEAD, OPTIONS";
+    String actualHeaderVal = responseToOptionsRequest.getHeader(MessageHeader.ALLOW);
+    assertEquals(expectedHeaderVal, actualHeaderVal);
   }
   
   @Test 

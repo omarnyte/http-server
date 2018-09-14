@@ -1,10 +1,16 @@
 import java.io.File;
 import java.util.HashMap;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
   
 public class FormHandler implements Handler {   
   private final static String DESTINATION_DIRECTORY_URI = "/POSTed";
   private final static String POSTED_FILE_EXTENSION = ".txt";
+  private static final List<String> SUPPORTED_METHODS = Arrays.asList( 
+    HttpMethod.OPTIONS, 
+    HttpMethod.POST
+  );
   
   private Directory directory;
   
@@ -12,15 +18,14 @@ public class FormHandler implements Handler {
     this.directory = directory;
   }
   
-  public Response generateResponse(Request request) { 
-    String uri = request.getURI();
-     
+  public Response generateResponse(Request request) {      
     switch (request.getMethod()) { 
-      case "POST":  
+      case HttpMethod.OPTIONS: 
+        return ResponseUtil.buildOptionsResponse(SUPPORTED_METHODS);
+      case HttpMethod.POST:  
         return buildPostResponse(request); 
       default:  
-        return new Response.Builder(HttpStatusCode.METHOD_NOT_ALLOWED) 
-                           .build(); 
+        return ResponseUtil.buildMethodNotAllowedResponse(SUPPORTED_METHODS);
     } 
   }
 

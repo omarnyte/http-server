@@ -1,6 +1,14 @@
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 public class QueryHandler implements Handler {
+  private static final List<String> SUPPORTED_METHODS = Arrays.asList( 
+    HttpMethod.GET,
+    HttpMethod.HEAD,
+    HttpMethod.OPTIONS
+  );
+  
   private UrlDecoder urlDecoder;
 
   public QueryHandler(UrlDecoder urlDecoder) {
@@ -9,9 +17,11 @@ public class QueryHandler implements Handler {
   
   public Response generateResponse(Request request) {
     switch (request.getMethod()) {
-      case "HEAD": 
+      case HttpMethod.OPTIONS: 
+        return ResponseUtil.buildOptionsResponse(SUPPORTED_METHODS);
+      case HttpMethod.HEAD: 
         return buildHeadResponse(request);
-      case "GET": 
+      case HttpMethod.GET: 
         return buildGetResponse(request);
       default: 
         return new Response.Builder(HttpStatusCode.METHOD_NOT_ALLOWED)

@@ -1,8 +1,15 @@
 import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
+import java.util.List;
 
 public class DirectoryHandler implements Handler {
-  private Response response;
+  private static final List<String> SUPPORTED_METHODS = Arrays.asList( 
+    HttpMethod.GET,
+    HttpMethod.HEAD,
+    HttpMethod.OPTIONS
+  );
+  
   private Directory directory;
 
   private String subdirectoryUri;
@@ -21,13 +28,14 @@ public class DirectoryHandler implements Handler {
     String method = request.getMethod();
 
     switch (method) {
-      case "HEAD": 
+      case HttpMethod.OPTIONS: 
+      return ResponseUtil.buildOptionsResponse(SUPPORTED_METHODS);
+      case HttpMethod.HEAD: 
         return buildHeadResponse();
-      case "GET": 
+      case HttpMethod.GET: 
         return buildGetResponse();
-      default: 
-        return new Response.Builder(HttpStatusCode.METHOD_NOT_ALLOWED)
-                           .build();
+      default:
+        return ResponseUtil.buildMethodNotAllowedResponse(SUPPORTED_METHODS);
     }
   }
 
