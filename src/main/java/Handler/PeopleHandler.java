@@ -3,6 +3,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class PeopleHandler implements Handler {
+  private final static String DESTINATION_DIRECTORY_URI = "/people";
   private final static String[] SUPPORTED_MEDIA_TYPES = { 
     MimeType.JSON, 
     MimeType.PLAIN_TEXT
@@ -16,6 +17,7 @@ public class PeopleHandler implements Handler {
 
   public PeopleHandler(Directory directory) {
     this.directory = directory;
+    this.directory.createDirectory(DESTINATION_DIRECTORY_URI);
   }
 
   public Response generateResponse(Request request) {
@@ -44,7 +46,7 @@ public class PeopleHandler implements Handler {
     String contentType = request.getHeader(MessageHeader.CONTENT_TYPE);
     String extension = MimeType.getExtension(contentType);
     byte[] content = request.getBody().getBytes();
-    String uri = "/people/" + Util.createRandomFileName(extension);
+    String uri = DESTINATION_DIRECTORY_URI + "/" + Util.createRandomFileName(extension);
     this.directory.createFileWithContent(uri, content);
     return uri;
   }

@@ -1,8 +1,5 @@
 Feature: Create a resource
 
-Background: 
-  Given a directory /people exists 
-
 Scenario: POST request with JSON
   When a client makes a POST request to /api/people
   And the request contains the application/json message body
