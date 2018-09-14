@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>CORS Image</title>
+  <title>CORS POST</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script
   src="https://code.jquery.com/jquery-3.3.1.js"
@@ -12,15 +12,19 @@
 
 </head>
 <body>
-  <h1>The text below lives in another server!</h1>
+  <h1>POSTing to another server!</h1>
   <p id="cors-p"></p>
   
   <script>
-    var body = document.getElementById("cors-p");
-    $.get('http://localhost:7777/text.txt', function(data) {
-      console.log(data);
-      document.getElementById("cors-p").innerHTML = data;
-    }, 'text');
+    $.ajax({
+      type: "POST",
+      url: "http://localhost:8888/api/people",
+      data: "PEOPLE",
+      dataType: "text",
+      contentType: "text/plain"
+    });
   </script>
+
+
 </body>
 </html>

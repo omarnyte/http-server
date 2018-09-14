@@ -20,9 +20,17 @@ dependencies {
     testCompile 'junit:junit:4.12'
 }
 
+def corsPort = 7777
+def corsDirectoryPath = System.getProperty("user.dir") + '/src/test/resources/corsFiles'
 def defaultPort = 8888
 def demoDirectoryPath = System.getProperty("user.dir") + '/src/test/resources/demoFiles'
 def testDirectoryPath = System.getProperty("user.dir") + '/src/test/resources/testFiles'
+
+task startCorsServer(type: JavaExec) {
+    classpath sourceSets.main.runtimeClasspath
+    main = "Main"
+    args "-port", corsPort, "-dir", corsDirectoryPath
+}
 
 task startDemoServer(type: JavaExec) {
     classpath sourceSets.main.runtimeClasspath
