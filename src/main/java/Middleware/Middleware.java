@@ -6,10 +6,12 @@ public abstract class Middleware {
     return next;
   }
 
-  public abstract Request applyMiddleware(Request request);
+  public Request applyMiddleware(Request request) {
+    return checkNext(request);
+  }
 
   public Response applyMiddleware(Response response) {
-    return response;
+    return checkNext(response);
   };
 
   protected Request checkNext(Request request) {

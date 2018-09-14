@@ -42,13 +42,6 @@ public class FileHandlerTest {
   }
   
   @Test 
-  public void returnsSupportedMethodsInAllowHeaderForOptionsRequestToPatchableResource() {
-    String expectedHeaderVal = "DELETE, GET, HEAD, OPTIONS, PATCH, PUT";
-    String actualHeaderVal = responseToOptions.getHeader(MessageHeader.ALLOW);
-    assertEquals(expectedHeaderVal, actualHeaderVal);
-  }
-
-  @Test 
   public void returnsSupportedMethodsInAllowHeaderForOptionsRequestToNonPatchableResource() {
     responseToOptions = fileHandler.generateResponse(TestUtil.buildRequestToUri(HttpMethod.OPTIONS, IMAGE_FILE_URI));
     String expectedHeaderVal = "DELETE, GET, HEAD, OPTIONS";

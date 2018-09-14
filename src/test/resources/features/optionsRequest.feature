@@ -35,7 +35,7 @@ Scenario Outline: OPTIONS request to files
   Examples: Existing files
   | File Name   | Directory |  Path        | Supported Methods |
   | sample.json | /         | /sample.json | DELETE, GET, HEAD, OPTIONS, PATCH, PUT | 
-  | sample.txt  | /         | /sample.txt  | DELETE, GET, HEAD, OPTIONS, PATCH, PUT | 
+  | sample.txt  | /         | /sample.txt  | DELETE, GET, HEAD, OPTIONS, PUT | 
 
 Scenario Outline: OPTIONS request to nonexistent files
   Given a file with the name <File Name> does not exist in <Directory>
