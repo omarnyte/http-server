@@ -28,6 +28,8 @@ import java.util.List;
         return buildHeadResponse(request.getURI()); 
       case HttpMethod.PUT:  
         return handlePutRequest(request);
+      case HttpMethod.PATCH:  
+        return handlePatchRequest(request);
       case HttpMethod.DELETE:  
         return handleDeleteRequest(request.getURI());
       default:  
@@ -88,6 +90,53 @@ import java.util.List;
 
   private Response buildPutResponse(Request request) {
     return new Response.Builder(HttpStatusCode.OK)
+                       .build();
+  }
+
+  private Response handlePatchRequest(Request request) {
+    String uri = request.getURI();
+    String resourceContentType = this.directory.getFileType(uri);
+    if (!PatchApplicator.isPatchable(resourceContentType)) {
+      return buildMethodNotAllowedResponse();
+    }
+
+    try {
+      return patchResource(request) ? buildGetResponse(uri) : buildInternalServerErrorResponse();
+    } catch (BadRequestException e) {
+      return buildBadRequestException();
+    } catch (UnprocessableEntityException e) {
+      return buildUnprocessableEntityResponse();
+    } catch (UnsupportedMediaTypeException e) {
+      return buildUnsupportedMediaTypeResponse();
+    }
+  }
+
+  private boolean patchResource(Request request) throws BadRequestException, UnprocessableEntityException, UnsupportedMediaTypeException {
+    String uri = request.getURI();
+    String resourceContentType = this.directory.getFileType(uri);    
+    String originalResourceContent = new String(this.directory.readFile(uri));
+    PatchApplicator patchApplicator = PatchApplicator.getPatchApplicator(resourceContentType); 
+    byte[] updatedResourceContent = patchApplicator.applyPatch(request, originalResourceContent).getBytes();
+    return this.directory.overwriteFileWithContent(uri, updatedResourceContent);
+  }
+
+  private Response buildMethodNotAllowedResponse() {
+    return new Response.Builder(HttpStatusCode.METHOD_NOT_ALLOWED)
+                       .build();
+  }
+
+  private Response buildBadRequestException() {
+    return new Response.Builder(HttpStatusCode.BAD_REQUEST)
+                       .build();
+  }
+
+  private Response buildUnprocessableEntityResponse() {
+    return new Response.Builder(HttpStatusCode.UNPROCESSABLE_ENTITY)
+                       .build();
+  }
+
+  private Response buildUnsupportedMediaTypeResponse() {
+    return new Response.Builder(HttpStatusCode.UNSUPPORTED_MEDIA_TYPE)
                        .build();
   }
 
