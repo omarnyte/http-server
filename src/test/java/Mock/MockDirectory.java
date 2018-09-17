@@ -15,14 +15,14 @@ public class MockDirectory extends Directory {
     super(DEFAULT_DIRECTORY_PATH);
   }
   
-  public MockDirectory(List<String> files, HashMap fileContents, Map fileTypes) throws NonexistentDirectoryException {
+  public MockDirectory(List<String> files, HashMap<String, String> fileContents, Map fileTypes) throws NonexistentDirectoryException {
     super(DEFAULT_DIRECTORY_PATH);
     this.files = files;
     this.fileContents = fileContents;
     this.fileTypes = fileTypes;
   }
 
-  public MockDirectory(List<String> subdirectories, List<String> files, HashMap fileContents, Map fileTypes) throws NonexistentDirectoryException {
+  public MockDirectory(List<String> subdirectories, List<String> files, HashMap<String, String> fileContents, Map fileTypes) throws NonexistentDirectoryException {
     super(DEFAULT_DIRECTORY_PATH);
     this.subdirectories = subdirectories;
     this.files = files;

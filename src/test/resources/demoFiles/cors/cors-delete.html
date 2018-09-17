@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>CORS Delete</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+<body>
+  <h1>Click the button below to delete a file in another server!</h1>
+  <button id="textFileButton">Delete a Text File!</button>
+  <button id="jsonFileButton">Delete a JSON File!</button>
+
+  <script>
+    const textFileButton = document.getElementById("textFileButton");
+    textFileButton.addEventListener("click", () => deleteTextFile());
+
+    const init = {
+      method: 'DELETE'
+    }
+
+    function deleteTextFile() {
+      const request = new Request('http://localhost:7777/delete/to-delete.txt');
+      fetch(request, init);
+    }
+
+    const jsonFileButton = document.getElementById("jsonFileButton");
+    jsonFileButton.addEventListener("click", () => deleteJsonFile());
+
+
+    function deleteJsonFile() {
+      const request = new Request('http://localhost:7777/delete/to-delete.json');
+      fetch(request, init);
+    }
+  </script>
+</body>
+</html>

@@ -12,8 +12,9 @@ This is a simple server built with Java 10. It can receive, parse, handle, and r
 
 ### On Default Port and Directory
 1. Navigate to the root directory 
-2. Run the following gradle task 
+2. Run the following gradle tasks 
     ```
+    gradle assemble
     gradle startDemoServer
     ```
 * The default port is 8888
@@ -38,10 +39,11 @@ This is a simple server built with Java 10. It can receive, parse, handle, and r
 
 
 ## Running Tests 
-Unit tests covering this project are written with the [JUnit](https://junit.org/junit4/) testing framework. Acceptance tests are written using [Cucumber](https://docs.cucumber.io). To run acceptance tests, the server must be running on port 8888. After starting the server (see above):
+Unit tests covering this project are written with the [JUnit](https://junit.org/junit4/) testing framework. Acceptance tests are written using [Cucumber](https://docs.cucumber.io). To run acceptance tests, the server must be running on port 8888 and serving content from `src/test/resources/testFiles`:
 1. Navigate to the root directory.
-2. Run the following gradle task:
+2. Run the following gradle tasks:
     ```
+    gradle assemble
     gradle startTestServer
     ```
 2. Run `gradle test`. 
