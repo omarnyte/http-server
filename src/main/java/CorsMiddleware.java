@@ -12,6 +12,7 @@ public class CorsMiddleware extends Middleware {
     HashMap<String, String> updatedHeaders = originalHeaders;
     updatedHeaders.put(MessageHeader.AC_ALLOW_ORIGIN, "http://localhost:8888");
     updatedHeaders.put(MessageHeader.AC_ALLOW_CREDENTIALS, "true");
+    updatedHeaders.put(MessageHeader.AC_ALLOW_METHODS, "DELETE");
     return updatedHeaders;
   }
 
