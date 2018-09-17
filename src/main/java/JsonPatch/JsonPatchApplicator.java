@@ -9,23 +9,28 @@ public class JsonPatchApplicator extends PatchApplicator {
     this.jsonPatchParser = jsonPatchParser;
   }
   
-  public String applyPatch(Request request, String resourceContent) throws UnsupportedMediaTypeException {
+  public String applyPatch(Request request, String resourceContent) throws BadRequestException, UnprocessableEntityException, UnsupportedMediaTypeException {
     String requestContentType = request.getHeader(MessageHeader.CONTENT_TYPE);
     if (!requestContentType.equals(MimeType.JSON_PATCH)) {
       throw new UnsupportedMediaTypeException(requestContentType, RESOURCE_CONTENT_TYPE);
     }
 
-    return resourceContent;
+    return updateResourceWithPatchDocument(resourceContent, request.getBody());
   }
-  
-  // public String applyPatch(String patchDocument, String resourceContent) throws BadRequestException, UnprocessableEntityException {
-  //   String updatedResourceContent = resourceContent;
-  //   ArrayList<JsonPatchOperation> patches = this.jsonPatchParser.getOperations(patchDocument);
-  //   for (JsonPatchOperation patch : patches) {
-  //     updatedResourceContent = patch.applyOperation(updatedResourceContent);
-  //   }
 
-  //   return updatedResourceContent;
-  // }
+  private String updateResourceWithPatchDocument(String resourceContent, String patchDocument) throws BadRequestException, UnprocessableEntityException {
+    ArrayList<JsonPatchOperation> operations = this.jsonPatchParser.getOperations(patchDocument);
+    
+    return applyOperationsToResource(operations, resourceContent);
+  }
+
+  private String applyOperationsToResource(ArrayList<JsonPatchOperation> operations, String resourceContent) throws BadRequestException, UnprocessableEntityException {
+    String updatedResourceContent = resourceContent;
+    for (JsonPatchOperation operation : operations) {
+      updatedResourceContent = operation.applyOperation(updatedResourceContent);
+    }
+    
+    return updatedResourceContent;
+  }
   
 }
