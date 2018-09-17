@@ -1,14 +1,30 @@
 Feature: Text Negotiation
 
 Scenario: The text file exists 
+  Given a file with the name sample-text.txt exists in / 
+  And the file contains the content
+  """
+  This is a sample text file.
+  """
   When a client makes a GET request to /sample-text.txt
   Then the server should respond with status code 200 OK 
-  And the server should respond with a message body of "This is a sample text file."
+  And the server should respond with a message body of
+  """
+  This is a sample text file.
+  """
 
 Scenario: The text file exists and contains spaces in its name 
+  Given a file with the name file with spaces.txt exists in / 
+  And the file contains the content
+  """
+  The title of this text file has spaces.
+  """
   When a client makes a GET request to /file%20with%20spaces.txt
   Then the server should respond with status code 200 OK 
-  And the server should respond with a message body of "The title of this text file has spaces."
+  And the server should respond with a message body of 
+  """
+  The title of this text file has spaces.
+  """
 
 Scenario: The text file does not exist
   When a client makes a GET request to /does-not-exist.txt

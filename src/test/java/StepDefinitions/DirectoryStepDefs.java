@@ -2,13 +2,10 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.PendingException;
 import java.io.File;
+import java.io.FileOutputStream;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
-
-import java.io.FileOutputStream;
-
 
 public class DirectoryStepDefs {
   private final static String TEST_DIRECTORY_PATH = System.getProperty("TEST_DIRECTORY_PATH"); 
@@ -32,7 +29,6 @@ public class DirectoryStepDefs {
 
   @Given("^the file contains the content$")
   public void the_file_contains_the_content(String content) throws Throwable {
-    System.out.println("PATH OF FILE TO BE CREATEDL " + this.file.getPath());
     byte[] contentBytes = content.getBytes();
     FileOutputStream outputStream = new FileOutputStream(this.file);
     outputStream.write(contentBytes);
