@@ -16,10 +16,9 @@ public class CorsMiddleware extends Middleware {
     return updatedHeaders;
   }
 
-  private Response updateResponseWithHeaders(Response response, HashMap<String, String> headers) {
-    return new Response.Builder(response.getStatusCode()) 
+  private Response updateResponseWithHeaders(Response oldResponse, HashMap<String, String> headers) {
+    return new Response.Builder(oldResponse) 
                        .headers(headers)
-                       .messageBody(response.getMessageBody())
                        .build();
   }
 

@@ -7,14 +7,22 @@ public class Response {
   private int statusCode;
   private String version;
   private HashMap<String, String> headers;
-
+  
   public static class Builder { 
     private HashMap<String, String> headers;
     private byte[] messageBody;
     private String reasonPhrase;
     private int statusCode;
     private String version;
-
+    
+    public Builder (Response oldResponse) {
+      this.statusCode = oldResponse.statusCode;
+      this.reasonPhrase = oldResponse.reasonPhrase;
+      this.version = oldResponse.version;
+      this.headers = oldResponse.headers;
+      this.messageBody = oldResponse.messageBody;
+    }
+    
     public Builder(int statusCode) {
       this.statusCode = statusCode;
       this.reasonPhrase = HttpStatusCode.getReasonPhrase(statusCode);
