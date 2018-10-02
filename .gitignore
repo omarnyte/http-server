@@ -1,8 +1,7 @@
 /.gradle
-/bin 
+/bin
 /.settings
 /build
-/gradle 
 .project
 gradlew
 gradlew.bat
