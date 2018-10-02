@@ -1,9 +1,10 @@
 plugins {
     id 'java'
+    id 'maven-publish'
 }
 
 group = 'com.omarnyte'
-version = '1.1.2'
+version = '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -71,3 +72,39 @@ jar {
         attributes 'Main-Class': 'com.omarnyte.Main'
     }
 }
+
+publishing {
+    publications {
+        httpServer(MavenPublication) {
+            artifactId = 'http-server'
+            from components.java
+
+            pom {
+                name = 'HTTP Server'
+                description = 'A custom HTTP Server built in Java'
+                url = 'https://github.com/omarnyte/http-server'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git://github.com/omarnyte/http-server.git'
+                    developerConnection = 'scm:git:ssh://git@github.com/omarnyte/http-server.git'
+                    url = 'https://github.com/omarnyte/http-server'
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            url = "https://clojars.org/repo"
+            credentials {
+                username clojarsUsername 
+                password clojarsPassword 
+            }
+        }
+    }
+}
+
