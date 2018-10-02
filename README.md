@@ -1,3 +1,5 @@
+[![Clojars Project](https://img.shields.io/clojars/v/com.omarnyte/http-server.svg)](https://clojars.org/com.omarnyte/http-server)
+
 # HTTP Server
 This is a simple server built with Java 10. It can receive, parse, handle, and respond to HTTP 1.1 requests. For more detailed functionality and limitations, see [Supported Functionality](#supported-functionality).
 
